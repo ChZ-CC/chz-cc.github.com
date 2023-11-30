@@ -1,2 +1,14 @@
+baseURL = "http://chz-cc.github.io/"
+title = "起风了"
 theme = "contrast"
-baseURL = "http://ChZ-CC.github.io/"
+
+[params]
+  minimal = false
+  excerpts = false
+
+[menu]
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about"
+    weight = 10

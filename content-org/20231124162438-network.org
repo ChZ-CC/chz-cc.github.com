@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       86C7AAD1-3ECA-4ECA-BDE7-BC97111BF9D2
+:END:
+#+TITLE: Networking
+#+AUTHOR: CC
+#+DATE: [2023-11-24 五 16:24]
+#+HUGO_BASE_DIR: ../
+#+HUGO_SECTION: notes
+
+* Socket
+[[https://goodyduru.github.io/os/2023/10/03/ipc-unix-domain-sockets.html][IPC - Unix Domain Sockets]]
+- IPC: inter-process communication
+- BSD: Berkeley Software Distribution: a UNIX-based computer operating system
+
+** Socket API
+- ~socket()~: 创建一个 socket/endpoint 用于通信。设置通信终端的域名/domain 和语义（TCP、UDP、raw）。可以是 integer 或 对象（不同语言而定）。
+- ~bind()~: server 端使用。给 socket 映射到一个引用(referrence)，引用通常是 IP:Port 或文件，用于进程间通信（IPC）。
+- ~listen()~: server 端使用。表示准备好接进来的连接。
+- ~connect()~: client 端使用。将客户端 socket 与服务端关联起来，使之可以通信。三次握手发生在这里。这里的引用也是 IP:Port 或文件。
+- ~accept()~: server 端使用。接受一个进来的连接，创建一个新的 socket。这个 socket 用来传递信息。
+- ~send()~ and ~recv()~: 在节点之间传递信息。
+- ~close()~: 释放资源，发起四次挥手。

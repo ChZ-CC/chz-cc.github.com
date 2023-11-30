@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       BD49FBC5-E0A4-4D52-875E-4BDF7FEC4023
+:END:
+#+TITLE: Anime
+#+AUTHOR: CC
+#+DATE: [2023-11-18 六 22:52]
+#+HUGO_BASE_DIR: ../
+#+HUGO_SECTION: notes
+
+* 追番/补番
+** TODO 葬送的芙莉莲
