@@ -10,6 +10,7 @@
 * 日常沙雕问题
 
 ** github port 443: Timed out
+
 - 场景：以 https 方式 clone 仓库时出现的错误。
 - 原因：Git 所设端口与系统代理不一致。
 - 解决方法：
@@ -20,3 +21,9 @@
   3. 取消 git 代理配置： ~git config --global --unset http.proxy~
   4. 查看 git 代理配置： ~git config --global --get http.proxy~
 - 参考：https://zhuanlan.zhihu.com/p/636418854
+
+** github pages 404: index.html not found
+
+- 问题： github pages workflow 构建完毕后，打开页面显示 404，找不到 index.html。
+- 原因： git settings > Pages > Build and Deployment, 设置为 from a branch + master。而 hugo 编译后提交在了 hg-pages 分支。
+- 解决： 改了分支就可以了。
