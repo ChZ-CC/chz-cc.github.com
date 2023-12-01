@@ -7,3 +7,5 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_SECTION: notes
 
+* 《起风岁月》
+* 《献给阿尔吉侬的花束》

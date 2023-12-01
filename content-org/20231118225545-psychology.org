@@ -7,3 +7,4 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_SECTION: notes
 
+* 心理学
