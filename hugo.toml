@@ -1,4 +1,4 @@
-baseURL = "http://chz-cc.github.io/"
+baseURL = "https://chz-cc.github.io/"
 languageCode = 'en-us'
 title = "起风了"
 theme = "contrast"
