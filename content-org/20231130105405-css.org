@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       366DDA5D-1673-4617-9F32-31A1425536B3
+:END:
+#+TITLE: CSS
+#+AUTHOR: CC
+#+DATE: [2023-11-30 四 10:54]
+#+HUGO_BASE_DIR: ../
+#+HUGO_SECTION: notes
+
+* CSS
+
+** TailWind
+:PROPERTIES:
+:ID:       26ED4BFC-ED61-427C-92B3-A7B7B55AE8FC
+:END:
+
+- [[https://tailwindcss.com/docs/installation][Doc]]
+- 魏双大佬说：CSS 是前端最核心技术之一，Tailwind CSS 长期在 state of CSS 上霸榜。
+
+** 《CSS 世界》by 张鑫旭
+- [[https://www.zhangxinxu.com/wordpress/category/css/][大佬的 blog]]
+- 

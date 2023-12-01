@@ -7,3 +7,7 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_SECTION: notes
 
+* Python 依赖管理
+* Rust && Python
+* 异步
+
