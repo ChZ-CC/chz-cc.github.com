@@ -2,6 +2,7 @@ baseURL = "https://chz-cc.github.io/"
 languageCode = 'en-us'
 title = "起风了"
 theme = "contrast"
+sectionPagesMenu = 'main'
 
 [params]
   minimal = false
@@ -10,9 +11,19 @@ theme = "contrast"
 [menu]
   [[menu.main]]
     identifier = "about"
-    name = "About"
+    name = "关于我"
     url = "/about"
-    weight = 10
+    weight =  50
+  [[menu.main]]
+    identifier = "notes"
+    name = "笔记"
+    url = "/notes"
+    weight = 30
+  [[menu.main]]
+    identifier = "posts"
+    name = "文章"
+    url = "/articles"
+    weight = 20
 
 [permalinks]
   [permalinks.page]
@@ -21,3 +32,7 @@ theme = "contrast"
   [permalinks.section]
     posts = '/articles/'
     notes = '/notes/'
+
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'

@@ -7,9 +7,6 @@ headless = true
 
 # 归档
 
-- [TIL:日常碎笔记](./notes/20231118222730-til)
-- [Notes:正经的笔记](./notes/20231123144240-notes)
-- [文章](./articles/)
-
-# 最近更新
-
+- [TIL:日常碎笔记](./notes/til)
+- [Notes:正经的笔记](./notes/notes)
+- [文章列表](./articles/)
