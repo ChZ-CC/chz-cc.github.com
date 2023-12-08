@@ -13,3 +13,11 @@ theme = "contrast"
     name = "About"
     url = "/about"
     weight = 10
+
+[permalinks]
+  [permalinks.page]
+    posts = '/articles/:slug/'
+    notes = '/notes/:slug/'
+  [permalinks.section]
+    posts = '/articles/'
+    notes = '/notes/'

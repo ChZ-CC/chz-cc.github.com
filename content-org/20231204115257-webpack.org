@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       1FC3D79B-CD48-4634-8638-1B76B60C0641
+:END:
+#+TITLE: webPack
+#+AUTHOR: CC
+#+DATE: [2023-12-04 一 11:52]
+#+HUGO_BASE_DIR: ../
+#+HUGO_SECTION: notes
+
+* Rspack
+
+- [[https://github.com/web-infra-dev/rspack][Rspack]]: rust 语言实现的替代 webPack 的打包工具。
+- [[https://github.com/web-infra-dev/rsbuild][Rsbuild]]: 基于 Rspack 的前端工具。

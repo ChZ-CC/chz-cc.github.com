@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       C09CB401-5D1F-4E48-B3AE-913AFDB3E3F8
+:END:
+#+TITLE: FrontEnd
+#+AUTHOR: CC
+#+DATE: [2023-12-04 一 11:50]
+#+HUGO_BASE_DIR: ../
+#+HUGO_SECTION: notes
+
+** 子目录
+- [[id:366DDA5D-1673-4617-9F32-31A1425536B3][CSS]]
+- [[id:1FC3D79B-CD48-4634-8638-1B76B60C0641][webPack]]
+** 工具箱
+- [[https://jsbin.com/?html,output][jsbin]] 前端试验工具，运行 HTML/CSS/JS/Markdown 代码等，输出结果。

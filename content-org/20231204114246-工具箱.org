@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       D9749DBB-CC55-42CE-A91A-D389C4779EB3
+:END:
+#+TITLE: 工具箱
+#+AUTHOR: CC
+#+DATE: [2023-12-04 一 11:42]
+#+HUGO_BASE_DIR: ../
+#+HUGO_SECTION: notes
+
+* 画图工具
+** [[https://zaixianps.net/][minipaint中文版]] 英文原始开源项目 [[https://github.com/viliusle/miniPaint][miniPaint]]
