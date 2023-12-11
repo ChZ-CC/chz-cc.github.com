@@ -4,6 +4,12 @@ title = "起风了"
 theme = "contrast"
 sectionPagesMenu = 'main'
 
+summaryLength = 2
+toc = false
+autoCollapseToc = true
+
+paginate = 3
+
 [params]
   minimal = false
   excerpts = false
@@ -17,7 +23,7 @@ sectionPagesMenu = 'main'
   [[menu.main]]
     identifier = "notes"
     name = "笔记"
-    url = "/notes"
+    url = "/notes/til"
     weight = 30
   [[menu.main]]
     identifier = "posts"
@@ -36,3 +42,9 @@ sectionPagesMenu = 'main'
 [taxonomies]
   category = 'categories'
   tag = 'tags'
+
+[markup]
+  [markup.tableOfContents]
+    endLevel = 6
+    ordered = false
+    startLevel = 2
