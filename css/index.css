@@ -20,6 +20,7 @@ html {
 }
 
 body {
+  /* overflow: hidden; */
   background: #ffffff;
   color: #212228;
   font-family: "PT Sans", -apple-system, "Helvetica Neue", "Segoe UI", "Roboto", sans-serif;
@@ -203,6 +204,7 @@ nav a {
 
 .more {
   margin: 2em 0 1em;
+  text-align: right;
 }
 
 .more a {
@@ -242,6 +244,10 @@ nav a {
   color: #909194;
 }
 
+.summary-div {
+  padding: 0 2em;
+}
+
 .breadcrumb {
   background: #fbfbfb;
   padding: 0 calc(22% - 6em);
@@ -269,4 +275,88 @@ nav a {
 
 .dark-theme .breadcrumb {
   background: #252627;
+}
+
+article .breadcrumb {
+  padding: 0 calc(38% - 21em);
+  background: #fff;
+  position: relative;
+  top: -1.6em;
+}
+
+.post-content {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.post-text {
+  flex: auto;
+  overflow: auto;
+}
+
+.post-toc {
+  flex: none;
+  overflow: auto;
+  align-self: flex-start;
+  background: #eef;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  text-overflow: ellipsis;
+}
+
+.post-toc ul {
+  list-style-type: disc;
+  /* background: greenyellow; */
+  padding-inline-start: 1.6em;
+  padding-inline-end: 0.6em;
+  margin-block-end: 0em;
+  margin-block-start: 0em;
+}
+
+.post-toc nav, .post-toc a {
+  padding: 0 0;
+  background: none;
+  margin: 0 0;
+}
+
+.post-toc li {
+  padding: 5px 10px;
+  margin: 0 0;
+  color: rgb(101, 101, 195);
+  padding: 0 0;
+  white-space: nowrap;
+  /* overflow: hidden; */
+  text-overflow: ellipsis;
+}
+
+.post-toc li a:hover {
+  text-decoration: underline;
+}
+
+details {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 0.2em 0.4em 0;
+  box-shadow: 3px 3px 4px black;
+}
+
+summary {
+  font-weight: bold;
+  margin: -0.2em -0.2em 0;
+  padding: 0.2em;
+}
+
+details[open] {
+  padding: 0.2em 0.4em 0;
+}
+
+details[open] summary {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 0.2em;
 }
