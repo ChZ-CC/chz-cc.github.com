@@ -5,7 +5,6 @@ theme = "contrast"
 sectionPagesMenu = 'main'
 
 summaryLength = 2
-toc = false
 autoCollapseToc = true
 
 paginate = 3
@@ -13,6 +12,8 @@ paginate = 3
 [params]
   minimal = false
   excerpts = false
+  toc = true
+  tocMinWordCount = 20
 
 [menu]
   [[menu.main]]
