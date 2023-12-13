@@ -6,4 +6,4 @@ draft = false
 headless = true
 +++
 
-[TIL](./notes/til) | [Notes](./notes/notes) | [文章](./articles/)
+[TIL](./notes/til) | [文章](./articles/)
