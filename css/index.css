@@ -302,7 +302,7 @@ article .breadcrumb {
   flex: none;
   overflow: auto;
   align-self: flex-start;
-  background: #eef;
+  background: #fbfbfb;
   margin-block-start: 0em;
   margin-block-end: 0em;
   margin-inline-start: 0px;
@@ -328,11 +328,14 @@ article .breadcrumb {
 .post-toc li {
   padding: 5px 10px;
   margin: 0 0;
-  color: rgb(101, 101, 195);
   padding: 0 0;
   white-space: nowrap;
   /* overflow: hidden; */
   text-overflow: ellipsis;
+}
+
+.post-toc li a {
+  color: rgb(85, 85, 180);
 }
 
 .post-toc li a:hover {
@@ -342,8 +345,8 @@ article .breadcrumb {
 details {
   border: 1px solid #aaa;
   border-radius: 4px;
-  padding: 0.2em 0.4em 0;
-  box-shadow: 3px 3px 4px black;
+  padding: 0.4em 0.4em 0 0.5em;
+  box-shadow: 3px 3px 4px #2d2e36;
 }
 
 summary {
@@ -353,10 +356,28 @@ summary {
 }
 
 details[open] {
-  padding: 0.2em 0.4em 0;
+  padding: 0.4em 0.4em 0 0.5em;
 }
 
 details[open] summary {
   border-bottom: 1px solid #aaa;
   margin-bottom: 0.2em;
+}
+
+.tags-list {
+  list-style: none;
+}
+
+.tags-list li {
+  display: inline-block;
+  padding-inline-start: 1em;
+}
+
+.tags-list a {
+  color: #fbfbfb;
+  background: #2d2e36;
+  border: 1px solid #33353e;
+  border-radius: 10px;
+  padding: 0.4em 0.4em;
+  box-shadow: 3px 3px 3px #909194;
 }
