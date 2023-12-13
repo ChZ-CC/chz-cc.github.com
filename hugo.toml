@@ -24,7 +24,7 @@ paginate = 3
   [[menu.main]]
     identifier = "notes"
     name = "笔记"
-    url = "/notes/til"
+    url = "/notes"
     weight = 30
   [[menu.main]]
     identifier = "posts"

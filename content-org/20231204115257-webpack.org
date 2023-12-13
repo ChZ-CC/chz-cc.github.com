@@ -7,6 +7,12 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_SECTION: notes
 
+#+HUGO_TAGS: rspack
+#+HUGO_CATEGORIES: note
+#+HUGO_CUSTOM_FRONT_MATTER: :toc true
+
+#+HUGO_DRAFT: false
+
 * Rspack
 
 - [[https://github.com/web-infra-dev/rspack][Rspack]]: rust 语言实现的替代 webPack 的打包工具。

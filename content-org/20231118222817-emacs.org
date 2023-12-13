@@ -7,6 +7,12 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_SECTION: notes
 
+#+HUGO_TAGS: emacs org org-roam
+#+HUGO_CATEGORIES: note
+#+HUGO_CUSTOM_FRONT_MATTER: :toc true
+
+#+HUGO_DRAFT: false
+
 * Basics
 :PROPERTIES:
 :ID:       ADCE818A-48A1-415A-BDAD-DFE31243A7B0

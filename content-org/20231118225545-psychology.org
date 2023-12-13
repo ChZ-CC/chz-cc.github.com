@@ -7,4 +7,10 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_SECTION: notes
 
+#+HUGO_TAGS: TOC Psychology
+#+HUGO_CATEGORIES: note
+#+HUGO_CUSTOM_FRONT_MATTER: :toc false
+
+#+HUGO_DRAFT: false
+
 * 心理学

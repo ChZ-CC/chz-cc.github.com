@@ -7,6 +7,12 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_SECTION: notes
 
+#+HUGO_TAGS: socket sse
+#+HUGO_CATEGORIES: note
+#+HUGO_CUSTOM_FRONT_MATTER: :toc true
+
+#+HUGO_DRAFT: false
+
 * Socket
 [[https://goodyduru.github.io/os/2023/10/03/ipc-unix-domain-sockets.html][IPC - Unix Domain Sockets]]
 

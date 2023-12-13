@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       1D4260CE-ADF0-41D1-A392-66BB2DE71F8F
+:END:
+#+TITLE: Hadoop
+#+AUTHOR: CC
+#+DATE: [2023-12-13 三 16:25]
+#+HUGO_BASE_DIR: ../
+#+HUGO_SECTION: notes
+
+#+HUGO_TAGS: 
+#+HUGO_CATEGORIES:
+#+HUGO_CUSTOM_FRONT_MATTER: :toc true
+
+#+HUGO_DRAFT: true
+#+HUGO_SLUG: hadoop-deployment
+
+安装 Hadoop
+
+1. 下载

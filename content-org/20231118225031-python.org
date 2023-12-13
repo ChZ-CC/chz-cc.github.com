@@ -7,6 +7,13 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_SECTION: notes
 
+#+HUGO_TAGS: python toc
+#+HUGO_CATEGORIES: note
+#+HUGO_TOC: false
+#+HUGO_CUSTOM_FRONT_MATTER: :foo bar
+
+#+HUGO_DRAFT: false
+
 * Python 依赖管理
 * Rust && Python
 * 异步

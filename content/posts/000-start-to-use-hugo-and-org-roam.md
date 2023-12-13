@@ -4,6 +4,7 @@ date = 2023-12-04T14:39:17+08:00
 draft = false
 tags = ["emacs", 'org', 'hugo']
 categories = ["article"]
+toc = false
 +++
 
 hi

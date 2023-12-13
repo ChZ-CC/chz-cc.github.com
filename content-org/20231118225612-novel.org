@@ -7,5 +7,11 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_SECTION: notes
 
+#+HUGO_TAGS: TOC Novel
+#+HUGO_CATEGORIES: note
+#+HUGO_CUSTOM_FRONT_MATTER: :toc false
+
+#+HUGO_DRAFT: false
+
 * 《起风岁月》
 * 《献给阿尔吉侬的花束》

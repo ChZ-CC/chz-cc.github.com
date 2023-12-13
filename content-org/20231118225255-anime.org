@@ -7,5 +7,11 @@
 #+HUGO_BASE_DIR: ../
 #+HUGO_SECTION: notes
 
+#+HUGO_TAGS: TOC anime
+#+HUGO_CATEGORIES: note
+#+HUGO_CUSTOM_FRONT_MATTER: :toc false
+
+#+HUGO_DRAFT: true
+
 * 追番/补番
 ** TODO 葬送的芙莉莲
