@@ -19,27 +19,43 @@
 :END:
 
 ** 基本操作
-- `C-x s` save all
-- `C-h C-q` 快速帮助（常用快捷键），再次按快捷键关闭快速帮助。
-- `C-h ?` 帮助，查看快捷键。没有长命令。 `q` 退出帮助界面。
-- `C-v` 向下翻页
-- `M-v` 向上翻页
-- `C-l` 光标移动到屏幕中央/上方/下方。
-- `C-space` Mark 模式，选择文本。
-- `C-x space` Mark Set，矩形选区。
+- ~C-x s~ save all
+- ~C-h C-q~ 快速帮助（常用快捷键），再次按快捷键关闭快速帮助。
+- ~C-h ?~ 帮助，查看快捷键。没有长命令。 ~q~ 退出帮助界面。
+- ~C-v~ 向下翻页
+- ~M-v~ 向上翻页
+- ~C-l~ 光标移动到屏幕中央/上方/下方。
+- ~C-space~ Mark 模式，选择文本。
+- ~C-x space~ Mark Set，矩形选区。
 
 ** 区块操作
 [[http://xahlee.info/emacs/emacs/emacs_string-rectangle_ascii-art.html][Emacs: Edit Column Text, Rectangle]]
 
-- `C-x r k` 删除矩形选区（M-x kill-rectangle）
-  - `C-space` 选择区域之后，按  `C-x r k` 将删除 起点 到 终点 之间的矩形选取。
-- `C-x r t` 替换矩形选取（M-x replace-rectangle）
-  - `C-space` 选择区域后，按 `C-x r t` 替换矩形区域的文本。
-- `C-x r y` 将 kill-rectangle 的文本粘贴到选定的矩形区域。
-- `C-x r N` 插入数字列（rectangle-number-lines）
-- `C-u` + `C-x r N` 插入自定义列表
+- ~C-x r k~ 删除矩形选区（M-x kill-rectangle）
+  - ~C-space~ 选择区域之后，按  ~C-x r k~ 将删除 起点 到 终点 之间的矩形选取。
+- ~C-x r t~ 替换矩形选取（M-x replace-rectangle）
+  - ~C-space~ 选择区域后，按 ~C-x r t~ 替换矩形区域的文本。
+- ~C-x r y~ 将 kill-rectangle 的文本粘贴到选定的矩形区域。
+- ~C-x r N~ 插入数字列（rectangle-number-lines）
+- ~C-u~ + ~C-x r N~ 插入自定义列表
   - %2d 默认格式，两位的数字。
   - %c 字母列表 A-Z。
+
+** 自定义家目录与配置文件路径
+
+Windows 环境，默认的配置路径是 ~"C:\Users\{YourUserName}\.emacs.d"~ ，配置内容多起来有很多三方依赖、缓存数据等，越来越大，想要放到其盘，比如 F:/。
+
+- 在 emacs 安装目录下 ~".\emacs-29.1\share\emacs\site-lisp\"~ 添加一个文件 ~"site-start.el"~
+
+  #+BEGIN_SRC lisp
+    (defun set-home-dir (dir)
+      "Set a new HOME directory. This is where Emacs will look for init files and
+       where '~' will default to."
+      (setenv "HOME" dir)
+      (message (format "HOME location is %s" (getenv "HOME"))))
+
+    (set-home-dir "F:/")
+  #+END_SRC
 
 * Org Mode
 :PROPERTIES:
@@ -62,13 +78,13 @@
 
 常用快捷键：
 
-1. `C-c n f` 查找节点/node，如果没有，新建（f=find）。
-2. `C-c C-c` 完成节点创建。
-3. `C-c C-k` 终止节点创建。
-4. `C-c n i` 在笔记任意位置插入新的节点。
-5. `C-c C-o` 打开到光标所在位置对应的子节点的链接。
-6. `C-c C-.` 返回上一级。
-7. `M-x org-id-get-created` 基于 headline 创建节点。
+1. ~C-c n f~ 查找节点/node，如果没有，新建（f=find）。
+2. ~C-c C-c~ 完成节点创建。
+3. ~C-c C-k~ 终止节点创建。
+4. ~C-c n i~ 在笔记任意位置插入新的节点。
+5. ~C-c C-o~ 打开到光标所在位置对应的子节点的链接。
+6. ~C-c C-.~ 返回上一级。
+7. ~M-x org-id-get-created~ 基于 headline 创建节点。
 
 * buffer
 :PROPERTIES:
@@ -76,44 +92,44 @@
 :END:
 
 ** 选择 buffer
-- `C-x b` 在当前窗口切换 buffer
-- `C-x 4 b` 在另外的窗口切换 buffer
-- `C-x 4 C-f` 在另外的窗口打开文件
-- `C-x 5 b` 在另外的 frame 切换 buffer
-- `M-x delete-frame` 关闭当前 Frame。
-- `C-x 0` 关闭当前 buffer
-- `C-x 1` 关闭当前 buffer 以外的所有 buffer
-- `C-x 2` 将当前 buffer 上下分屏
-- `C-x 3` 将当前 buffer 左右分屏
+- ~C-x b~ 在当前窗口切换 buffer
+- ~C-x 4 b~ 在另外的窗口切换 buffer
+- ~C-x 4 C-f~ 在另外的窗口打开文件
+- ~C-x 5 b~ 在另外的 frame 切换 buffer
+- ~M-x delete-frame~ 关闭当前 Frame。
+- ~C-x 0~ 关闭当前 buffer
+- ~C-x 1~ 关闭当前 buffer 以外的所有 buffer
+- ~C-x 2~ 将当前 buffer 上下分屏
+- ~C-x 3~ 将当前 buffer 左右分屏
 
 ** Ibuffer
 
-`(global-set-key (kbd "C-x C-b") 'ibuffer)` 绑定快捷键，`C-x C-b` 进入 ibuffer 模式。
+~(global-set-key (kbd "C-x C-b") 'ibuffer)~ 绑定快捷键，~C-x C-b~ 进入 ibuffer 模式。
 [[https://zhuanlan.zhihu.com/p/482720932][buffer 管理与 ibuffer的介绍与使用--知乎]]
 
 *** 标记
-- `m`，标记光标所在 buffer
-- `d`，标记光标所在 buffer 为将删除
-- `t`，取消所有标记，并标记所有未标记的 buffer
-- `u`，取消光标所在 buffer 标记
-- `U`，取消所有标记
+- ~m~ ，标记光标所在 buffer
+- ~d~ ，标记光标所在 buffer 为将删除
+- ~t~ ，取消所有标记，并标记所有未标记的 buffer
+- ~u~ ，取消光标所在 buffer 标记
+- ~U~ ，取消所有标记
 *** 筛选
-- `/` 根据所有的 major mode 筛选
-- `/ m` 根据 buffer 中使用的 major mode 筛选（major mode in use）
-- `/ n` ，根据 buffer name 进行筛选
-- `/ c` ，根据 buffer 内容进行筛选（c for contents）
-- `/ b` ，根据文件基础名字（不带扩展名）进行筛选
-- `/ F` ，根据目录名进行筛选（不含文件名）
-- `/ f` ，根据文件名进行筛选（绝对路径名）
-- `/ .` ，根据扩展名进行筛选
-- `/ i` ，筛选处于 modified 的 buffer
+- ~/~ 根据所有的 major mode 筛选
+- ~/ m~ 根据 buffer 中使用的 major mode 筛选（major mode in use）
+- ~/ n~ ，根据 buffer name 进行筛选
+- ~/ c~ ，根据 buffer 内容进行筛选（c for contents）
+- ~/ b~ ，根据文件基础名字（不带扩展名）进行筛选
+- ~/ F~ ，根据目录名进行筛选（不含文件名）
+- ~/ f~ ，根据文件名进行筛选（绝对路径名）
+- ~/ .~ ，根据扩展名进行筛选
+- ~/ i~ ，筛选处于 modified 的 buffer
 *** 排序
-- `,` 切换排序方式
-- `s i` 对当前排序逆序排列
-- `s a` 字母排序
-- `s f` 文件名
-- `s v` 最近访问
-- `s s` 根据文件大小排序
+- ~,~ 切换排序方式
+- ~s i~ 对当前排序逆序排列
+- ~s a~ 字母排序
+- ~s f~ 文件名
+- ~s v~ 最近访问
+- ~s s~ 根据文件大小排序
 
 * Emacs Lisp
 :PROPERTIES:
