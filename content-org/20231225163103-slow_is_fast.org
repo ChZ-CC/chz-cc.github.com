@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       ACE21F66-6BA5-43C7-9FFE-0B4F670C186D
+:END:
+#+TITLE: 慢就是快
+#+AUTHOR: CC
+#+DATE: [2023-12-25 一 16:31]
+#+HUGO_BASE_DIR: ../
+#+HUGO_SECTION: notes
+
+#+HUGO_TAGS: 
+#+HUGO_CATEGORIES:
+#+HUGO_CUSTOM_FRONT_MATTER: :toc true
+
+#+HUGO_DRAFT: false
+#+HUGO_SLUG:
+
+[[id:C56133C1-2FA9-48C6-8F8C-7B6D93C1533C][碎片 <返回]]
+
+src: [[https://dtransposed.github.io/blog/2023/11/02/Remote-SWE/][A Video Game that Pays: Lessons Learned from Working Remotely]]
+
+关于远程办公的经验教训。
+
+- 远程不像现场办公，单位里有人可以靠一点点产出加每天打卡在职场生存。远程办公必须通过有价值的产出来维持自己的位置。
+- 远程交流效率非常重要。
+  - 慢：多花时间仔细的描述问题情景。
+  - 顺：对方看到之后无需额外信息，直接上手解决问题。否则需要再问几个来回，双方在线时间不同的话这个过程可能要耗费很多时间。
+  - 快：问题解决了。

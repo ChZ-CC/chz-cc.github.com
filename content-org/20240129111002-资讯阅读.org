@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       934F5FA6-BF7F-4542-A37D-0B738285E18A
+:END:
+#+TITLE: 资讯阅读
+#+AUTHOR: CC
+#+DATE: [2024-01-29 Mon 11:10]
+#+HUGO_BASE_DIR: ../
+#+HUGO_SECTION: notes
+
+#+HUGO_TAGS: 
+#+HUGO_CATEGORIES:
+#+HUGO_CUSTOM_FRONT_MATTER: :toc true
+
+#+HUGO_DRAFT: false
+#+HUGO_SLUG:  
+
+** 高德地图红绿灯倒计时的实现
+#+BEGIN_QUOTE
+<2024-01-29 Mon 11:13:34>
+From: 阮一峰技术周刊 288 期，[[https://mp.weixin.qq.com/s/3_LNM62zoHaJsmvAryujEw][原文链接/微信公众号]]。
+#+END_QUOTE
+
+简单来说是通过实施交通数据+算法推算出当前路口红绿灯的周期时长。收集一段时间内的车辆样本，统计第一个车的启动时间和后续其他车辆启动时间的偏移时长，再加上车辆样本的分布情况和周期性特征，计算出红绿灯的周期时长。
+
+现在高德有和交管部门合作（烟台），直接从源头获取数据，接入红绿灯状态信息，更精确。
+
