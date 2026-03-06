@@ -1,5 +1,7 @@
 +++
 title = "笔记"
+description = "我的知识库笔记"
+draft = false
 +++
 
-[笔记](./notes)
+学习笔记。

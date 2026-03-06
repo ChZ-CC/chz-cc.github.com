@@ -35,10 +35,10 @@ paginate = 3
 [permalinks]
   [permalinks.page]
     posts = '/articles/:slug/'
-    notes = '/notes/:slug/'
+    'notes/*' = '/notes/:sections[1:]/:slug/'
   [permalinks.section]
     posts = '/articles/'
-    notes = '/notes/'
+    'notes/*' = '/notes/:sections[1:]/'
 
 [taxonomies]
   category = 'categories'
