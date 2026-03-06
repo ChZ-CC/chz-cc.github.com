@@ -2,4 +2,4 @@
 title = "笔记"
 +++
 
-[TIL](./til) | [Notes](./notes)
+[笔记](./notes)
