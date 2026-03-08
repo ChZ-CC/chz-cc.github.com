@@ -1,0 +1,317 @@
+<!doctype html><html lang=en-us><title>Elasticsearch 学习笔记 | 起风了</title>
+<meta charset=utf-8><meta name=generator content="Hugo 0.120.4"><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=https://chz-cc.github.io/css/index.css><link rel=canonical href=https://chz-cc.github.io/notes/tech/elasticsearch-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/><link rel=alternate type=application/rss+xml href title=起风了><header><a href=https://chz-cc.github.io/ class=title>起风了</a><nav><a href=/articles>文章</a>
+<a href=/notes>笔记</a>
+<a href=/about>关于我</a></nav></header><article><div class=breadcrumb><li><a href=https://chz-cc.github.io/>首页</a></li><li><a href=https://chz-cc.github.io/notes/>笔记</a></li><li><a href=https://chz-cc.github.io/notes/tech/>技术</a></li><li class=active><a href=https://chz-cc.github.io/notes/tech/elasticsearch-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/>Elasticsearch 学习笔记</a></li></div><header><h1>Elasticsearch 学习笔记</h1><time datetime=2023-03-24T00:00:00Z>2023-03-24
+</time><span class=header-tag>&nbsp;字数:2555&nbsp;用时:12min
+&nbsp;分类:
+<a href=https://chz-cc.github.io/categories/note/>note</a>
+&nbsp;标签:
+<a href=https://chz-cc.github.io/tags/elasticsearch/>elasticsearch</a></span></header><div class=post-content><div class=post-text><h1 id=elaticsearch-dls>elaticsearch-dls</h1><ul><li><a href=https://godleon.github.io/blog/Elasticsearch/Elasticsearch-getting-started/>Elasticsearch 基本概念与搜索入门</a></li></ul><h2 id=search>search</h2><ul><li>query: 搜索，打分</li><li>filter: 筛选，不打分</li></ul><h2 id=analyze>analyze</h2><ul><li>char_filter: 分词前对字串的处理<ul><li>html strip</li><li>mapping</li><li>pattern replace</li></ul></li><li>tokenizer: 分词，把一个字符串拆分成单个的词<ul><li>Word Oriented Tokenizer<ul><li>Standard Tokenizer</li><li>Letter Tokenizer</li><li>Lowercase Tokenizer</li><li>Whitespace Tokenizer</li><li>UAX URL Email Tokenizer</li><li>Classic Tokenizer</li><li>Thai Tokenizer</li></ul></li><li>Partial Word Tokenizers<ul><li>N-Gram Tokenizer: quick → [qu, ui, ic, ck]</li><li>Edge N-Gram Tokenizer: quick → [q, qu, qui, quic, quick]</li></ul></li><li>Structured Text Tokenizer<ul><li>Keyword Tokenizer</li><li>Pattern Tokenizer</li><li>Simple Pattern Tokenizer</li><li>Char Group Tokenizer</li><li>Simple Pattern Split Tokenizer</li><li>Path Tokenizer: /foo/bar/baz → [/foo, /foo/bar, /foo/bar/baz]</li></ul></li></ul></li><li>filter: 又叫 token filter，是对分词结果做处理<ul><li>word_delimiter: 单词定界 EN。将单词分解为子词，并对子词进行可选的转换<ul><li>词内分隔符，大小写分隔/驼峰，数字分隔，缩写&rsquo;s删除。</li><li>参数：<ul><li>generate_word_parts: &ldquo;PowerShot&rdquo; &#187; &ldquo;Power&rdquo; &ldquo;Shot&rdquo; [true]</li><li>generate_number_parts: &ldquo;500-42&rdquo; &#187; &ldquo;500&rdquo; &ldquo;42&rdquo; [true]</li><li>catenate_words: &ldquo;wi-fi&rdquo; &#187; &ldquo;wifi&rdquo; [false]</li><li>catenate_numbers: &ldquo;500-42&rdquo; &#187; &ldquo;50042&rdquo; [false]</li><li>catenate_all: &ldquo;wi-fi-4000&rdquo; &#187; &ldquo;wifi4000&rdquo; [false]</li><li>split_on_case_change: &ldquo;PowerShot&rdquo; &#187; &ldquo;Power&rdquo; &ldquo;Shot&rdquo; [true]</li><li>preserve_original: &ldquo;500-42&rdquo; &#187; &ldquo;j&rdquo; &ldquo;2&rdquo; &ldquo;se&rdquo; [true]</li><li>stem_english_possessive: &ldquo;O&rsquo;Neil&rsquo;s&rdquo; &#187; &ldquo;O&rdquo;, &ldquo;Neil&rdquo; [true]</li><li>protected_words: 数组，被分隔时的受保护词列表。<ul><li>protected_words_path: 文件路径，受保护词表文件。</li></ul></li></ul></li></ul></li><li>cjk_width: 日语片假名不分割，当做单词处理<ul><li>&ldquo;シーサイドライナー花は花&rdquo; &#187; &ldquo;シーサイドライナー&rdquo;, &ldquo;花&rdquo;, &ldquo;は&rdquo;, &ldquo;花&rdquo;</li></ul></li><li>cjk_bigram: 二分</li><li>classic: 来自 &ldquo;classic tokenizer&rdquo;</li></ul></li></ul><h2 id=course-from-timegeek>Course from time.geek</h2><h3 id=第二章-安装>第二章 安装</h3><h3 id=第三章-入门>第三章 入门</h3><h4 id=search-api-概述>search api 概述</h4><ul><li>precision / 精准率: 击中 / 实际返回的总数（击中+虚报）</li><li>recall / 召回率: 击中 / 应该返回的总数（击中+漏报）</li></ul><h3 id=第四章-深入搜索>第四章 深入搜索</h3><h4 id=term词项查询-vs-text全文查询>term/词项查询 VS text/全文查询</h4><p>基于 term 的查询：</p><ul><li>不分词，在倒排索引中查找准确的词项；</li><li>包括：term query / range query / exists query / prefix query / wildcard query</li><li>通过 constant score 将查询转为 filtering，避免算分，利用缓存，提高性能。</li></ul><p>基于 text 的查询</p><ul><li>索引和搜索都会先进行分词，生成查询词项列表。查询时，对每个词项逐个查询，把结果合并，为每个文档算分。</li><li>包括：match query / match phrase query / query string query<ul><li>match query: 默认是 OR 词项是"或"的关系<ul><li>operator: AND</li></ul></li><li>match phrase query: AND, 词序有关系。<ul><li>slop: 1 (词项中间可以出现其他词的数量)</li></ul></li></ul></li></ul><h4 id=structured-search--结构化搜索>Structured search / 结构化搜索</h4><ul><li>日期、Boolean、数字</li><li>文本：固定集合，如颜色集合：红、绿、蓝。（choices/enums）</li><li>使用 term 查询，返回 true/false。</li><li>例：<ul><li>Boolean查询：term。</li><li>数值查询：term、range-gte/lte。</li><li>日期查询：range。&ldquo;2014-01-01 00:00:00||+1M&rdquo;, &ldquo;now-1y&rdquo;<ul><li>y : year</li><li>M : month</li><li>w : week</li><li>d : day</li><li>H/h : hour</li><li>m : minute</li><li>s : second</li></ul></li><li>多值/列表字段的查询<ul><li>term：包含查询字段就会返回。</li><li>想要精确匹配，增加一个count字段计数，判断是否完全一致。</li></ul></li></ul></li></ul><h4 id=搜索的相关性计算>搜索的相关性计算</h4><p>相关性 / relevance 算法：TF-IDF &#187; BM 25</p><p>可以指定相似度算法：&ldquo;custom_similarity&rdquo;: {&ldquo;type&rdquo;: &ldquo;BM25&rdquo;, &ldquo;b&rdquo;: 0, &ldquo;k1&rdquo;: 2}；mapping 的字段指定 &ldquo;similarity&rdquo;: &ldquo;custom_similarity&rdquo;。</p><p>explain API：查看查询和算分的详情。</p><p>Boosting Relevance：控制相关度的一种手段，在索引、字段、查询子条件中。</p><ul><li>boost > 1，权重提升；</li><li>0 &lt; boost &lt; 1，权重降低；</li><li>boost &lt; 0，贡献负分。</li></ul><h4 id=bool-query-多字段查询>bool query 多字段查询</h4><p>bool 查询：一个或多个查询子句的组合。</p><ul><li>must: 必须匹配，贡献算分；</li><li>should: 选择性匹配，贡献算分；</li><li>must_not: filter context，必须不匹配；</li><li>filter: filter context，必须匹配，不贡献算分。</li></ul><p>bool 查询可以嵌套，会影响算分。</p><h4 id=dis-max-query-单字符串多字段查询>Dis Max Query 单字符串多字段查询</h4><p>普通算分是每一个匹配字段的得分的总和。</p><p>Disjunction Max Query：&ldquo;dis_max&rdquo; 将字段上最匹配的评分作为最终评分。</p><h4 id=multi-match-单字符串多字段查询>multi match 单字符串多字段查询</h4><p>multi match query:</p><ul><li>type:<ul><li>&ldquo;best_fields&rdquo; default，最高分。</li><li>&ldquo;most_fields&rdquo; 做累加。无法使用 operator；可以用 copy to，需要额外空间。</li><li>&ldquo;cross_fields&rdquo;<ul><li>跨字段搜索：地址信息 -> street/city/country/postcode</li><li>可以使用 operator；设置权重。</li></ul></li></ul></li><li>query</li><li>fields</li><li>tie_breaker</li><li>minimum_should_match: &ldquo;20%&rdquo;</li></ul><h4 id=混合多语言>混合多语言</h4><ul><li>不同索引使用不同语言</li><li>同一索引，不同字段使用不同语言</li><li>字段内混合不同语言</li></ul><p>中文分词器</p><ul><li>HanLP：面向生产环境的自然语言处理工具包<ul><li>安装：./elastcsearch-plugin install <a href=https://github.com/zip_file_of_the_analyzer_you_want_to_install>https://github.com/zip_file_of_the_analyzer_you_want_to_install</a></li><li>hanlp: defualt</li><li>hanlp_standard</li><li>hanlp_index</li><li>hanlp_nlp</li><li>hanlp_n_short: N-最短路径</li><li>hanlp_dijkstra: 最短路径分词</li><li>hanlp_crf: 1.6.6+ 废弃</li><li>hanlp_speed</li></ul></li><li>ik 分词器<ul><li>ik_max_word</li><li>ik_smart</li></ul></li><li>pinyin</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;settings&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;analysis&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;analyzer&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;user_name_analyzer&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;tokenizer&#34;</span>: <span style=color:#e6db74>&#34;whitespace&#34;</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;filter&#34;</span>: <span style=color:#e6db74>&#34;pinyin_first_letter_and_full_pinyin_filter&#34;</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;filter&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;pinyin_first_letter_and_full_pinyin_filter&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;pinyin&#34;</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;keep_first_letter&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;keep_full_pinyin&#34;</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;keep_none_chinese&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;keep_original&#34;</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;limit_first_letter_length&#34;</span>: <span style=color:#ae81ff>16</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;lowercase&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;trim_whitespace&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;keep_none_chinese_in_first_letter&#34;</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>自然语言与查询</p><ul><li>不完全匹配，意思相同，希望能搜到。<ul><li>quick brown fox</li><li>fast brown fox / jumping fox</li><li>jumped foxes</li></ul></li><li>优化方法<ul><li>归一化：清除变音符</li><li>抽词根：清除复数、时态差异</li><li>同义词</li><li>拼写错误</li></ul></li></ul><h4 id=search-template--index-alias>Search Template & Index Alias</h4><p>Search Template：定义一个 contract，解耦程序与搜索，开发、搜索、性能各司其职。</p><pre tabindex=0><code>POST _scripts/tmdb
+{
+  &#34;script&#34;: {
+    &#34;lang&#34;: &#34;mustache&#34;,
+    &#34;source&#34;: {
+      &#34;_source&#34;: [
+        &#34;title&#34;,&#34;overview&#34;
+      ],
+      &#34;size&#34;: 20,
+      &#34;query&#34;: {
+        &#34;multi_match&#34;: {
+          &#34;query&#34;: &#34;{{q}}&#34;,
+          &#34;fields&#34;: [&#34;title&#34;,&#34;overview&#34;]
+        }
+      }
+    }
+  }
+}
+DELETE _scripts/tmdb
+
+GET _scripts/tmdb
+
+POST tmdb/_search/template
+{
+    &#34;id&#34;:&#34;tmdb&#34;,
+    &#34;params&#34;: {
+        &#34;q&#34;: &#34;basketball with cartoon aliens&#34;
+    }
+}
+</code></pre><p>Index Alias：别名，零停机运维</p><ul><li>reindex：新建一个index，指向原有 alias；删除旧的 index 的alias。这样同一个 alias 就无痛切换到了新的索引上。</li><li>同一个 index 指向不同 alias，通过添加 filter 形成不同的索引。</li><li>不同的 index 指向同一个 alias，搜索多个 indices 的数据。</li></ul><h4 id=function-score-query-优化算分>Function Score Query 优化算分</h4><p>在查询结束后，对每一个匹配的文档重新算分，然后根据新的分数做排序。</p><ul><li>weight: 为单个文档设置（简单、不被规范化的）权重。</li><li>field value factor: 用这个值来修改 _score，例如投票数、点赞数。<ul><li>boost_mode: 默认乘。sum。</li><li>&ldquo;modifier&rdquo;: &ldquo;log1p&rdquo;</li><li>&ldquo;factor&rdquo;</li></ul></li><li>random score: 广告投放。<ul><li>seed</li></ul></li><li>衰减函数: 以某个字段的值为标准，距离某个值越近，得分越高。</li><li>script score: 完全有自定义脚本控制。</li></ul><h4 id=sugester-搜索引擎输入提示>sugester 搜索引擎输入提示</h4><p>原理：将输入文本分解为 token，然后在索引的字典中查找相似的 term 并返回。</p><p>实现：在 mapping 中设置字段 type=completion；搜索时使用 suggest，prefix=搜索内容，completion=对应字段。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>articles</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;mappings&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;properties&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;title_completion&#34;</span>:{
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;completion&#34;</span>
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><ul><li>Term suggester: 返回相似文本, leenshtein edit distance 算法实现。<ul><li>suggest_mode 包括：<ul><li>missing: 索引中已经存在就不提供建议；</li><li>popular: 推荐出现频率高的词；</li><li>always: 无论存在与否，都提供建议。</li></ul></li></ul></li></ul><pre tabindex=0><code>POST /articles/_search
+{
+  &#34;size&#34;: 1,
+  &#34;query&#34;: {
+    &#34;match&#34;: {
+      &#34;body&#34;: &#34;lucen rock&#34;
+    }
+  },
+  &#34;suggest&#34;: {
+    &#34;term-suggestion&#34;: {
+      &#34;text&#34;: &#34;lucen rock&#34;,
+      &#34;term&#34;: {
+        &#34;suggest_mode&#34;: &#34;missing&#34;,
+        &#34;field&#34;: &#34;body&#34;
+      }
+    }
+  }
+}
+</code></pre><ul><li>phrase suggester: 使用 phrase 关键字。在 term 基础上增加了额外逻辑。<ul><li>suggest_mode: missing, popular, always</li><li>max_errors: 最多可以拼错的 term 数</li><li>confidence: 置信度，控制返回结果数量。默认为 1。</li></ul></li></ul><pre tabindex=0><code>POST /articles/_search
+{
+  &#34;suggest&#34;: {
+    &#34;my-suggestion&#34;: {
+      &#34;text&#34;: &#34;lucne and elasticsear rock hello world &#34;,
+      &#34;phrase&#34;: {
+        &#34;field&#34;: &#34;body&#34;,
+        &#34;max_errors&#34;:2,
+        &#34;confidence&#34;:0,
+        &#34;direct_generator&#34;:[{
+          &#34;field&#34;:&#34;body&#34;,
+          &#34;suggest_mode&#34;:&#34;always&#34;
+        }],
+        &#34;highlight&#34;: {
+          &#34;pre_tag&#34;: &#34;&lt;em&gt;&#34;,
+          &#34;post_tag&#34;: &#34;&lt;/em&gt;&#34;
+        }
+      }
+    }
+  }
+}
+</code></pre><ul><li>complete suggester<ul><li>auto complete / 自动补全，精准、即时。</li><li>所以不用倒排索引，而是将 analyze 的数据编码成 FST 和索引一起存放。FST 会被 ES 加载进内存。</li><li>FST 只能用于前缀查找。</li></ul></li></ul><pre tabindex=0><code>POST articles/_search?pretty
+{
+  &#34;size&#34;: 0,
+  &#34;suggest&#34;: {
+    &#34;article-suggester&#34;: {
+      &#34;prefix&#34;: &#34;elk &#34;,
+      &#34;completion&#34;: {
+        &#34;field&#34;: &#34;title_completion&#34;
+      }
+    }
+  }
+}
+</code></pre><ul><li>context suggerster<ul><li>context 类型：category, geo 地理位置</li></ul></li></ul><h4 id=cross-data-search-跨集群搜索>cross data search 跨集群搜索</h4><p>在每个集群上配置动态的设置：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>_cluster/settings</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;persistent&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;cluster&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;remote&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;cluster0&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;seeds&#34;</span>: [
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;127.0.0.1:9300&#34;</span>
+</span></span><span style=display:flex><span>          ],
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;transport.ping_schedule&#34;</span>: <span style=color:#e6db74>&#34;30s&#34;</span>
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;cluster1&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;seeds&#34;</span>: [
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;127.0.0.1:9301&#34;</span>
+</span></span><span style=display:flex><span>          ],
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;transport.compress&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;skip_unavailable&#34;</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;cluster2&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;seeds&#34;</span>: [
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;127.0.0.1:9302&#34;</span>
+</span></span><span style=display:flex><span>          ]
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><ul><li>kibana > index pattern > create index pattern</li></ul><h3 id=第五章-分布式特性及分布式搜索的机制>第五章 分布式特性及分布式搜索的机制</h3><h4 id=分布式模型及选主和脑裂问题>分布式模型及选主和脑裂问题</h4><ul><li><p>集群: 通过名字来区分，默认名字是 &ldquo;elasticsearch&rdquo;。</p><ul><li>修改集群名称：1. 配置文件；2. -E cluster.name=geettime</li></ul></li><li><p>节点: 一个 elasticsearch 实例，本质是一个 JAVA 进程。生产环境，一台机器运行一个节点。</p><ul><li>修改节点名称：1. 配置文件；2. -E node.name=node2</li><li>ID：节点启动自动分配一个 UID，保存在 data 目录下。</li></ul></li><li><p>data node</p></li><li><p>ingest node</p></li><li><p>master node 的职责：</p><ul><li>处理创建、删除索引等请求</li><li>决定分片被分配到哪个节点</li><li>维护、更新 cluster state</li><li>最佳实践： so in large or high-throughput clusters it is a good idea to avoid using the master-eligible nodes for tasks such as indexing and searching. You can do this by configuring three of your nodes to be dedicated master-eligible nodes. Dedicated master-eligible nodes only have the master role, allowing them to focus on managing the cluster.</li></ul></li><li><p>coordinationg node: 处理请求信息，路由到正确的节点。默认是 true。将其他项设置为 false 成为 dedicated coordinating node。</p></li><li><p>集群状态</p><ul><li>所有节点信息</li><li>所有索引和其他相关 mapping、setting 信息</li><li>分片的路由信息</li><li>每个节点都保存了集群状态信息，但只有 master 能修改，并负责同步给其他节点。</li></ul></li><li><p>选举：</p><ul><li>节点之间相互 ping，ID 小的做 master。</li></ul></li><li><p>脑裂：</p><ul><li>节点之间网络不通，产生多个 master 节点。</li><li>如何避免：设置 quorum（仲裁）限定选举条件，只有 master-eligible 节点数大于 quorum 才进行选举。<ul><li>quorum = （master-eligible 数量 / 2） + 1</li><li>7.0 无需配置</li></ul></li></ul></li><li><p>dedicated master-eligible node / default distribution</p><ul><li>node.master: true</li><li>node.voting_only: false</li><li>node.data: false</li><li>node.ingest: false</li><li>node.ml: false</li><li>xpack.ml.enabled: true</li><li>node.transform: false</li><li>xpack.transform.enabled: true</li><li>node.remote_cluster_client: false</li></ul></li><li><p>dedicated master-eligible node / oss-only disctrbution</p><ul><li>node.master: true</li><li>node.data: false</li><li>node.ingest: false</li><li>node.remote_cluster_client: false</li></ul></li></ul><h4 id=38--分片与集群的故障转移>38 | 分片与集群的故障转移</h4><h4 id=39--文档分布式存储>39 | 文档分布式存储</h4><h4 id=40--分片及其生命周期>40 | 分片及其生命周期</h4><h4 id=41--剖析分布式查询及相关性算分>41 | 剖析分布式查询及相关性算分</h4><h4 id=42--排序及doc-valuesfielddata>42 | 排序及Doc Values&amp;Fielddata</h4><h4 id=43--分页与遍历from-size-search-after--scroll-api>43 | 分页与遍历：From, Size, Search After & Scroll API</h4><h4 id=44--处理并发读写操作>44 | 处理并发读写操作</h4><h3 id=第六章深入聚合分析-4讲>第六章：深入聚合分析 (4讲)</h3><h4 id=45--bucket--metric聚合分析及嵌套聚合>45 | Bucket & Metric聚合分析及嵌套聚合</h4><h4 id=46--pipeline聚合分析>46 | Pipeline聚合分析</h4><h4 id=47--作用范围与排序>47 | 作用范围与排序</h4><h4 id=48--聚合分析的原理及精准度问题>48 | 聚合分析的原理及精准度问题</h4><h3 id=第七章数据建模-7讲>第七章：数据建模 (7讲)</h3><h4 id=49--对象及nested对象>49 | 对象及Nested对象</h4><p>一个字段包含多个数值对象（list of object [{&ldquo;a&rdquo;: 1, &ldquo;b&rdquo;:2}]），需要对对象进行查询，使用 nested 对象类型。</p><h4 id=50--文档的父子关系>50 | 文档的父子关系</h4><p>关联文档，父子分开存储，适合子文档更新频繁的情况，例如 博客的评论。</p><h4 id=51--update-by-query--reindex-api>51 | Update By Query & Reindex API</h4><ul><li>update_by_query: 索引新增字段，更新旧 doc 的索引</li><li>_reindex: 字段类型更改、分片数量改变、跨集群迁移</li></ul><h4 id=52--ingest-pipeline--painless-script>52 | Ingest Pipeline & Painless Script</h4><ul><li>Ingest Pipeline<ul><li>ingest node: 在 index 和 bulk 前，对数据进行预处理。</li><li>vs Logstash<ul><li>ingest node: 1. API获取数据，写入es；2. 不支持缓冲；3. es 内置，可以开发扩展插件；4. 无需额外部署。</li><li>Logstash: 1. 支持不同数据源，写入不同数据库；2. 列队，支持重写；3. 支持大量插件，可定制开发；4. 需要部署，增加架构的复杂度。</li></ul></li></ul></li><li>Painless<ul><li>高性能、安全；支持所有 java 数据类型和 java API 子集。</li><li>通过 Painless 脚本访问字段：<ul><li>ingestion : ctx.field_name</li><li>update : ctx._source.field_name</li><li>search & aggregation : doc[&ldquo;field_name&rdquo;]</li></ul></li></ul></li></ul><h4 id=53--elasticsearch数据建模实例>53 | Elasticsearch数据建模实例</h4><p>创建数据模型：第三范式，ES 反范式/denomalization。</p><ul><li>设置字段类型<ul><li>text: 分词，不支持聚合分析和排序。<ul><li>fielddata: true 支持聚合、排序</li></ul></li><li>keyword: 不分词。<ul><li>ES 默认为文本类型/text的字段设置一个 keyword 字段。</li></ul></li><li>数字：<ul><li>贴近类型</li><li>枚举值 设置为 keyword</li></ul></li></ul></li><li>检索<ul><li>index: false, 不需要搜索</li><li>index_options.norms: false, 不需要归一化。</li></ul></li><li>聚合和排序</li><li>额外存储<ul><li>store: true, 存储该字段的原始内容；</li><li>_source.enable: false, 节约磁盘。<ul><li>不建议，因为无法做 reindex 或 update。</li><li>优先考虑增加压缩比。</li></ul></li></ul></li></ul><h4 id=54--elasticsearch数据建模最佳实践>54 | Elasticsearch数据建模最佳实践</h4><ul><li>kibana 对 nested 和父子结构支持不好。</li><li>防止字段无线扩张<ul><li>Dynamic 设置 false/strict 控制字段的增加。</li><li>使用 nested object 设置 key value。</li></ul></li><li>避免使用正则查询</li><li>初始化空值，避免 null 值对聚合结果的影响。</li><li>加入 meta 信息，对 mapping 做版本控制（GitHub）。</li></ul><h4 id=55--第二部分总结回顾>55 | 第二部分总结回顾</h4><h3 id=第八章保护你的数据-3讲>第八章：保护你的数据 (3讲)</h3><h4 id=56--集群身份认证与用户鉴权>56 | 集群身份认证与用户鉴权</h4><p>ES 集群</p><ul><li>security 插件：search-guard、readonly rest</li><li>xpack.secutity.enable=true 开启权限管理<ul><li>es 默认有一些管理员账号。</li><li><code>$ bin/elasticsearch-setup-passwords interactive</code> 在命令行配置用户密码。</li></ul></li></ul><p>Kibana :: RBAC(role based access control)</p><ul><li>kibana-path/config/kibana.yml, 取消 username 和 password 的注释。</li><li>设置 role，添加 user。</li></ul><h4 id=57--集群内部安全通信>57 | 集群内部安全通信</h4><p>加密通讯：TLS(Trusted Certificate Authority/CA)</p><p>认证级别</p><ul><li>certificate: 节点加入需要使用相同 CA 签发的证书</li><li>full verification: certificate + host name 和 ip 地址验证</li><li>no verification: 任何节点都可加入。开发环境，用于诊断。</li></ul><p>创建证书</p><ul><li>创建 CA：<code>bin/elasticsearch-certutil ca</code>。生成一个 elastic-stack-ca.p12 文件。</li><li>签发证书：<code>bin/elasticsearch-certutil cert --ca elastic-stack-ca.p12</code>。生成一个 elastic-certificates.p12 证书文件。</li><li><code>mv elastic-certificates.p12 config/certs</code></li></ul><p>配置</p><ul><li>xpack.security.enable=true</li><li>xpack.security.transport.ssl.enable=true</li><li>xpack.security.transport.ssl.verification_mode=cerificate</li><li>xpack.security.transport.ssl.keystore.path=certs/elastic-certificates.p12</li><li>xpack.security.transport.ssl.truststore.path=certs/elastic-certificates.p12</li></ul><h4 id=58--集群与外部间的安全通信>58 | 集群与外部间的安全通信</h4><p>ES 的 HTTPS 配置，同上打开 ssl。</p><p>Kibana 的 HTTPS 配置 &ndash; kibana.yml</p><ul><li>Kibana 连接 ES HTTPS<ul><li>签发 .pem 证书：<code>openssl pkcs12 -in elastic-certificates.p12 -cacerts -nokeys -out elastic-ca.pem</code>。把 .pem 文件copy到 es 的 config/certs 下。</li><li>配置 kibana.yml，取消注释 <code>elasticsearch.hosts: ["https://localhost/9200"]</code> 及下面两行。</li></ul></li><li>Kibana 使用 HTTPS 访问<ul><li><code>bin/elasticsearch-certutil ca --pem</code> 生成一个 zip 文件，包含 ca.cert 和 ca.key 两个文件</li><li>cp ca.* kibana-path/config/certs（kibana 的 config/certs 下还有 .p12 的文件？）</li><li>kibana.yml 取消注释 server.ssl.enable: true 及下面几行。</li></ul></li></ul><h3 id=第九章水平扩展elasticsearch集群-6讲>第九章：水平扩展Elasticsearch集群 (6讲)</h3><h4 id=59--常见的集群部署方式>59 | 常见的集群部署方式</h4><ol><li>配置单一职责的节点</li></ol><ul><li>master: 3 台，低性能。</li><li>data: 多台，高性能。</li><li>ingest &#171; write</li><li>coordinate &#171; kibana | &#187; read, aggregation</li></ul><ol start=2><li>LB(load balance)</li></ol><h4 id=60--hot--warm架构与shard-filtering>60 | Hot & Warm架构与Shard Filtering</h4><ul><li>hot/warm node<ul><li>不同机器、不同数据<ul><li>hot: 高配置、ssd、新数据</li><li>warm: 大容量磁盘、只读</li></ul></li><li>步骤<ul><li>标记节点：node.attr.my_node_type=hot/warm<ul><li><code>GET /_cat/nodeattr?v</code> 查看节点属性</li></ul></li><li>配置 hot 数据<ul><li>设置 index 的 settings：</li></ul></li></ul></li></ul></li></ul><pre tabindex=0><code>PUT logs-2019-06-27
+{
+  &#34;settings&#34;: {
+    &#34;number_of_shards&#34;: 2,
+    &#34;number_of_replicas&#34;: 0,
+    &#34;index.routing.allocation.require.my_node_type&#34;: &#34;hot&#34;
+  }
+}
+</code></pre><pre><code>- 旧数据移动到 warm 节点
+</code></pre><pre tabindex=0><code>PUT logs-2019-06-27/settings
+{
+  &#34;index.routing.allocation.require.my_node_type&#34;: &#34;warm&#34;
+}
+
+查看节点分片信息
+GET _cat/shards?v
+</code></pre><ul><li><p>Rack Awareness 机架</p><p>机架断电，同时丢失多个节点。Rack Awareness 机制可以尽量避免同一个索引的主、副分片分配在同一个机架的节点上。</p><ul><li>标记 Rack 节点</li></ul></li></ul><pre tabindex=0><code>bin/elasticsearch  -E node.name=node1 -E cluster.name=geektime -E path.data=node1_data -E node.attr.my_rack_id=rack1
+bin/elasticsearch  -E node.name=node2 -E cluster.name=geektime -E path.data=node2_data -E node.attr.my_rack_id=rack1
+</code></pre><ul><li>配置集群</li></ul><pre tabindex=0><code>PUT _cluster/settings
+{
+  &#34;persistent&#34;: {
+    &#34;cluster.routing.allocation.awareness.attributes&#34;: &#34;my_rack_id&#34;
+  }
+}
+</code></pre><ul><li>Fore awareness: 副本无法分配到主分片的节点<ul><li>标记 rack</li><li>配置集群</li></ul></li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>_cluster/settings</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;persistent&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;cluster.routing.allocation.awareness.attributes&#34;</span>: <span style=color:#e6db74>&#34;my_rack_id&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;cluster.routing.allocation.awareness.force.my_rack_id.values&#34;</span>: <span style=color:#e6db74>&#34;rack1,rack2&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_cluster/settings</span>
+</span></span></code></pre></div><h4 id=61--分片设计及管理>61 | 分片设计及管理</h4><ul><li>分片数 > 节点数<ul><li>新节点加入，分片可以自动分配</li><li>分片重新分配时，不会有downtime</li></ul></li><li>多分片的好处：<ul><li>并行查询</li><li>分散写入</li></ul></li><li>分片过多的副作用<ul><li>每个分片是一个 Lucene 索引，会使用机器资源。过多的分片导致额外的性能开销<ul><li>Lucene indices / file dscriptor / RAM / CPU</li><li>每次搜索需要从每个分片上获取资源</li><li>分片的 meta 信息由 master 节点维护，过多的分片增加管理负担。</li></ul></li><li>经验值：分片总数在 10 万以内。</li></ul></li><li>推荐配置<ul><li>物理大小：日志类 &lt; 50GB; 搜索类应用 &lt; 20 GB<ul><li>提高 update 性能</li><li>merge 时减少所需资源</li><li>节点丢失，更快的恢复</li><li>便于集群内 rebalancing</li></ul></li><li>副本数量：增加写的负担、提高读的性能。</li></ul></li><li>index.routing.allocation.total_shards_per_node=1 索引的分片在一个节点上只能有一个。</li></ul><h4 id=62--如何对集群进行容量规划>62 | 如何对集群进行容量规划</h4><p>根据业务需求。</p><ul><li>搜索 日志分离<ul><li>搜索 ssd<ul><li>数据量稳定、增量少、搜索频繁</li></ul></li><li>日志 hot warm<ul><li>写入、查询近期、无修改。</li></ul></li></ul></li><li>及时监控，扩容<ul><li>高可用 3 台 dedicated master node</li><li>聚合查询 + coordinate node</li><li>写入 + ingest node</li></ul></li><li>date math 的方式写入时间序列数据（日志）</li><li>index alias</li></ul><h4 id=63--在私有云上管理elasticsearch集群的一些方法>63 | 在私有云上管理Elasticsearch集群的一些方法</h4><ul><li>集群管理<ul><li>容量不足，增加节点</li><li>节点丢失，修复、更换节点（rack awareness）</li><li>版本升级；数据备份；滚动升级</li></ul></li></ul><p>ECE - elastic cloud enterprise，单个控制台，管理多个集群</p><ul><li>支持不同方式的集群部署、跨数据中心、部署 Anti Affinity</li><li>统一监控所有集群的状态。</li><li>图形化操作<ul><li>增删节点</li><li>升级集群</li><li>滚动更新</li><li>自动数据备份</li></ul></li></ul><p>基于 Kubernetes 的方案</p><ul><li>基于容器技术，使用 operator 模式进行编排管理</li><li>配置管理多个集群</li><li>支持 hot & warm</li><li>数据快照和恢复</li></ul><p>建构自己的管理系统</p><ul><li>基于虚拟机</li><li>基于 kubernates</li></ul><h4 id=64--在公有云上管理与部署elasticsearch集群>64 | 在公有云上管理与部署Elasticsearch集群</h4><h3 id=第十章生产环境中的集群运维-10讲>第十章：生产环境中的集群运维 (10讲)</h3><h4 id=65--生产环境常用配置与上线清单>65 | 生产环境常用配置与上线清单</h4><p>系统设置：参考文档 &ldquo;Set up Elasticsearch&rdquo;</p><ul><li>禁用swap</li><li>ulimit（进程可以同时打开的文件数量）</li><li>。。。</li></ul><p>最佳实践：</p><ul><li>jvm<ul><li>避免修改默认配置</li><li>Xms 和 Xmx 一样大，避免 heap resize 引发停顿</li><li>Xmx 不超过物理内存的 50%，不大于 32G（提高效率，小于32时会启用内存对象指针压缩技术）。</li><li>JVM 必须使用 server 模式</li><li>关闭 JVM Swapping</li></ul></li><li>网络<ul><li>单集群不要夸数据中心（不要使用WAN，广域网，英語：Wide Area Network）</li><li>节点之间的 hops 越少越好（router 跳）</li><li>多块网卡，最好将 transport 和 http 绑定到不同网卡，并设置不同的防火墙</li><li>按需为 coordinating node 和 ingest node 配置负载均衡</li></ul></li><li>内存<ul><li>搜索类：1:16，日志类：1:48 ~ 1:96 之间。</li><li>例：1T数据，一个副本 = 2T 总数据量<ul><li>搜索类：31 × 16 = 496GB 约等于 400G，那么需要至少 5 个节点。</li><li>日志类：31 × 5 = 1550GB，两个节点即可。</li></ul></li></ul></li><li>存储<ul><li>SSD，本地存储，避免使用云存储。</li><li>本地指定多个 path.data 以支持使用多块磁盘</li><li>ES 提供了很好的 HA(High avalibity) 机制，无需配置 RAID 1/5/10</li><li>warm 节点可以使用 spinning disk，但要关闭 concurrent merge<ul><li>index.merge.scheduler.max_thread_count: 1</li></ul></li><li>trim SSD（参考文章：is-your-elasticsearch-trimmed）</li></ul></li><li>硬件<ul><li>中等配置值</li><li>一台机器不要运行多个节点</li></ul></li><li>集群设置：Throttles 限流，密码多任务对集群产生性能影响<ul><li>cluster.routing.allocation.node_concurrent_recoveries:2</li><li>cluster.routing.allocation.cluster_concurrent_rebalance:2</li></ul></li><li>安全配置</li></ul><h4 id=66--监控elasticsearch集群>66 | 监控Elasticsearch集群</h4><pre tabindex=0><code>GET _cluster/stats
+GET _nodes/stats
+GET my_index/_stats
+GET _cluster/pending_tasks
+GET tasks
+
+GET _nodes/thread_pool
+GET _nodes/stats/thread_pool
+GET _cat/thread_pool?v
+GET _nodes/hot_threads
+GET _nodes/stats/thread_pool
+
+# 设置 Index Slowlogs
+# the first 1000 characters of the doc&#39;s source will be logged
+PUT my_index/_settings
+{
+  &#34;index.indexing.slowlog&#34;:{
+    &#34;threshold.index&#34;:{
+      &#34;warn&#34;:&#34;10s&#34;,
+      &#34;info&#34;: &#34;4s&#34;,
+      &#34;debug&#34;:&#34;2s&#34;,
+      &#34;trace&#34;:&#34;0s&#34;
+    },
+    &#34;level&#34;:&#34;trace&#34;,
+    &#34;source&#34;:1000  
+  }
+}
+
+# 设置查询
+DELETE my_index
+//&#34;0&#34; logs all queries
+PUT my_index/
+{
+  &#34;settings&#34;: {
+    &#34;index.search.slowlog.threshold&#34;: {
+      &#34;query.warn&#34;: &#34;10s&#34;,
+      &#34;query.info&#34;: &#34;3s&#34;,
+      &#34;query.debug&#34;: &#34;2s&#34;,
+      &#34;query.trace&#34;: &#34;0s&#34;,
+      &#34;fetch.warn&#34;: &#34;1s&#34;,
+      &#34;fetch.info&#34;: &#34;600ms&#34;,
+      &#34;fetch.debug&#34;: &#34;400ms&#34;,
+      &#34;fetch.trace&#34;: &#34;0s&#34;
+    }
+  }
+}
+</code></pre><h4 id=67--诊断集群的潜在问题>67 | 诊断集群的潜在问题</h4><p>health api</p><ul><li>green: 分片有被正确的分配，不一定没有问题</li><li>负载过高导致集群失联，master/data node 宕机</li><li>副本丢失，数据可靠性受损</li><li>集群压力过大，数据写入失败</li><li>负载不均衡</li><li>优化分片，segment</li><li>规范操作：利用别名 / 避免 dynamic mapping</li></ul><p>阿里云Elasticsearch智能优化运维工具：EYou</p><h4 id=68--解决集群yellow与red的问题----allocationexplain-api>68 | 解决集群Yellow与Red的问题 &ndash; allocation/explain api</h4><ul><li>yellow: 副本分片没有分配</li><li>red: 主分片没有分配</li><li>green: 主副分片都正常配置</li></ul><pre tabindex=0><code>GET _cluster/health
+GET _cluster/health?level=indices
+GET _cluster/health/my_index
+GET _cluster/health?level=shards
+GET _cluster/allocation/explain
+</code></pre><h4 id=69--提升集群写性能>69 | 提升集群写性能</h4><ul><li>客户端：多线程、批量写（bulk）<ul><li>测试，确定最佳文档数</li></ul></li><li>服务器：分解问题，单节点调整测试，压榨硬件资源，达到最高吞吐量。<ul><li>更好的硬件</li><li>线程切换 / 堆栈状况</li><li>优化手段：<ul><li>refresh interval 降低io</li><li>降低 cpu 和存储开销：不必要的分词 / 不需要的 doc_value / 字段尽量保证相同顺序<ul><li>index: false &ndash; agg only</li><li>norms: false &ndash; 不算分</li><li>不用 dynamic mapping</li><li>index_options 控制哪些内容可以被添加到倒排索引中。</li><li>关闭 _source, 减少 IO 操作 &ndash; 指标型数据，不能 reindex 和 update</li></ul></li><li>shard filtering / write load balancer<ul><li>副本设为 0，写入完毕后再改回来。</li></ul></li><li>调整 bulk 线程池和列队<ul><li>5～15MB</li><li>timeout: 60s</li><li>轮询打到不同节点</li><li>线程池：cpu 核数 + 1，避免上下文切换。</li><li>列队大小适当增加。太大会占用过多内存增加 GC 负担。</li></ul></li></ul></li></ul></li></ul><h4 id=70--提升集群读性能>70 | 提升集群读性能</h4><ul><li>denormalize 不要搞关系型<ul><li>nested 类型，查询慢几倍；</li><li>parent/child 类型，查询慢几百倍。</li></ul></li><li>建模<ul><li>先计算，再保存到es。避免 script 计算；<ul><li>ingest pipeline，计算并写入某个字段</li></ul></li><li>尽量使用 filter context，利用缓存，减少不必要的算分；</li><li>结合 profile、explain api 分析慢查询的问题，持续优化数据模型<ul><li>严禁使用 * 开头的通配符 term 查询</li></ul></li></ul></li><li>聚合查询<ul><li>控制聚合的数量，减少内存开销。</li><li>将 query scope 改为 filter bucket。</li></ul></li><li>优化分片<ul><li>避免 over sharding</li><li>控制 分片尺寸</li><li>force-merge read-only 索引<ul><li>使用基于时间序列的索引，将只读的索引进行 force-merge，减少 segment 数量。</li></ul></li></ul></li></ul><h4 id=71--集群压力测试>71 | 集群压力测试</h4><p>压力测试</p><ul><li>目的：容量规划 / 性能优化 / 版本间的性能比较 / 性能问题诊断 / 系统维稳 / 系统极限和隐患</li><li>步骤：<ul><li>测试计划：确定测试场景和测试数据集</li><li>脚本开发</li><li>测试环境搭建 & 运行测试</li><li>结果分析</li></ul></li></ul><p>ES Rally，基于 python3 的压力测试工具。</p><ul><li>自动创建、配置、运行测试，并销毁 ES 集群</li><li>支持不同的测试数据的比较，支持将数据导入 ES 集群，进行二次分析</li><li>搜集测试的指标数据，方便对测试结果进行深度分析</li></ul><h4 id=72--段合并优化及注意事项>72 | 段合并优化及注意事项</h4><p>force merge</p><h4 id=73--缓存及使用breaker限制内存使用>73 | 缓存及使用Breaker限制内存使用</h4><ul><li>node query cache<ul><li>每个节点有一个 node query cache</li><li>节点上的所有 shard 共享</li><li>置缓存 filter context 相关内容</li><li>采用 LRU 算法</li><li>配置(静态 yaml)<ul><li>node level: indices.queries.cache.size: &ldquo;10%&rdquo;</li><li>index level: index.queries.cache.enabled: true</li></ul></li></ul></li><li>shard request cache 缓存分片上的查询结果<ul><li>只缓存 size=0 的结果，不缓存 hits。</li><li>会缓存 aggregation 和 suggestions</li><li>cache key：<ul><li>LRU 算法，整个 json 查询串作为 key。</li><li>查询时尽量保持字段顺序相同</li></ul></li><li>配置(yaml)<ul><li>indices.requests.cache.size: &ldquo;1%&rdquo;</li></ul></li></ul></li><li>fielddata cache<ul><li>text 类型以外 doc_value， aggregation 的 global ordinals 也在 fielddata cache 中。</li><li>text 类型的字段 打开 fielddata 才能进行聚合和排序，不推荐！！</li><li>配置<ul><li>indices.fielddata.cache.size (默认无限制)</li></ul></li></ul></li></ul><p>常见内存问题</p><ol><li>segment 个数过多，导致full GC。</li></ol><ul><li>解决：force-merge 把 segment 合并成一个。</li></ul><ol start=2><li>fielddata cache 过大，full GC</li></ol><ul><li>fielddata cache 的构建比较重，es 不会主动释放，所以值应该设置的保守一些。业务有需求，通过增加节点、扩容解决。</li></ul><ol start=3><li>复制嵌套聚合，full GC</li></ol><ul><li>dump 分析，大量 bucket 对象，查看日志，发现复杂聚合嵌套。</li><li>解决：聚合优化</li></ul><p>circuit breaker 断路器，避免不合理操作引发的 OOM(out of memrey)。</p><ul><li>GET /_node/stats/breaker?<ul><li>tripped > 0, 有过熔断</li><li>limit_size 与 estimated_size 越接近，越可能引发熔断</li></ul></li></ul><h4 id=74--一些运维的相关建议>74 | 一些运维的相关建议</h4><ul><li>rolling upgrade: 没有 downtime</li><li>full cluster restart<ul><li>更新期间集群不可用</li><li>速度更快</li><li>步骤：<ul><li>停止索引，备份集群</li><li>disable shard allocation</li></ul></li></ul></li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>_cluster/settings</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;persistent&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;cluster.routing.allocation.enable&#34;</span>: <span style=color:#e6db74>&#34;primaries&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><pre><code>- 执行 synced flush
+  POST _flush/synced
+- 关闭并更新所有节点
+- 运行所有 master 节点，然后运行其他节点
+- 集群变黄后，打开 shard allocation
+</code></pre><ul><li>cluster reroute 移动分片</li><li>从集群中移除一个节点</li></ul><h3 id=第十一章索引生命周期管理-2讲>第十一章：索引生命周期管理 (2讲)</h3><h4 id=75--使用shrink与rollover-api有效管理时间序列索引>75 | 使用Shrink与Rollover API有效管理时间序列索引</h4><p>索引管理 api</p><ul><li>open/close index<ul><li>查看索引是否存在: HEAD test</li><li>关闭索引 &ndash; 索引存在，无法查询、搜索: POST /test/_close</li><li>打开索引: POST /test/_open</li></ul></li><li>shrink index: 将主分片数收缩到较小的值<ul><li>场景：1. 数据量小，需要重新设定主分片数；2. 从 hot 到 warm 后，降低主分片数。</li><li>过程：<ol><li>使用源索引相同配置创建新索引。</li></ol><ul><li>源分片数必须是目标分片数的倍数(必须大于目标分片数)；如果源分片数是素数，目标分片数只能是 1。</li><li>分片必须是只读；所有分片必须在同一个节点；集群必须是 green。<ul><li>设置 readonly：{&ldquo;settings&rdquo;: {&ldquo;index.blocks.write&rdquo;: true}}</li></ul></li><li>如果文件系统支持硬链接，会将 segments 硬链接到目标索引，性能比 reindex 好。</li></ul><ol start=2><li>完成后，删除源索引。</li></ol></li></ul></li><li>split index: 扩大主分片数</li><li>rollover index: 索引超过一定尺寸/时间后，创建新索引。<ul><li>当满足一定条件时，rollover index 可以将一个 alias 指向一个新的索引。<ul><li>存活时间</li><li>最大文档数</li><li>最大文件尺寸</li></ul></li><li>需要结合 index lifecycle management policies 使用。</li><li>例：结尾是数字的索引可以自动生成新的；不是数字的可以指定新索引名</li></ul></li></ul><pre tabindex=0><code>POST /nginx_logs_write/_rollover[/new_index_name]
+{
+  &#34;conditions&#34;: {
+    &#34;max_age&#34;:   &#34;1d&#34;,
+    &#34;max_docs&#34;:  5,
+    &#34;max_size&#34;:  &#34;5gb&#34;
+  }
+}
+</code></pre><pre><code>- 设置索引 alias 的 is_write_index=true：rollover 之后 alias 包含旧的索引；写入文档时保存到 is_write_index==true 的分片上，也就是最新的分片。
+</code></pre><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>apache-logs</span><span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;aliases&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;apache_logs&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;is_write_index&#34;</span>:<span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><ul><li>rollup index: 对数据进行处理后，重现写入，减少数据量。</li></ul><h4 id=76--索引全生命周期管理及工具介绍>76 | 索引全生命周期管理及工具介绍</h4><p>curator 基于 python 的命令行工具</p><p>index lifecycle management</p><ul><li>ILM policy</li><li>phase<ul><li>hot phase</li><li>warm phase</li><li>cold phase</li><li>delete phase</li></ul></li><li>kibana 中使用</li><li>api 使用</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>_cluster/settings</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;persistent&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;indices.lifecycle.poll_interval&#34;</span>:<span style=color:#e6db74>&#34;1s&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=第十二章用logstash和beats构建数据管道-3讲>第十二章：用Logstash和Beats构建数据管道 (3讲)</h3><h4 id=77--logstash入门及架构介绍>77 | Logstash入门及架构介绍</h4><p>[source data] input &#187; [event] filter &#187; output [targe data]</p><ul><li>codec(code/decode): 将原始数据 decode 成 event；将 event encode 成目标数据。<ul><li>line</li><li>json</li><li>multiline</li><li>dots</li></ul></li><li>event: 是个 Java Object，在 filter 阶段可以进行增删改查。</li><li>queue: 支持列队。<ul><li>in memory queue</li><li>persistent queue</li></ul></li></ul><p>配置：</p><ul><li>bin/logstash -f demo.conf</li><li>pipeline: input &ndash; filter &ndash; output<ul><li>每个阶段都有很多插件可用。</li></ul></li><li>config 文件的结构</li></ul><pre tabindex=0><code>input {
+  file {
+    path =&gt; &#34;/Users/yiruan/dev/elk7/logstash-7.0.1/bin/movies.csv&#34;
+    start_position =&gt; &#34;beginning&#34;
+    sincedb_path =&gt; &#34;/dev/null&#34;
+  }
+}
+filter {
+  csv {
+    separator =&gt; &#34;,&#34;
+    columns =&gt; [&#34;id&#34;,&#34;content&#34;,&#34;genre&#34;]
+  }
+  mutate {
+    split =&gt; { &#34;genre&#34; =&gt; &#34;|&#34; }
+    remove_field =&gt; [&#34;path&#34;, &#34;host&#34;,&#34;@timestamp&#34;,&#34;message&#34;]
+  }
+  mutate {
+    split =&gt; [&#34;content&#34;, &#34;(&#34;]
+    add_field =&gt; { &#34;title&#34; =&gt; &#34;%{[content][0]}&#34;}
+    add_field =&gt; { &#34;year&#34; =&gt; &#34;%{[content][1]}&#34;}
+  }
+  mutate {
+    convert =&gt; {
+      &#34;year&#34; =&gt; &#34;integer&#34;
+    }
+    strip =&gt; [&#34;title&#34;]
+    remove_field =&gt; [&#34;path&#34;, &#34;host&#34;,&#34;@timestamp&#34;,&#34;message&#34;,&#34;content&#34;]
+  }
+}
+output {
+  elasticsearch {
+    hosts =&gt; &#34;http://localhost:9200&#34;
+    index =&gt; &#34;movies&#34;
+    document_id =&gt; &#34;%{id}&#34;
+  }
+  stdout { codec =&gt; rubydebug }
+}
+</code></pre><h4 id=78--利用jdbc插件导入数据到elasticsearch>78 | 利用JDBC插件导入数据到Elasticsearch</h4><p>需求：将数据库的数据同步、更新到 ES。</p><ul><li>创建 alias，只显示没有被标记 deleted的用户</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/_aliases</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;actions&#34;</span>: [
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;add&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;index&#34;</span>: <span style=color:#e6db74>&#34;users&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;alias&#34;</span>: <span style=color:#e6db74>&#34;view_users&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;filter&#34;</span> : { <span style=color:#f92672>&#34;term&#34;</span> : { <span style=color:#f92672>&#34;is_deleted&#34;</span> : <span style=color:#66d9ef>false</span> } }
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  ]
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h4 id=79--beats介绍>79 | Beats介绍</h4><p>Beats, light weight data shippers. 收集数据，支持与 logstash 或 ES 集成。基于 Go lang</p><ul><li>matricbeat: 定期搜集操作系统、软件的指标数据<ul><li>可聚合、定期搜索。</li><li>指标数据存入 ES，通过 Kibana 进行实时的数据分析。</li></ul></li><li>packetbeat: 实时的网络数据分析，监控应用服务器之间的网络流量。</li></ul><h3 id=第十三章用kibana进行数据可视化分析-4讲>第十三章：用Kibana进行数据可视化分析 (4讲)</h3><h4 id=80--使用index-pattern配置数据>80 | 使用Index Pattern配置数据</h4><p>测试数据：设置 mapping > 导入数据到 ES</p><p>Kibana > management > index pattern</p><h4 id=81--使用kibana-discover探索数据>81 | 使用Kibana Discover探索数据</h4><p>Kibana > discover</p><ul><li>加过滤器：展开字段&ndash;加号/value==，星号/exist。修改。</li><li>add 字段到展示页面，点击查看数据分布。</li><li>search</li></ul><h4 id=82--基本可视化组件介绍>82 | 基本可视化组件介绍</h4><p>Kibana > visualiztion</p><p>饼图、面积图（area）、柱状图&mldr;&mldr;</p><ul><li>matrics / buckets agg</li><li>inspect: 查看数据，view request 查看查询语句。</li></ul><h4 id=83--构建dashboard>83 | 构建Dashboard</h4><p>定制多个可视化组件。</p><h3 id=第十四章探索x-pack套件-6讲>第十四章：探索X-Pack套件 (6讲)</h3><h4 id=84--用monitoring和alerting监控elasticsearch集群>84 | 用Monitoring和Alerting监控Elasticsearch集群</h4><h4 id=85--用apm进行程序性能监控>85 | 用APM进行程序性能监控</h4><h4 id=86--用机器学习实现时序数据的异常检测上>86 | 用机器学习实现时序数据的异常检测（上）</h4><h4 id=87--用机器学习实现时序数据的异常检测下>87 | 用机器学习实现时序数据的异常检测（下）</h4><h4 id=88--用elk进行日志管理>88 | 用ELK进行日志管理</h4><h4 id=89--用canvas做数据演示>89 | 用Canvas做数据演示</h4><h3 id=实战1电影搜索服务-3讲>实战1：电影搜索服务 (3讲)</h3><h4 id=90--项目需求分析及架构设计>90 | 项目需求分析及架构设计</h4><h4 id=91--将电影数据导入elasticsearch>91 | 将电影数据导入Elasticsearch</h4><h4 id=92--搭建你的电影搜索服务>92 | 搭建你的电影搜索服务</h4><h3 id=实战2stackoverflow用户调查问卷分析-3讲>实战2：Stackoverflow用户调查问卷分析 (3讲)</h3><h4 id=93--需求分析及架构设计>93 | 需求分析及架构设计</h4><h4 id=94--数据extract--enrichment>94 | 数据Extract & Enrichment</h4><h4 id=95--构建insights-dashboard>95 | 构建Insights Dashboard</h4><h3 id=备战elastic认证-5讲>备战：Elastic认证 (5讲)</h3><h4 id=96--elastic认证介绍>96 | Elastic认证介绍</h4><h4 id=97--考点梳理>97 | 考点梳理</h4><h4 id=98--集群数据备份>98 | 集群数据备份</h4><h4 id=99--基于java和elasticseach构建应用>99 | 基于Java和Elasticseach构建应用</h4><h4 id=100--结课测试结束语>100 | 结课测试&结束语</h4><h2 id=note>Note</h2><h3 id=索引分片设置>索引分片设置</h3><p>参考文章: <a href=https://opster.com/guides/elasticsearch/data-structuring/elasticsearch-number-of-shards/>https://opster.com/guides/elasticsearch/data-structuring/elasticsearch-number-of-shards/</a></p><ul><li>多分片，bulk写入时分散到每个分片，分布式并行写入，效率高。</li><li>分片数大于节点数时，分片数最好是节点数的倍数。</li><li>为了更快的构建索引，索引分片应该至少等于集群节点数。即每个节点一个分片。</li><li>搜索时，多分片需要 merge，计算更复杂。数据少的话，一个分片最快。<ul><li>多分片时，搜索结果的相关性和分值会有道影响（relevance and score）。参考：https://www.elastic.co/guide/en/elasticsearch/guide/master/relevance-is-broken.html</li></ul></li></ul></div><div><details class=post-toc close><summary>目录</summary><nav id=TableOfContents><ul><li><a href=#search>search</a></li><li><a href=#analyze>analyze</a></li><li><a href=#course-from-timegeek>Course from time.geek</a><ul><li><a href=#第二章-安装>第二章 安装</a></li><li><a href=#第三章-入门>第三章 入门</a><ul><li><a href=#search-api-概述>search api 概述</a></li></ul></li><li><a href=#第四章-深入搜索>第四章 深入搜索</a><ul><li><a href=#term词项查询-vs-text全文查询>term/词项查询 VS text/全文查询</a></li><li><a href=#structured-search--结构化搜索>Structured search / 结构化搜索</a></li><li><a href=#搜索的相关性计算>搜索的相关性计算</a></li><li><a href=#bool-query-多字段查询>bool query 多字段查询</a></li><li><a href=#dis-max-query-单字符串多字段查询>Dis Max Query 单字符串多字段查询</a></li><li><a href=#multi-match-单字符串多字段查询>multi match 单字符串多字段查询</a></li><li><a href=#混合多语言>混合多语言</a></li><li><a href=#search-template--index-alias>Search Template & Index Alias</a></li><li><a href=#function-score-query-优化算分>Function Score Query 优化算分</a></li><li><a href=#sugester-搜索引擎输入提示>sugester 搜索引擎输入提示</a></li><li><a href=#cross-data-search-跨集群搜索>cross data search 跨集群搜索</a></li></ul></li><li><a href=#第五章-分布式特性及分布式搜索的机制>第五章 分布式特性及分布式搜索的机制</a><ul><li><a href=#分布式模型及选主和脑裂问题>分布式模型及选主和脑裂问题</a></li><li><a href=#38--分片与集群的故障转移>38 | 分片与集群的故障转移</a></li><li><a href=#39--文档分布式存储>39 | 文档分布式存储</a></li><li><a href=#40--分片及其生命周期>40 | 分片及其生命周期</a></li><li><a href=#41--剖析分布式查询及相关性算分>41 | 剖析分布式查询及相关性算分</a></li><li><a href=#42--排序及doc-valuesfielddata>42 | 排序及Doc Values&amp;Fielddata</a></li><li><a href=#43--分页与遍历from-size-search-after--scroll-api>43 | 分页与遍历：From, Size, Search After & Scroll API</a></li><li><a href=#44--处理并发读写操作>44 | 处理并发读写操作</a></li></ul></li><li><a href=#第六章深入聚合分析-4讲>第六章：深入聚合分析 (4讲)</a><ul><li><a href=#45--bucket--metric聚合分析及嵌套聚合>45 | Bucket & Metric聚合分析及嵌套聚合</a></li><li><a href=#46--pipeline聚合分析>46 | Pipeline聚合分析</a></li><li><a href=#47--作用范围与排序>47 | 作用范围与排序</a></li><li><a href=#48--聚合分析的原理及精准度问题>48 | 聚合分析的原理及精准度问题</a></li></ul></li><li><a href=#第七章数据建模-7讲>第七章：数据建模 (7讲)</a><ul><li><a href=#49--对象及nested对象>49 | 对象及Nested对象</a></li><li><a href=#50--文档的父子关系>50 | 文档的父子关系</a></li><li><a href=#51--update-by-query--reindex-api>51 | Update By Query & Reindex API</a></li><li><a href=#52--ingest-pipeline--painless-script>52 | Ingest Pipeline & Painless Script</a></li><li><a href=#53--elasticsearch数据建模实例>53 | Elasticsearch数据建模实例</a></li><li><a href=#54--elasticsearch数据建模最佳实践>54 | Elasticsearch数据建模最佳实践</a></li><li><a href=#55--第二部分总结回顾>55 | 第二部分总结回顾</a></li></ul></li><li><a href=#第八章保护你的数据-3讲>第八章：保护你的数据 (3讲)</a><ul><li><a href=#56--集群身份认证与用户鉴权>56 | 集群身份认证与用户鉴权</a></li><li><a href=#57--集群内部安全通信>57 | 集群内部安全通信</a></li><li><a href=#58--集群与外部间的安全通信>58 | 集群与外部间的安全通信</a></li></ul></li><li><a href=#第九章水平扩展elasticsearch集群-6讲>第九章：水平扩展Elasticsearch集群 (6讲)</a><ul><li><a href=#59--常见的集群部署方式>59 | 常见的集群部署方式</a></li><li><a href=#60--hot--warm架构与shard-filtering>60 | Hot & Warm架构与Shard Filtering</a></li><li><a href=#61--分片设计及管理>61 | 分片设计及管理</a></li><li><a href=#62--如何对集群进行容量规划>62 | 如何对集群进行容量规划</a></li><li><a href=#63--在私有云上管理elasticsearch集群的一些方法>63 | 在私有云上管理Elasticsearch集群的一些方法</a></li><li><a href=#64--在公有云上管理与部署elasticsearch集群>64 | 在公有云上管理与部署Elasticsearch集群</a></li></ul></li><li><a href=#第十章生产环境中的集群运维-10讲>第十章：生产环境中的集群运维 (10讲)</a><ul><li><a href=#65--生产环境常用配置与上线清单>65 | 生产环境常用配置与上线清单</a></li><li><a href=#66--监控elasticsearch集群>66 | 监控Elasticsearch集群</a></li><li><a href=#67--诊断集群的潜在问题>67 | 诊断集群的潜在问题</a></li><li><a href=#68--解决集群yellow与red的问题----allocationexplain-api>68 | 解决集群Yellow与Red的问题 &ndash; allocation/explain api</a></li><li><a href=#69--提升集群写性能>69 | 提升集群写性能</a></li><li><a href=#70--提升集群读性能>70 | 提升集群读性能</a></li><li><a href=#71--集群压力测试>71 | 集群压力测试</a></li><li><a href=#72--段合并优化及注意事项>72 | 段合并优化及注意事项</a></li><li><a href=#73--缓存及使用breaker限制内存使用>73 | 缓存及使用Breaker限制内存使用</a></li><li><a href=#74--一些运维的相关建议>74 | 一些运维的相关建议</a></li></ul></li><li><a href=#第十一章索引生命周期管理-2讲>第十一章：索引生命周期管理 (2讲)</a><ul><li><a href=#75--使用shrink与rollover-api有效管理时间序列索引>75 | 使用Shrink与Rollover API有效管理时间序列索引</a></li><li><a href=#76--索引全生命周期管理及工具介绍>76 | 索引全生命周期管理及工具介绍</a></li></ul></li><li><a href=#第十二章用logstash和beats构建数据管道-3讲>第十二章：用Logstash和Beats构建数据管道 (3讲)</a><ul><li><a href=#77--logstash入门及架构介绍>77 | Logstash入门及架构介绍</a></li><li><a href=#78--利用jdbc插件导入数据到elasticsearch>78 | 利用JDBC插件导入数据到Elasticsearch</a></li><li><a href=#79--beats介绍>79 | Beats介绍</a></li></ul></li><li><a href=#第十三章用kibana进行数据可视化分析-4讲>第十三章：用Kibana进行数据可视化分析 (4讲)</a><ul><li><a href=#80--使用index-pattern配置数据>80 | 使用Index Pattern配置数据</a></li><li><a href=#81--使用kibana-discover探索数据>81 | 使用Kibana Discover探索数据</a></li><li><a href=#82--基本可视化组件介绍>82 | 基本可视化组件介绍</a></li><li><a href=#83--构建dashboard>83 | 构建Dashboard</a></li></ul></li><li><a href=#第十四章探索x-pack套件-6讲>第十四章：探索X-Pack套件 (6讲)</a><ul><li><a href=#84--用monitoring和alerting监控elasticsearch集群>84 | 用Monitoring和Alerting监控Elasticsearch集群</a></li><li><a href=#85--用apm进行程序性能监控>85 | 用APM进行程序性能监控</a></li><li><a href=#86--用机器学习实现时序数据的异常检测上>86 | 用机器学习实现时序数据的异常检测（上）</a></li><li><a href=#87--用机器学习实现时序数据的异常检测下>87 | 用机器学习实现时序数据的异常检测（下）</a></li><li><a href=#88--用elk进行日志管理>88 | 用ELK进行日志管理</a></li><li><a href=#89--用canvas做数据演示>89 | 用Canvas做数据演示</a></li></ul></li><li><a href=#实战1电影搜索服务-3讲>实战1：电影搜索服务 (3讲)</a><ul><li><a href=#90--项目需求分析及架构设计>90 | 项目需求分析及架构设计</a></li><li><a href=#91--将电影数据导入elasticsearch>91 | 将电影数据导入Elasticsearch</a></li><li><a href=#92--搭建你的电影搜索服务>92 | 搭建你的电影搜索服务</a></li></ul></li><li><a href=#实战2stackoverflow用户调查问卷分析-3讲>实战2：Stackoverflow用户调查问卷分析 (3讲)</a><ul><li><a href=#93--需求分析及架构设计>93 | 需求分析及架构设计</a></li><li><a href=#94--数据extract--enrichment>94 | 数据Extract & Enrichment</a></li><li><a href=#95--构建insights-dashboard>95 | 构建Insights Dashboard</a></li></ul></li><li><a href=#备战elastic认证-5讲>备战：Elastic认证 (5讲)</a><ul><li><a href=#96--elastic认证介绍>96 | Elastic认证介绍</a></li><li><a href=#97--考点梳理>97 | 考点梳理</a></li><li><a href=#98--集群数据备份>98 | 集群数据备份</a></li><li><a href=#99--基于java和elasticseach构建应用>99 | 基于Java和Elasticseach构建应用</a></li><li><a href=#100--结课测试结束语>100 | 结课测试&结束语</a></li></ul></li></ul></li><li><a href=#note>Note</a><ul><li><a href=#索引分片设置>索引分片设置</a></li></ul></li></ul></nav><a href=# id=toc-toggle></a></details></div></div></article><body><script src=https://unpkg.com/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js></script><script>addBackToTop({diameter:40})</script></body></html>

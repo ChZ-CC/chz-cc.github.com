@@ -1,0 +1,16 @@
+<!doctype html><html lang=en-us><title>git项目批量拷贝文件后换行不一致的问题 | 起风了</title>
+<meta charset=utf-8><meta name=generator content="Hugo 0.120.4"><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=https://chz-cc.github.io/css/index.css><link rel=canonical href=https://chz-cc.github.io/notes/tech/git%E9%A1%B9%E7%9B%AE%E6%89%B9%E9%87%8F%E6%8B%B7%E8%B4%9D%E6%96%87%E4%BB%B6%E5%90%8E%E6%8D%A2%E8%A1%8C%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98/><link rel=alternate type=application/rss+xml href title=起风了><header><a href=https://chz-cc.github.io/ class=title>起风了</a><nav><a href=/articles>文章</a>
+<a href=/notes>笔记</a>
+<a href=/about>关于我</a></nav></header><article><div class=breadcrumb><li><a href=https://chz-cc.github.io/>首页</a></li><li><a href=https://chz-cc.github.io/notes/>笔记</a></li><li><a href=https://chz-cc.github.io/notes/tech/>技术</a></li><li class=active><a href=https://chz-cc.github.io/notes/tech/git%E9%A1%B9%E7%9B%AE%E6%89%B9%E9%87%8F%E6%8B%B7%E8%B4%9D%E6%96%87%E4%BB%B6%E5%90%8E%E6%8D%A2%E8%A1%8C%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98/>git项目批量拷贝文件后换行不一致的问题</a></li></div><header><h1>git项目批量拷贝文件后换行不一致的问题</h1><time datetime=2026-03-02T00:00:00Z>2026-03-02
+</time><span class=header-tag>&nbsp;字数:63&nbsp;用时:1min
+&nbsp;分类:
+<a href=https://chz-cc.github.io/categories/note/>note</a>
+&nbsp;标签:
+<a href=https://chz-cc.github.io/tags/git/>git</a>,
+<a href=https://chz-cc.github.io/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/>项目管理</a></span></header><div class=post-content><div class=post-text><p>问题情境：Windows 环境 git 管理的项目，手动 copy 项目代码，本地原本是 CRLF 换行的文件变成了 LF 换行，导致所有文件都变成了 <code>modified</code> 状态。实际上大部分没有修改，只是换行变了。</p><p>解决方法：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 移除暂存区的缓存</span>
+</span></span><span style=display:flex><span>git rm --cached -r .
+</span></span><span style=display:flex><span><span style=color:#75715e># 重新追踪项目文件</span>
+</span></span><span style=display:flex><span>git add .
+</span></span><span style=display:flex><span><span style=color:#75715e># 此时 modified 文件就只有实际修改的文件，而没有仅换行差异的，可以提交代码。</span>
+</span></span><span style=display:flex><span>git commit -m <span style=color:#e6db74>&#34;Fix line endings&#34;</span>
+</span></span></code></pre></div><p><code>git rm</code> 移除对文件的追踪，同时删除本地文件。<code>--cached</code> 只是从暂存区删除，保留工作目录中的文件。这个命令的效果是：</p><ul><li>清空暂存区 ：移除所有已跟踪文件的暂存状态</li><li>保留工作文件 ：不会删除本地工作目录中的实际文件</li><li>更新 Git 跟踪 ：使所有文件变为"未跟踪"状态（untracked）</li></ul><p>使用场景</p><ol><li>解决换行符问题 ：当换行符转换导致文件状态异常时，清除缓存后重新添加</li><li>重新应用 .gitignore ：当修改了 .gitignore 文件后，需要清除缓存以忽略新的文件</li><li>修复文件跟踪状态 ：当文件权限或属性变更导致 Git 错误跟踪时</li><li>重新初始化 Git 跟踪 ：需要重新开始文件跟踪时</li></ol></div><div><details class=post-toc close><summary>目录</summary><nav id=TableOfContents></nav><a href=# id=toc-toggle></a></details></div></div></article><body><script src=https://unpkg.com/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js></script><script>addBackToTop({diameter:40})</script></body></html>
