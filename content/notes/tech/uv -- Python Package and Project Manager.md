@@ -1,8 +1,7 @@
 +++
 title = "uv -- Python Package and Project Manager"
-author = ["CC"]
-date = 2025-07-24
-slug = ""
+author = "CC"
+date = 2026-03-08T22:27:14
 tags = ["Python", "uv"]
 categories = ["note"]
 draft = false

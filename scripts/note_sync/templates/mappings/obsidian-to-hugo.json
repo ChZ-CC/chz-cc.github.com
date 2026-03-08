@@ -1,0 +1,25 @@
+{
+  "direction": "obsidian-to-hugo",
+  "mapping": {
+    "title": {
+      "target": "title",
+      "type": "string"
+    },
+    "type": {
+      "target": "categories",
+      "type": "array"
+    },
+    "tags": {
+      "target": "tags",
+      "type": "array"
+    },
+    "date": {
+      "target": "date",
+      "type": "date"
+    },
+    "draft": {
+      "target": "draft",
+      "type": "boolean"
+    }
+  }
+}

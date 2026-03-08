@@ -1,9 +1,11 @@
 +++
 title = "webPack"
-author = ["CC"]
-date = 2023-12-04T11:52:00+08:00
-categories = ["note", "tech"]
+author = "CC"
+date = 2023-12-04T00:00:00
+tags = ["webpack"]
+categories = ["note", "前端"]
 draft = false
+toc = true
 +++
 
 ## Rspack {#rspack}

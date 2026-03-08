@@ -1,0 +1,22 @@
++++
+title = "github port 443 - Timed out"
+author = "CC"
+date = 2023-11-30T00:00:00
+tags = ["debug"]
+categories = ["note", "tech"]
+draft = false
+toc = true
++++
+
+### github port 443: Timed out {#github-port-443-timed-out}
+
+- 场景：以 https 方式 clone 仓库时出现的错误。
+- 原因：Git 所设端口与系统代理不一致。
+- 解决方法：
+    1. 查看电脑的网络代理的 IP/端口，windows: 设置 - 网络与Internet - 代理。
+    2. 修改 git 的 http.proxy/https.proxy。修改 `\~/.gitconfig` 文件，或：
+        `git config --global http.proxy http://127.0.0.1:7890`
+        `git config --global https.proxy http://127.0.0.1:7890`
+    3. 取消 git 代理配置： `git config --global --unset http.proxy`
+    4. 查看 git 代理配置： `git config --global --get http.proxy`
+- 参考：<https://zhuanlan.zhihu.com/p/636418854>
