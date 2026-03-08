@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hugo-Obsidian 笔记转换</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F5F7FA;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #4A90E2;
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+        .btn-primary {
+            background-color: #4A90E2;
+            border-color: #4A90E2;
+        }
+        .btn-primary:hover {
+            background-color: #357ABD;
+            border-color: #357ABD;
+        }
+        .btn-secondary {
+            background-color: #50E3C2;
+            border-color: #50E3C2;
+        }
+        .btn-secondary:hover {
+            background-color: #3BD9B3;
+            border-color: #3BD9B3;
+        }
+        .form-control:focus {
+            border-color: #4A90E2;
+            box-shadow: 0 0 0 0.25rem rgba(74, 144, 226, 0.25);
+        }
+        .file-upload-area {
+            border: 2px dashed #E4E7EB;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .file-upload-area:hover {
+            border-color: #4A90E2;
+            background-color: rgba(74, 144, 226, 0.05);
+        }
+        .preview-area {
+            border: 1px solid #E4E7EB;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: white;
+            min-height: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+        }
+        /* 语法高亮样式 */
+        pre {
+            background-color: #2d2d2d;
+            color: #cccccc;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="text-center">Hugo-Obsidian 笔记转换工具</h1>
+                    </div>
+                    <div class="card-body">
+                        <!-- 字段映射配置 -->
+                        <div class="mb-4">
+                            <h2 class="h4 mb-3">
+                                字段映射配置
+                                <button id="toggle-mapping" class="btn btn-sm btn-outline-secondary">收起</button>
+                            </h2>
+                            <div id="mapping-config" class="card p-4" style="display: block;">
+                                <!-- 配置名称和编辑模式控制 -->
+                                <div class="mb-3 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <label class="form-label mb-0" style="font-weight: bold;">当前配置: <span id="current-config-name">Obsidian → Hugo</span></label>
+                                    </div>
+                                    <div>
+                                        <button id="edit-mapping-btn" class="btn btn-sm btn-outline-info">编辑</button>
+                                        <button id="cancel-edit-btn" class="btn btn-sm btn-outline-secondary" style="display: none;">取消</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <select id="mapping-direction" class="form-select">
+                                        <option value="hugo-to-obsidian">Hugo → Obsidian</option>
+                                        <option value="obsidian-to-hugo" selected>Obsidian → Hugo</option>
+                                    </select>
+                                </div>
+                                <div id="mapping-table" class="mb-3">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>源字段</th>
+                                                <th>目标字段</th>
+                                                <th>类型</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="mapping-rows">
+                                            <!-- 映射行将通过 JavaScript 动态添加 -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <button id="add-mapping" class="btn btn-sm btn-secondary" style="display: none;">添加映射</button>
+                                    <div>
+                                        <button id="save-template" class="btn btn-sm btn-outline-primary" style="display: none;">保存模板</button>
+                                        <button id="load-template" class="btn btn-sm btn-outline-primary ms-2">加载模板</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 文件路径输入 -->
+                        <div class="mb-4">
+                            <h2 class="h4 mb-3">文件路径</h2>
+                            <div class="mb-3 position-relative">
+                                <label class="form-label">输入文件/文件夹路径</label>
+                                <div class="input-group">
+                                    <input type="text" id="input-path" class="form-control" placeholder="默认: ../../content/notes" autocomplete="off">
+                                    <button class="btn btn-outline-secondary" type="button" id="input-path-clear" title="清除">×</button>
+                                </div>
+                                <div class="list-group" id="input-path-history" style="display: none; position: absolute; z-index: 1000; width: 100%; top: 100%; left: 0; margin-top: 4px; max-height: 300px; overflow-y: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-radius: 0.25rem;">
+                                    <p class="text-muted small p-2 mb-0">暂无历史</p>
+                                </div>
+                                <small class="form-text text-muted">支持相对路径和绝对路径，留空或设置为默认值</small>
+                            </div>
+                            <div class="mb-3 position-relative">
+                                <label class="form-label">输出目录</label>
+                                <div class="input-group">
+                                    <input type="text" id="output-path" class="form-control" placeholder="默认: ../../content" autocomplete="off">
+                                    <button class="btn btn-outline-secondary" type="button" id="output-path-clear" title="清除">×</button>
+                                </div>
+                                <div class="list-group" id="output-path-history" style="display: none; position: absolute; z-index: 1000; width: 100%; top: 100%; left: 0; margin-top: 4px; max-height: 300px; overflow-y: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-radius: 0.25rem;">
+                                    <p class="text-muted small p-2 mb-0">暂无历史</p>
+                                </div>
+                                <small class="form-text text-muted">支持相对路径和绝对路径，留空或设置为默认值</small>
+                            </div>
+                            <div id="file-list" class="small text-muted mb-3"></div>
+                        </div>
+                        
+                        <!-- 预览区域 -->
+                        <div class="mb-4">
+                            <h2 class="h4 mb-3">预览结果</h2>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3 class="h6 mb-2">源文件</h3>
+                                    <div class="preview-area">
+                                        <div id="source-content" class="code-block">
+                                            输入文件路径后将显示源文件内容
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="h6 mb-2">转换后</h3>
+                                    <div class="preview-area">
+                                        <div id="preview-content" class="code-block">
+                                            点击预览后将显示转换结果
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 操作按钮 -->
+                        <div class="d-flex justify-content-between">
+                            <button id="preview-btn" class="btn btn-secondary">预览</button>
+                            <button id="convert-btn" class="btn btn-primary">转换</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 关于 -->
+                <div class="mt-4 text-center text-muted">
+                    <p>© 2026 Hugo-Obsidian 笔记转换工具</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 表单 -->
+    <form id="convert-form" action="/convert" method="post" enctype="multipart/form-data" style="display: none;">
+        <input type="hidden" name="direction" id="direction-input">
+        <input type="file" name="files" id="form-files" multiple accept=".md">
+    </form>
+    
+    <!-- 模板选择模态框 -->
+    <div class="modal fade" id="loadTemplateModal" tabindex="-1" aria-labelledby="loadTemplateLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loadTemplateLabel">加载模板</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <h6>用户模板</h6>
+                        <div id="user-templates-list" class="list-group mb-3">
+                            <p class="text-muted">暂无用户模板</p>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h6>默认模板</h6>
+                        <div id="default-templates-list" class="list-group">
+                            <p class="text-muted">暂无默认模板</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 保存模板模态框 -->
+    <div class="modal fade" id="saveTemplateModal" tabindex="-1" aria-labelledby="saveTemplateLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="saveTemplateLabel">保存模板</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="templateNameInput" class="form-label">模板名称</label>
+                        <input type="text" class="form-control" id="templateNameInput" placeholder="输入新模板名称或选择现有模板进行覆盖">
+                    </div>
+                    <div class="mb-3">
+                        <h6>现有用户模板（点击覆盖）</h6>
+                        <div id="existing-templates-list" class="list-group">
+                            <p class="text-muted">暂无用户模板</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="confirmSaveTemplate">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markdown.min.js"></script>
+    <script>
+        // 初始化语法高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            Prism.highlightAll();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 变量
+            let currentDirection = 'obsidian-to-hugo';
+            let isEditMode = false;
+            let currentConfigName = '默认配置';
+            let previousMappingState = null;
+            
+            // 分别存储两个方向的映射数据
+            let mappingDataStore = {
+                'hugo-to-obsidian': {},
+                'obsidian-to-hugo': {}
+            };
+            
+            // 存储每个方向对应的配置文件名
+            let configFileNames = {
+                'hugo-to-obsidian': 'hugo-to-obsidian.json',
+                'obsidian-to-hugo': 'obsidian-to-hugo.json'
+            };
+            
+            // 获取当前方向的映射数据
+            function getCurrentMapping() {
+                return mappingDataStore[currentDirection] || {};
+            }
+            
+            // 设置当前方向的映射数据
+            function setCurrentMapping(data) {
+                mappingDataStore[currentDirection] = data;
+            }
+            
+            // 切换编辑模式
+            function toggleEditMode(enable) {
+                isEditMode = enable;
+                updateUIForEditMode();
+                
+                if (enable) {
+                    // 进入编辑模式时，保存当前映射状态
+                    previousMappingState = JSON.parse(JSON.stringify(getCurrentMapping()));
+                }
+            }
+            
+            // 更新UI界面显示，根据编辑模式改变按钮可见性
+            function updateUIForEditMode() {
+                const addMappingBtn = document.getElementById('add-mapping');
+                const saveTemplateBtn = document.getElementById('save-template');
+                const editBtn = document.getElementById('edit-mapping-btn');
+                const cancelBtn = document.getElementById('cancel-edit-btn');
+                const deleteButtons = document.querySelectorAll('.delete-mapping-btn');
+                const loadTemplateBtn = document.getElementById('load-template');
+                
+                if (isEditMode) {
+                    // 显示编辑时的按钮
+                    editBtn.style.display = 'none';
+                    loadTemplateBtn.style.display = 'none';
+                    cancelBtn.style.display = 'inline-block';
+                    addMappingBtn.style.display = 'inline-block';
+                    saveTemplateBtn.style.display = 'inline-block';
+                    
+                    // 启用删除按钮
+                    deleteButtons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                        btn.style.cursor = 'pointer';
+                    });
+                } else {
+                    // 显示查看时的按钮
+                    editBtn.style.display = 'inline-block';
+                    loadTemplateBtn.style.display = 'inline-block';
+                    cancelBtn.style.display = 'none';
+                    addMappingBtn.style.display = 'none';
+                    saveTemplateBtn.style.display = 'none';
+                    
+                    // 禁用删除按钮
+                    deleteButtons.forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.5';
+                        btn.style.cursor = 'not-allowed';
+                    });
+                }
+            }
+            
+            // 更新配置名称显示
+            function updateConfigName(name) {
+                currentConfigName = name;
+                document.getElementById('current-config-name').textContent = currentConfigName;
+            }
+
+            function initializeMappings() {
+                Promise.all([
+                    fetch('/get-default-mapping/hugo-to-obsidian').then(r => r.json()),
+                    fetch('/get-default-mapping/obsidian-to-hugo').then(r => r.json())
+                ])
+                .then(([hugoToObsData, obsidianToHugoData]) => {
+                    if (!hugoToObsData.error && hugoToObsData.mapping) {
+                        mappingDataStore['hugo-to-obsidian'] = hugoToObsData.mapping;
+                    }
+                    if (!obsidianToHugoData.error && obsidianToHugoData.mapping) {
+                        mappingDataStore['obsidian-to-hugo'] = obsidianToHugoData.mapping;
+                    }
+                    // 初始化完成后加载当前方向的映射
+                    renderCurrentMapping();
+                })
+                .catch(error => {
+                    console.error('初始化映射失败:', error);
+                    // 如果初始化失败，加载默认备份
+                    loadDefaultMappingsFromCache();
+                    renderCurrentMapping();
+                });
+            }
+            
+            // 使用本地备份映射初始化
+            function loadDefaultMappingsFromCache() {
+                mappingDataStore['hugo-to-obsidian'] = {
+                    'title': { target: 'title', type: 'string' },
+                    'date': { target: 'date,ts', type: 'date' },
+                    'tags': { target: 'tags', type: 'array' },
+                    'categories': { target: 'type', type: 'array' },
+                    'draft': { target: 'draft', type: 'boolean' }
+                };
+                mappingDataStore['obsidian-to-hugo'] = {
+                    'type': { target: 'categories', type: 'array' },
+                    'tags': { target: 'tags', type: 'array' },
+                    'date': { target: 'date', type: 'date' },
+                    'ts': { target: 'date', type: 'date' },
+                    'draft': { target: 'draft', type: 'boolean' }
+                };
+            }
+            
+            // 渲染当前方向的映射
+            function renderCurrentMapping() {
+                const mappingRows = document.getElementById('mapping-rows');
+                mappingRows.innerHTML = '';
+                const mapping = getCurrentMapping();
+                Object.entries(mapping).forEach(([source, mappingData]) => {
+                    if (mappingData && mappingData.target) {
+                        addMappingRow(source, mappingData.target, mappingData.type || 'string');
+                    }
+                });
+            }
+            
+            // 初始化映射数据
+            initializeMappings();
+            
+            // 初始化UI，确保编辑按钮正确显示
+            updateUIForEditMode();
+            
+            // 初始化配置名称显示（默认为当前方向的配置文件名）
+            updateConfigName('obsidian-to-hugo.json');
+            
+            // ===== 路径历史记录管理 =====
+            const PATH_HISTORY_KEY_INPUT = 'note_sync_input_path_history';
+            const PATH_HISTORY_KEY_OUTPUT = 'note_sync_output_path_history';
+            const MAX_HISTORY_ITEMS = 10;
+            
+            // 从localStorage加载历史路径
+            function loadPathHistory(key) {
+                const history = localStorage.getItem(key);
+                return history ? JSON.parse(history) : [];
+            }
+            
+            // 保存路径到历史
+            function savePathToHistory(key, path) {
+                if (!path || path.trim() === '') return;
+                
+                let history = loadPathHistory(key);
+                path = path.trim();
+                
+                // 移除已存在的相同路径（避免重复）
+                history = history.filter(p => p !== path);
+                
+                // 将新路径添加到开头
+                history.unshift(path);
+                
+                // 只保留最近的 MAX_HISTORY_ITEMS 条
+                history = history.slice(0, MAX_HISTORY_ITEMS);
+                
+                localStorage.setItem(key, JSON.stringify(history));
+            }
+            
+            // 渲染历史路径列表
+            function renderPathHistory(inputId, historyListId, key) {
+                const history = loadPathHistory(key);
+                const historyList = document.getElementById(historyListId);
+                
+                if (history.length === 0) {
+                    historyList.innerHTML = '<p class="text-muted small p-2 mb-0">暂无历史</p>';
+                    return;
+                }
+                
+                historyList.innerHTML = '';
+                history.forEach(path => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+                    
+                    const pathSpan = document.createElement('span');
+                    pathSpan.textContent = path;
+                    pathSpan.style.flex = '1';
+                    pathSpan.style.overflow = 'hidden';
+                    pathSpan.style.textOverflow = 'ellipsis';
+                    pathSpan.style.whiteSpace = 'nowrap';
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.type = 'button';
+                    deleteBtn.className = 'btn btn-sm btn-outline-danger ms-2';
+                    deleteBtn.textContent = '删除';
+                    deleteBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        // 从历史中删除这一项
+                        let history = loadPathHistory(key);
+                        history = history.filter(p => p !== path);
+                        localStorage.setItem(key, JSON.stringify(history));
+                        renderPathHistory(inputId, historyListId, key);
+                    });
+                    
+                    button.appendChild(pathSpan);
+                    button.appendChild(deleteBtn);
+                    
+                    button.addEventListener('click', function(e) {
+                        if (!e.target.classList.contains('btn-outline-danger')) {
+                            document.getElementById(inputId).value = path;
+                            historyList.style.display = 'none';
+                            document.getElementById(inputId).focus();
+                        }
+                    });
+                    
+                    historyList.appendChild(button);
+                });
+            }
+            
+            // 输入路径历史处理
+            const inputPathInput = document.getElementById('input-path');
+            const inputPathHistory = document.getElementById('input-path-history');
+            const inputPathClearBtn = document.getElementById('input-path-clear');
+            
+            inputPathInput.addEventListener('focus', function() {
+                renderPathHistory('input-path', 'input-path-history', PATH_HISTORY_KEY_INPUT);
+                inputPathHistory.style.display = 'block';
+            });
+            
+            inputPathInput.addEventListener('blur', function() {
+                // 延迟隐藏，以便用户能点击历史项目
+                setTimeout(() => {
+                    inputPathHistory.style.display = 'none';
+                }, 200);
+            });
+            
+            inputPathClearBtn.addEventListener('click', function() {
+                inputPathInput.value = '';
+                inputPathInput.focus();
+            });
+            
+            // 输出路径历史处理
+            const outputPathInput = document.getElementById('output-path');
+            const outputPathHistory = document.getElementById('output-path-history');
+            const outputPathClearBtn = document.getElementById('output-path-clear');
+            
+            outputPathInput.addEventListener('focus', function() {
+                renderPathHistory('output-path', 'output-path-history', PATH_HISTORY_KEY_OUTPUT);
+                outputPathHistory.style.display = 'block';
+            });
+            
+            outputPathInput.addEventListener('blur', function() {
+                // 延迟隐藏，以便用户能点击历史项目
+                setTimeout(() => {
+                    outputPathHistory.style.display = 'none';
+                }, 200);
+            });
+            
+            outputPathClearBtn.addEventListener('click', function() {
+                outputPathInput.value = '';
+                outputPathInput.focus();
+            });
+            
+            // ===== 编辑映射按钮事件
+            document.getElementById('edit-mapping-btn').addEventListener('click', function() {
+                toggleEditMode(true);
+            });
+            
+            // 取消编辑按钮事件
+            document.getElementById('cancel-edit-btn').addEventListener('click', function() {
+                if (previousMappingState) {
+                    setCurrentMapping(previousMappingState);
+                    renderCurrentMapping();
+                }
+                toggleEditMode(false);
+            });
+            
+            // 显示/隐藏映射配置
+            document.getElementById('toggle-mapping').addEventListener('click', function() {
+                const mappingConfig = document.getElementById('mapping-config');
+                if (mappingConfig.style.display === 'none') {
+                    mappingConfig.style.display = 'block';
+                    this.textContent = '隐藏';
+                } else {
+                    mappingConfig.style.display = 'none';
+                    this.textContent = '显示';
+                }
+            });
+            
+            // 映射方向变更
+            document.getElementById('mapping-direction').addEventListener('change', function() {
+                const direction = this.value;
+                currentDirection = direction;
+                document.getElementById('direction-input').value = currentDirection;
+                
+                // 更新配置名称显示为当前方向的配置文件名
+                updateConfigName(configFileNames[direction]);
+                
+                // 检查目标方向是否有数据
+                const targetMapping = mappingDataStore[direction];
+                if (!targetMapping || Object.keys(targetMapping).length === 0) {
+                    // 如果目标方向没有数据，从后端加载默认映射
+                    fetch(`/get-default-mapping/${direction}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.error && data.mapping) {
+                                setCurrentMapping(data.mapping);
+                            }
+                            renderCurrentMapping();
+                        })
+                        .catch(error => {
+                            console.error('加载映射失败:', error);
+                            renderCurrentMapping();
+                        });
+                } else {
+                    // 如果有数据，直接使用本地数据
+                    renderCurrentMapping();
+                }
+            });
+            
+            // 更新映射
+            function addMappingRow(source = '', target = '', type = 'string') {
+                const mappingRows = document.getElementById('mapping-rows');
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>
+                        <input type="text" class="form-control source-field" value="${source}">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control target-field" value="${target}">
+                    </td>
+                    <td>
+                        <select class="form-select type-select">
+                            <option value="string" ${type === 'string' ? 'selected' : ''}>字符串</option>
+                            <option value="number" ${type === 'number' ? 'selected' : ''}>数字</option>
+                            <option value="boolean" ${type === 'boolean' ? 'selected' : ''}>布尔值</option>
+                            <option value="array" ${type === 'array' ? 'selected' : ''}>数组</option>
+                            <option value="date" ${type === 'date' ? 'selected' : ''}>日期</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-danger delete-mapping-btn delete-mapping">删除</button>
+                    </td>
+                `;
+                
+                mappingRows.appendChild(row);
+                
+                // 添加删除按钮事件
+                row.querySelector('.delete-mapping-btn').addEventListener('click', function() {
+                    row.remove();
+                    updateMapping();
+                });
+                
+                // 添加输入事件
+                row.querySelector('.source-field').addEventListener('input', updateMapping);
+                row.querySelector('.target-field').addEventListener('input', updateMapping);
+                row.querySelector('.type-select').addEventListener('change', updateMapping);
+                
+                // 如果不在编辑模式，禁用删除按钮
+                if (!isEditMode) {
+                    row.querySelector('.delete-mapping-btn').disabled = true;
+                    row.querySelector('.delete-mapping-btn').style.opacity = '0.5';
+                    row.querySelector('.delete-mapping-btn').style.cursor = 'not-allowed';
+                }
+            }
+            
+            // 更新映射
+            function updateMapping() {
+                const rows = document.querySelectorAll('#mapping-rows tr');
+                const newMapping = {};
+                
+                rows.forEach(row => {
+                    const source = row.querySelector('.source-field').value;
+                    const target = row.querySelector('.target-field').value;
+                    const type = row.querySelector('.type-select').value;
+                    if (source && target) {
+                        newMapping[source] = {
+                            target: target,
+                            type: type
+                        };
+                    }
+                });
+                
+                setCurrentMapping(newMapping);
+            }
+            
+            // 添加映射按钮
+            document.getElementById('add-mapping').addEventListener('click', function() {
+                addMappingRow();
+            });
+            
+            // 保存模板
+            document.getElementById('save-template').addEventListener('click', function() {
+                // 打开保存模板模态框
+                const saveTemplateModal = new bootstrap.Modal(document.getElementById('saveTemplateModal'));
+                
+                // 首先获取用户模板列表
+                fetch('/get-templates')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert('获取模板列表失败: ' + data.error);
+                        } else {
+                            // 显示现有的用户模板
+                            const existingList = document.getElementById('existing-templates-list');
+                            if (data.user_templates && data.user_templates.length > 0) {
+                                existingList.innerHTML = '';
+                                data.user_templates.forEach(template => {
+                                    const button = document.createElement('button');
+                                    button.type = 'button';
+                                    button.className = 'list-group-item list-group-item-action';
+                                    button.textContent = template.name;
+                                    button.addEventListener('click', function() {
+                                        document.getElementById('templateNameInput').value = template.name;
+                                    });
+                                    existingList.appendChild(button);
+                                });
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        alert('获取模板列表失败: ' + error.message);
+                    });
+                
+                saveTemplateModal.show();
+            });
+            
+            // 确认保存模板
+            document.getElementById('confirmSaveTemplate').addEventListener('click', function() {
+                const templateName = document.getElementById('templateNameInput').value.trim();
+                if (!templateName) {
+                    alert('请输入模板名称');
+                    return;
+                }
+                
+                const currentMapping = getCurrentMapping();
+                const wasInEditMode = isEditMode;
+                
+                // 发送保存模板请求
+                fetch('/save-template', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'template_name': templateName,
+                        'direction': document.getElementById('mapping-direction').value,
+                        'mapping': JSON.stringify(currentMapping)
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('模板保存失败: ' + data.error);
+                    } else {
+                        // 同时更新本地数据
+                        setCurrentMapping(currentMapping);
+                        // 更新配置文件名为保存的模板名，包含.json后缀
+                        configFileNames[currentDirection] = templateName + '.json';
+                        updateConfigName(configFileNames[currentDirection]);
+                        alert('模板保存成功！');
+                        
+                        // 如果在编辑模式下保存，则自动退出编辑模式
+                        if (wasInEditMode) {
+                            toggleEditMode(false);
+                        }
+                        
+                        // 关闭模态框
+                        bootstrap.Modal.getInstance(document.getElementById('saveTemplateModal')).hide();
+                        // 清空输入框
+                        document.getElementById('templateNameInput').value = '';
+                    }
+                })
+                .catch(error => {
+                    alert('模板保存失败: ' + error.message);
+                });
+            });
+            
+            // 加载模板
+            document.getElementById('load-template').addEventListener('click', function() {
+                // 打开加载模板模态框
+                const loadTemplateModal = new bootstrap.Modal(document.getElementById('loadTemplateModal'));
+                
+                // 获取模板列表
+                fetch('/get-templates')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert('获取模板列表失败: ' + data.error);
+                        } else {
+                            // 显示用户模板
+                            const userList = document.getElementById('user-templates-list');
+                            if (data.user_templates && data.user_templates.length > 0) {
+                                userList.innerHTML = '';
+                                data.user_templates.forEach(template => {
+                                    const button = document.createElement('button');
+                                    button.type = 'button';
+                                    button.className = 'list-group-item list-group-item-action';
+                                    button.textContent = template.name;
+                                    button.addEventListener('click', function() {
+                                        loadTemplateByName(template.name, template.is_default);
+                                        bootstrap.Modal.getInstance(document.getElementById('loadTemplateModal')).hide();
+                                    });
+                                    userList.appendChild(button);
+                                });
+                            }
+                            
+                            // 显示默认模板
+                            const defaultList = document.getElementById('default-templates-list');
+                            if (data.default_templates && data.default_templates.length > 0) {
+                                defaultList.innerHTML = '';
+                                data.default_templates.forEach(template => {
+                                    const button = document.createElement('button');
+                                    button.type = 'button';
+                                    button.className = 'list-group-item list-group-item-action';
+                                    button.textContent = template.name;
+                                    button.addEventListener('click', function() {
+                                        loadTemplateByName(template.name, template.is_default);
+                                        bootstrap.Modal.getInstance(document.getElementById('loadTemplateModal')).hide();
+                                    });
+                                    defaultList.appendChild(button);
+                                });
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        alert('获取模板列表失败: ' + error.message);
+                    });
+                
+                loadTemplateModal.show();
+            });
+            
+            // 加载指定的模板
+            function loadTemplateByName(templateName, isDefault) {
+                // 发送加载模板请求
+                fetch('/load-template', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'template_name': templateName,
+                        'is_default': isDefault ? 'true' : 'false'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('模板加载失败: ' + data.error);
+                    } else {
+                        const direction = data.template.direction;
+                        const mapping = data.template.mapping;
+                        
+                        // 同时更新本地数据和当前视图
+                        currentDirection = direction;
+                        document.getElementById('mapping-direction').value = direction;
+                        document.getElementById('direction-input').value = direction;
+                        
+                        // 更新该方向的本地数据
+                        mappingDataStore[direction] = mapping;
+                        
+                        // 更新配置文件名为加载的模板名，包含.json后缀
+                        configFileNames[direction] = templateName + '.json';
+                        updateConfigName(configFileNames[direction]);
+                        
+                        // 清空现有行
+                        document.getElementById('mapping-rows').innerHTML = '';
+                        
+                        // 添加模板中的映射
+                        Object.entries(mapping).forEach(([source, mappingData]) => {
+                            if (typeof mappingData === 'object' && mappingData !== null && mappingData.target) {
+                                addMappingRow(source, mappingData.target, mappingData.type || 'string');
+                            } else {
+                                addMappingRow(source, mappingData);
+                            }
+                        });
+                        
+                        alert('模板加载成功！');
+                    }
+                })
+                .catch(error => {
+                    alert('模板加载失败: ' + error.message);
+                });
+            }
+            
+            // 获取包含direction的完整映射数据
+            function getMappingWithDirection() {
+                return {
+                    direction: currentDirection,
+                    mapping: getCurrentMapping()
+                };
+            }
+            
+            // 预览按钮
+            document.getElementById('preview-btn').addEventListener('click', function() {
+                let inputPath = document.getElementById('input-path').value.trim();
+                // 移除路径两端的引号
+                inputPath = inputPath.replace(/^['"]|['"]$/g, '');
+                
+                // 如果输入路径为空，使用默认值
+                if (!inputPath) {
+                    inputPath = '../../content/notes';
+                }
+                
+                // 检查是否使用了用户定义的字段映射规则
+                checkMappingUsed();
+                
+                // 发送预览请求
+                fetch('/preview', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'input_path': inputPath,
+                        'mapping': JSON.stringify(getMappingWithDirection())
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('预览失败: ' + data.error);
+                    } else {
+                        // 保存输入路径到历史
+                        savePathToHistory(PATH_HISTORY_KEY_INPUT, inputPath);
+                        
+                        // 显示源文件内容
+                        const sourceContent = document.getElementById('source-content');
+                        sourceContent.textContent = data.source_content;
+                        Prism.highlightElement(sourceContent);
+                        
+                        // 显示转换后的内容
+                        const previewContent = document.getElementById('preview-content');
+                        previewContent.textContent = data.content;
+                        Prism.highlightElement(previewContent);
+                    }
+                })
+                .catch(error => {
+                    alert('预览失败: ' + error.message);
+                });
+            });
+            
+            // 删除了"默认映射规则"的提示逻辑，保留函数以兼容
+            function checkMappingUsed() {
+                // 此函数保留用于内部验证，但不再显示提示
+            }
+            
+            // 清空预览区域
+            const inputPath = document.getElementById('input-path');
+            const outputPath = document.getElementById('output-path');
+            
+            function clearPreview() {
+                document.getElementById('source-content').textContent = '输入文件路径后将显示源文件内容';
+                document.getElementById('preview-content').textContent = '点击预览后将显示转换结果';
+            }
+            
+            // 同步滚动
+            const sourceArea = document.querySelector('.row .col-md-6:nth-child(1) .preview-area');
+            const previewArea = document.querySelector('.row .col-md-6:nth-child(2) .preview-area');
+            
+            if (sourceArea && previewArea) {
+                sourceArea.addEventListener('scroll', function() {
+                    const scrollPercent = this.scrollTop / (this.scrollHeight - this.clientHeight);
+                    previewArea.scrollTop = scrollPercent * (previewArea.scrollHeight - previewArea.clientHeight);
+                });
+                
+                previewArea.addEventListener('scroll', function() {
+                    const scrollPercent = this.scrollTop / (this.scrollHeight - this.clientHeight);
+                    sourceArea.scrollTop = scrollPercent * (sourceArea.scrollHeight - sourceArea.clientHeight);
+                });
+            }
+            
+            inputPath.addEventListener('blur', clearPreview);
+            outputPath.addEventListener('blur', clearPreview);
+            
+            // 转换按钮
+            document.getElementById('convert-btn').addEventListener('click', function() {
+                let inputPath = document.getElementById('input-path').value.trim();
+                // 移除路径两端的引号
+                inputPath = inputPath.replace(/^['"]|['"]$/g, '');
+                
+                // 如果输入路径为空，使用默认值
+                if (!inputPath) {
+                    inputPath = '../../content/notes';
+                }
+                
+                let outputPath = document.getElementById('output-path').value.trim();
+                // 移除路径两端的引号
+                outputPath = outputPath.replace(/^['"]|['"]$/g, '');
+                
+                // 如果输出路径为空，使用默认值
+                if (!outputPath) {
+                    outputPath = '../../content';
+                }
+                
+                // 检查是否使用了用户定义的字段映射规则
+                checkMappingUsed();
+                
+                // 发送转换请求
+                fetch('/convert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'input_path': inputPath,
+                        'output_path': outputPath,
+                        'mapping': JSON.stringify(getMappingWithDirection())
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('转换失败: ' + data.error);
+                    } else if (data.overwrite_confirm) {
+                        // 询问是否覆盖
+                        if (confirm('检测到重名文件，是否覆盖？\n' + data.files)) {
+                            // 再次发送请求，确认覆盖
+                            fetch('/convert', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: new URLSearchParams({
+                                    'input_path': inputPath,
+                                    'output_path': outputPath,
+                                    'mapping': JSON.stringify(getMappingWithDirection()),
+                                    'overwrite': 'true'
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.error) {
+                                    alert('转换失败: ' + data.error);
+                                } else {
+                                    // 保存输入和输出路径到历史
+                                    savePathToHistory(PATH_HISTORY_KEY_INPUT, inputPath);
+                                    savePathToHistory(PATH_HISTORY_KEY_OUTPUT, outputPath);
+                                    alert('转换成功！');
+                                }
+                            });
+                        }
+                    } else {
+                        // 保存输入和输出路径到历史
+                        savePathToHistory(PATH_HISTORY_KEY_INPUT, inputPath);
+                        savePathToHistory(PATH_HISTORY_KEY_OUTPUT, outputPath);
+                        alert('转换成功！');
+                    }
+                })
+                .catch(error => {
+                    alert('转换失败: ' + error.message);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
