@@ -175,29 +175,6 @@ nav a {
   margin: 0.5em 1em;
 }
 
-@media (prefers-color-scheme: dark) {
-
-  .breadcrumb,
-  html,
-  body,
-  body>header,
-  body>footer {
-    background: #212228;
-    color: #ffffff;
-    box-shadow: 0 0 0 1px #33353e;
-  }
-}
-
-@media (min-width: 32em) {
-
-  .breadcrumb,
-  body>header,
-  body>article,
-  body>footer {
-    padding: 1.65em calc(22% - 6em);
-  }
-}
-
 .title {
   font-size: 1.3em;
 }
@@ -273,10 +250,6 @@ nav a {
   text-decoration: none;
 }
 
-.dark-theme .breadcrumb {
-  background: #252627;
-}
-
 article .breadcrumb {
   padding: 0 calc(38% - 21em);
   background: #fff;
@@ -319,7 +292,8 @@ article .breadcrumb {
   margin-block-start: 0em;
 }
 
-.post-toc nav, .post-toc a {
+.post-toc nav,
+.post-toc a {
   padding: 0 0;
   background: none;
   margin: 0 0;
@@ -380,4 +354,93 @@ details[open] summary {
   border-radius: 10px;
   padding: 0.4em 0.4em;
   box-shadow: 3px 3px 3px #909194;
+}
+
+/* 分页样式 */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2em 0;
+  padding: 1em 0;
+  border-top: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.pagination-prev,
+.pagination-next {
+  padding: 0.5em 1em;
+  border: 1px solid #68f;
+  border-radius: 4px;
+  color: #68f;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination-prev:hover,
+.pagination-next:hover {
+  background-color: #68f;
+  color: white;
+}
+
+.pagination-info {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  .pagination {
+    border-top: 1px solid #33353e;
+    border-bottom: 1px solid #33353e;
+  }
+
+  .pagination-prev,
+  .pagination-next {
+    border: 1px solid #68f;
+    color: #68f;
+  }
+
+  .pagination-prev:hover,
+  .pagination-next:hover {
+    background-color: #68f;
+    color: white;
+  }
+
+  .pagination-info {
+    color: #cccccc;
+  }
+
+  .post-toc,
+  html,
+  body,
+  body>header,
+  body>footer {
+    background: #212228;
+    color: #ffffff;
+    box-shadow: 0 0 0 1px #b5b5b5;
+  }
+  
+  .breadcrumb li a,
+  .post-toc li a {
+    color: #ffffff;
+  }
+  
+  article .breadcrumb {
+    background: #212228;
+    box-shadow: none;
+  }
+}
+
+@media (min-width: 32em) {
+  .breadcrumb,
+  body>header,
+  body>article,
+  body>footer {
+    padding: 1.65em calc(22% - 6em);
+  }
 }
