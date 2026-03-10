@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>版本管理 on 起风了</title><link>https://chz-cc.github.io/tags/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86/</link><description>Recent content in 版本管理 on 起风了</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 08 Mar 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://chz-cc.github.io/tags/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml"/><item><title>using git</title><link>https://chz-cc.github.io/notes/tech/using-git/</link><pubDate>Sun, 08 Mar 2020 00:00:00 +0000</pubDate><guid>https://chz-cc.github.io/notes/tech/using-git/</guid><description>&lt;p&gt;Git 是分布式版本控制系统，核心概念包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;工作区&lt;/strong&gt;：实际编辑文件的目录&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;暂存区&lt;/strong&gt;：&lt;code&gt;git add&lt;/code&gt; 后的文件存放区域&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;本地仓库&lt;/strong&gt;：&lt;code&gt;git commit&lt;/code&gt; 后的版本历史&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;远程仓库&lt;/strong&gt;：如 GitHub、GitLab 等托管平台&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

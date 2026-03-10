@@ -1,0 +1,107 @@
+<!doctype html><html lang=en-us><title>【Git】fork 仓库与源仓库的同步更新 | 起风了</title><meta charset=utf-8><meta name=generator content="Hugo 0.157.0"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><link rel=stylesheet href=https://chz-cc.github.io/css/index.css><link rel=stylesheet href=https://chz-cc.github.io/PT-Sans/index.css><link rel=canonical href=https://chz-cc.github.io/notes/tech/gitfork-%E4%BB%93%E5%BA%93%E4%B8%8E%E6%BA%90%E4%BB%93%E5%BA%93%E7%9A%84%E5%90%8C%E6%AD%A5%E6%9B%B4%E6%96%B0/><link rel=alternate type=application/rss+xml href title=起风了><header class=hover><h1 class=full><a href=https://chz-cc.github.io/>起风了</a></h1><nav><a href=/notes>笔记</a>
+<a href=/archive>归档</a>
+<a href=/about>关于我</a></nav><nav><a href=mailto: aria-label=mail><svg viewBox="0 0 512 512"><path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V4e2c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5.0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"/></svg></a>
+<a href=https://github.com/ChZ-CC aria-label=Github><svg viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6.0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6.0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3.0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1.0-6.2-.3-40.4-.3-61.4.0.0-70 15-84.7-29.8.0.0-11.4-29.1-27.8-36.6.0.0-22.9-15.7 1.6-15.4.0.0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5.0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9.0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4.0 33.7-.3 75.4-.3 83.6.0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6.0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9.0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></a>
+<a href aria-label=Subscribe><svg viewBox="0 0 448 512"><path d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328.0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765.0 183.105.0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686.0 38.981.0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"/></svg></a></nav></header><div aria-label=breadcrumb class=breadcrumb><ol><li><a href=/>Home</a></li><li><a href=/notes/>笔记</a></li><li><a href=/notes/tech/>技术</a></li><li class=active><a aria-current=page href=/notes/tech/gitfork-%E4%BB%93%E5%BA%93%E4%B8%8E%E6%BA%90%E4%BB%93%E5%BA%93%E7%9A%84%E5%90%8C%E6%AD%A5%E6%9B%B4%E6%96%B0/>【Git】fork 仓库与源仓库的同步更新</a></li></ol></div><article><header class=meta><h1><a href=/notes/tech/gitfork-%E4%BB%93%E5%BA%93%E4%B8%8E%E6%BA%90%E4%BB%93%E5%BA%93%E7%9A%84%E5%90%8C%E6%AD%A5%E6%9B%B4%E6%96%B0/>【Git】fork 仓库与源仓库的同步更新</a></h1><time datetime=2026-03-09T00:00:00Z>2026-03-09
+</time><span class=header-tag>字数:925
+</span><span class=header-tag>用时:2min
+</span><span class=header-tag>分类:
+<a href=https://chz-cc.github.io/categories/note/>Note</a>
+</span><span class=header-tag></span></header><div class=post-toc><details close><summary>目录</summary><nav id=TableOfContents><ul><li><a href=#1-配置上游仓库>1. 配置上游仓库</a></li><li><a href=#2-获取原项目更新>2. 获取原项目更新</a></li><li><a href=#3-同步更新到本地>3. 同步更新到本地</a><ul><li><a href=#方法一合并更新推荐>方法一：合并更新（推荐）</a></li><li><a href=#方法二变基更新保持线性历史>方法二：变基更新（保持线性历史）</a></li></ul></li><li><a href=#4-同步其他分支>4. 同步其他分支</a></li><li><a href=#5-定期同步的最佳实践>5. 定期同步的最佳实践</a><ul><li><a href=#设置自动化同步脚本>设置自动化同步脚本</a></li><li><a href=#使用github-actions自动同步>使用GitHub Actions自动同步</a></li></ul></li><li><a href=#6-处理冲突>6. 处理冲突</a></li><li><a href=#7-实用命令速查>7. 实用命令速查</a></li><li><a href=#注意事项>注意事项</a></li></ul></nav><a href=# id=toc-toggle></a></details></div><p>同步fork项目与原项目的更新是GitHub协作中的常见需求。以下是详细的操作步骤：</p><h2 id=1-配置上游仓库>1. 配置上游仓库</h2><p>首先需要添加原项目作为上游仓库：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 查看当前远程仓库</span>
+</span></span><span style=display:flex><span>git remote -v
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 添加原项目作为上游仓库（只需执行一次）</span>
+</span></span><span style=display:flex><span>git remote add upstream https://github.com/原项目所有者/原项目名称.git
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 再次查看确认</span>
+</span></span><span style=display:flex><span>git remote -v
+</span></span></code></pre></div><h2 id=2-获取原项目更新>2. 获取原项目更新</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 获取上游仓库的所有更新</span>
+</span></span><span style=display:flex><span>git fetch upstream
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 查看所有分支</span>
+</span></span><span style=display:flex><span>git branch -a
+</span></span></code></pre></div><h2 id=3-同步更新到本地>3. 同步更新到本地</h2><h3 id=方法一合并更新推荐>方法一：合并更新（推荐）</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 切换到主分支</span>
+</span></span><span style=display:flex><span>git checkout main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 合并上游主分支的更新</span>
+</span></span><span style=display:flex><span>git merge upstream/main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 推送到自己的fork仓库</span>
+</span></span><span style=display:flex><span>git push origin main
+</span></span></code></pre></div><h3 id=方法二变基更新保持线性历史>方法二：变基更新（保持线性历史）</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 切换到主分支</span>
+</span></span><span style=display:flex><span>git checkout main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 变基到上游主分支</span>
+</span></span><span style=display:flex><span>git rebase upstream/main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 强制推送到自己的fork仓库</span>
+</span></span><span style=display:flex><span>git push origin main --force-with-lease
+</span></span></code></pre></div><h2 id=4-同步其他分支>4. 同步其他分支</h2><p>如果原项目有其他分支也需要同步：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 创建并切换到新分支</span>
+</span></span><span style=display:flex><span>git checkout -b 新分支名 upstream/新分支名
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 推送到自己的fork仓库</span>
+</span></span><span style=display:flex><span>git push origin 新分支名
+</span></span></code></pre></div><h2 id=5-定期同步的最佳实践>5. 定期同步的最佳实践</h2><h3 id=设置自动化同步脚本>设置自动化同步脚本</h3><p>创建一个同步脚本 <code>sync-upstream.sh</code>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e>#!/bin/bash
+</span></span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;正在同步上游仓库更新...&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 获取上游更新</span>
+</span></span><span style=display:flex><span>git fetch upstream
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 切换到主分支</span>
+</span></span><span style=display:flex><span>git checkout main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 合并更新</span>
+</span></span><span style=display:flex><span>git merge upstream/main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 推送到自己的fork</span>
+</span></span><span style=display:flex><span>git push origin main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;同步完成！&#34;</span>
+</span></span></code></pre></div><h3 id=使用github-actions自动同步>使用GitHub Actions自动同步</h3><p>在 <code>.github/workflows/sync.yml</code> 中创建：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>name</span>: <span style=color:#ae81ff>Sync Upstream</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>on</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>schedule</span>:
+</span></span><span style=display:flex><span>    - <span style=color:#f92672>cron</span>: <span style=color:#e6db74>&#39;0 0 * * *&#39;</span>  <span style=color:#75715e># 每天午夜运行</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>workflow_dispatch</span>:  <span style=color:#75715e># 允许手动触发</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>jobs</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>sync</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>runs-on</span>: <span style=color:#ae81ff>ubuntu-latest</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>steps</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/checkout@v3</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>with</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>fetch-depth</span>: <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>          <span style=color:#f92672>token</span>: <span style=color:#ae81ff>${{ secrets.GITHUB_TOKEN }}</span>
+</span></span><span style=display:flex><span>      
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Add upstream remote</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>run</span>: <span style=color:#ae81ff>git remote add upstream https://github.com/原项目所有者/原项目名称.git</span>
+</span></span><span style=display:flex><span>      
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Fetch upstream</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>run</span>: <span style=color:#ae81ff>git fetch upstream</span>
+</span></span><span style=display:flex><span>      
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Merge upstream</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>run</span>: |<span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          git checkout main
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          git merge upstream/main</span>
+</span></span><span style=display:flex><span>      
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Push changes</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>run</span>: <span style=color:#ae81ff>git push origin main</span>
+</span></span></code></pre></div><h2 id=6-处理冲突>6. 处理冲突</h2><p>如果在合并过程中出现冲突：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 查看冲突文件</span>
+</span></span><span style=display:flex><span>git status
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 手动解决冲突后</span>
+</span></span><span style=display:flex><span>git add 冲突文件
+</span></span><span style=display:flex><span>git commit -m <span style=color:#e6db74>&#34;解决合并冲突&#34;</span>
+</span></span><span style=display:flex><span>git push origin main
+</span></span></code></pre></div><h2 id=7-实用命令速查>7. 实用命令速查</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 查看远程仓库配置</span>
+</span></span><span style=display:flex><span>git remote -v
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 查看分支差异</span>
+</span></span><span style=display:flex><span>git log --oneline --graph --decorate main upstream/main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 查看特定文件的差异</span>
+</span></span><span style=display:flex><span>git diff upstream/main -- 文件路径
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 查看上游仓库的最新提交</span>
+</span></span><span style=display:flex><span>git log upstream/main -5 --oneline
+</span></span></code></pre></div><h2 id=注意事项>注意事项</h2><ol><li><strong>不要直接在主分支上开发</strong>，始终创建功能分支</li><li><strong>定期同步</strong>，避免积累过多差异导致合并困难</li><li><strong>备份重要更改</strong>，在同步前确保本地更改已提交</li><li>**使用<code>--force-with-lease</code>**而不是<code>--force</code>，更安全地强制推送</li></ol><p>通过以上步骤，您可以有效地保持fork项目与原项目的同步，确保及时获取原项目的最新更新和修复。</p></article><footer class=nowrap><span></span> <a class=dark href=/notes/tech/bash%E8%84%9A%E6%9C%AC%E4%B8%ADset%E7%9A%84%E7%94%A8%E6%B3%95/>bash脚本中set的用法 »</a></footer><script src=https://chz-cc.github.io/js/vanilla-back-to-top.min.js></script><script>addBackToTop({diameter:40,padding:0})</script></html>

@@ -1,1 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>debug on 起风了</title><link>https://chz-cc.github.io/tags/debug/</link><description>Recent content in debug on 起风了</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 30 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chz-cc.github.io/tags/debug/index.xml" rel="self" type="application/rss+xml"/><item><title>github pages 404 &amp; domain 配置</title><link>https://chz-cc.github.io/notes/tech/github-pages-404-domain-%E9%85%8D%E7%BD%AE/</link><pubDate>Thu, 30 Nov 2023 00:00:00 +0000</pubDate><guid>https://chz-cc.github.io/notes/tech/github-pages-404-domain-%E9%85%8D%E7%BD%AE/</guid><description>github pages 404: index.</description></item><item><title>github port 443 - Timed out</title><link>https://chz-cc.github.io/notes/tech/github-port-443-timed-out/</link><pubDate>Thu, 30 Nov 2023 00:00:00 +0000</pubDate><guid>https://chz-cc.github.io/notes/tech/github-port-443-timed-out/</guid><description>github port 443: Timed out 场景：以 https 方式 clone 仓库时出现的错误。 原因：Git 所设端口与系统代理不一致。 解决方法： 查看电脑的网络代理的 IP/端口，windows: 设置 - 网络与Internet - 代理。 修改 git 的 http.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Debug on 起风了</title><link>https://chz-cc.github.io/tags/debug/</link><description>Recent content in Debug on 起风了</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 30 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chz-cc.github.io/tags/debug/index.xml" rel="self" type="application/rss+xml"/><item><title>github pages 404 &amp; domain 配置</title><link>https://chz-cc.github.io/notes/tech/github-pages-404--domain-%E9%85%8D%E7%BD%AE/</link><pubDate>Thu, 30 Nov 2023 00:00:00 +0000</pubDate><guid>https://chz-cc.github.io/notes/tech/github-pages-404--domain-%E9%85%8D%E7%BD%AE/</guid><description>&lt;h3 id="github-pages-404-index-dot-html-not-found"&gt;github pages 404: index.html not found&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;问题： github pages workflow 构建完毕后，打开页面显示 404，找不到 index.html。&lt;/li&gt;
+&lt;li&gt;原因： git settings &amp;gt; Pages &amp;gt; Build and Deployment, 设置为 from a branch + master。而 hugo 编译后提交在了 hg-pages 分支。&lt;/li&gt;
+&lt;li&gt;解决： 改了分支就可以了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;衍生问题： 在 settings 配置 custom domain，生效；提交代码再次触发 action 重新部署，失效。&lt;/p&gt;</description></item><item><title>github port 443 - Timed out</title><link>https://chz-cc.github.io/notes/tech/github-port-443---timed-out/</link><pubDate>Thu, 30 Nov 2023 00:00:00 +0000</pubDate><guid>https://chz-cc.github.io/notes/tech/github-port-443---timed-out/</guid><description>&lt;h3 id="github-port-443-timed-out"&gt;github port 443: Timed out&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;场景：以 https 方式 clone 仓库时出现的错误。&lt;/li&gt;
+&lt;li&gt;原因：Git 所设端口与系统代理不一致。&lt;/li&gt;
+&lt;li&gt;解决方法：
+&lt;ol&gt;
+&lt;li&gt;查看电脑的网络代理的 IP/端口，windows: 设置 - 网络与Internet - 代理。&lt;/li&gt;
+&lt;li&gt;修改 git 的 http.proxy/https.proxy。修改 &lt;code&gt;\~/.gitconfig&lt;/code&gt; 文件，或：
+&lt;code&gt;git config --global http.proxy http://127.0.0.1:7890&lt;/code&gt;
+&lt;code&gt;git config --global https.proxy http://127.0.0.1:7890&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;取消 git 代理配置： &lt;code&gt;git config --global --unset http.proxy&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;查看 git 代理配置： &lt;code&gt;git config --global --get http.proxy&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;参考：&lt;a href="https://zhuanlan.zhihu.com/p/636418854"&gt;https://zhuanlan.zhihu.com/p/636418854&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

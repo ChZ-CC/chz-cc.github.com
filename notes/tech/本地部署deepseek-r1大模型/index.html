@@ -1,0 +1,151 @@
+<!doctype html><html lang=en-us><title>本地部署DeepSeek-R1大模型 | 起风了</title><meta charset=utf-8><meta name=generator content="Hugo 0.157.0"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><link rel=stylesheet href=https://chz-cc.github.io/css/index.css><link rel=stylesheet href=https://chz-cc.github.io/PT-Sans/index.css><link rel=canonical href=https://chz-cc.github.io/notes/tech/%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2deepseek-r1%E5%A4%A7%E6%A8%A1%E5%9E%8B/><link rel=alternate type=application/rss+xml href title=起风了><header class=hover><h1 class=full><a href=https://chz-cc.github.io/>起风了</a></h1><nav><a href=/notes>笔记</a>
+<a href=/archive>归档</a>
+<a href=/about>关于我</a></nav><nav><a href=mailto: aria-label=mail><svg viewBox="0 0 512 512"><path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V4e2c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5.0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"/></svg></a>
+<a href=https://github.com/ChZ-CC aria-label=Github><svg viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6.0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6.0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3.0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1.0-6.2-.3-40.4-.3-61.4.0.0-70 15-84.7-29.8.0.0-11.4-29.1-27.8-36.6.0.0-22.9-15.7 1.6-15.4.0.0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5.0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9.0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4.0 33.7-.3 75.4-.3 83.6.0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6.0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9.0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></a>
+<a href aria-label=Subscribe><svg viewBox="0 0 448 512"><path d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328.0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765.0 183.105.0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686.0 38.981.0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"/></svg></a></nav></header><div aria-label=breadcrumb class=breadcrumb><ol><li><a href=/>Home</a></li><li><a href=/notes/>笔记</a></li><li><a href=/notes/tech/>技术</a></li><li class=active><a aria-current=page href=/notes/tech/%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2deepseek-r1%E5%A4%A7%E6%A8%A1%E5%9E%8B/>本地部署DeepSeek-R1大模型</a></li></ol></div><article><header class=meta><h1><a href=/notes/tech/%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2deepseek-r1%E5%A4%A7%E6%A8%A1%E5%9E%8B/>本地部署DeepSeek-R1大模型</a></h1><time datetime=2026-03-05T00:00:00Z>2026-03-05
+</time><span class=header-tag>字数:1205
+</span><span class=header-tag>用时:3min
+</span><span class=header-tag>分类:
+<a href=https://chz-cc.github.io/categories/note/>Note</a>
+</span><span class=header-tag>标签:
+<a href=https://chz-cc.github.io/tags/ai/>AI</a></span></header><div class=post-toc><details close><summary>目录</summary><nav id=TableOfContents><ul><li><a href=#依赖安装>依赖安装</a></li><li><a href=#模型下载>模型下载</a><ul><li><a href=#方法1使用-hugging-face-hub>方法1：使用 Hugging Face Hub</a></li><li><a href=#方法2使用transformers自动下载>方法2：使用Transformers自动下载</a></li></ul></li><li><a href=#代码示例>代码示例</a><ul><li><a href=#基本推理>基本推理</a></li><li><a href=#流式输出>流式输出</a></li><li><a href=#批量推理>批量推理</a></li></ul></li><li><a href=#运行步骤>运行步骤</a></li><li><a href=#常见问题>常见问题</a><ul><li><a href=#显存不足>显存不足</a></li><li><a href=#模型加载缓慢>模型加载缓慢</a></li><li><a href=#推理速度慢>推理速度慢</a></li></ul></li><li><a href=#优化技巧>优化技巧</a><ul><li><a href=#量化>量化</a></li><li><a href=#4位量化>4位量化</a></li></ul></li><li><a href=#个人感受和评价>个人感受和评价</a><ul><li><a href=#性能表现>性能表现</a></li><li><a href=#使用建议>使用建议</a></li></ul></li><li><a href=#参考文献>参考文献</a></li></ul></nav><a href=# id=toc-toggle></a></details></div><p>本地部署一个最小的 DeepSeek-R1 大模型。</p><h2 id=依赖安装>依赖安装</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 创建虚拟环境</span>
+</span></span><span style=display:flex><span>python -m venv deepseek-env
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 激活虚拟环境</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Windows</span>
+</span></span><span style=display:flex><span>deepseek-env<span style=color:#ae81ff>\S</span>cripts<span style=color:#ae81ff>\a</span>ctivate
+</span></span><span style=display:flex><span><span style=color:#75715e># Linux/Mac</span>
+</span></span><span style=display:flex><span>source deepseek-env/bin/activate
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 安装依赖</span>
+</span></span><span style=display:flex><span>pip install --upgrade pip
+</span></span><span style=display:flex><span>pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+</span></span><span style=display:flex><span>pip install transformers accelerate datasets sentencepiece
+</span></span></code></pre></div><h2 id=模型下载>模型下载</h2><h3 id=方法1使用-hugging-face-hub>方法1：使用 Hugging Face Hub</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 安装huggingface-cli</span>
+</span></span><span style=display:flex><span>pip install huggingface-cli
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 登录Hugging Face（需要账号）</span>
+</span></span><span style=display:flex><span>huggingface-cli login
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 下载模型</span>
+</span></span><span style=display:flex><span>git lfs install
+</span></span><span style=display:flex><span>git clone https://huggingface.co/deepseek-ai/deepseek-llm-7b-r1
+</span></span></code></pre></div><h3 id=方法2使用transformers自动下载>方法2：使用Transformers自动下载</h3><p>代码会在首次运行时自动下载模型到缓存目录。</p><h2 id=代码示例>代码示例</h2><h3 id=基本推理>基本推理</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> transformers <span style=color:#f92672>import</span> AutoTokenizer, AutoModelForCausalLM
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> torch
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 加载模型和分词器</span>
+</span></span><span style=display:flex><span>tokenizer <span style=color:#f92672>=</span> AutoTokenizer<span style=color:#f92672>.</span>from_pretrained(<span style=color:#e6db74>&#34;deepseek-ai/deepseek-llm-7b-r1&#34;</span>)
+</span></span><span style=display:flex><span>model <span style=color:#f92672>=</span> AutoModelForCausalLM<span style=color:#f92672>.</span>from_pretrained(
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;deepseek-ai/deepseek-llm-7b-r1&#34;</span>,
+</span></span><span style=display:flex><span>    torch_dtype<span style=color:#f92672>=</span>torch<span style=color:#f92672>.</span>bfloat16,
+</span></span><span style=display:flex><span>    device_map<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;auto&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 推理函数</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>generate_response</span>(prompt, max_new_tokens<span style=color:#f92672>=</span><span style=color:#ae81ff>512</span>):
+</span></span><span style=display:flex><span>    inputs <span style=color:#f92672>=</span> tokenizer(prompt, return_tensors<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;pt&#34;</span>)<span style=color:#f92672>.</span>to(model<span style=color:#f92672>.</span>device)
+</span></span><span style=display:flex><span>    outputs <span style=color:#f92672>=</span> model<span style=color:#f92672>.</span>generate(
+</span></span><span style=display:flex><span>        <span style=color:#f92672>**</span>inputs,
+</span></span><span style=display:flex><span>        max_new_tokens<span style=color:#f92672>=</span>max_new_tokens,
+</span></span><span style=display:flex><span>        temperature<span style=color:#f92672>=</span><span style=color:#ae81ff>0.7</span>,
+</span></span><span style=display:flex><span>        top_p<span style=color:#f92672>=</span><span style=color:#ae81ff>0.95</span>,
+</span></span><span style=display:flex><span>        repetition_penalty<span style=color:#f92672>=</span><span style=color:#ae81ff>1.05</span>
+</span></span><span style=display:flex><span>    )
+</span></span><span style=display:flex><span>    response <span style=color:#f92672>=</span> tokenizer<span style=color:#f92672>.</span>decode(outputs[<span style=color:#ae81ff>0</span>], skip_special_tokens<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> response
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 测试</span>
+</span></span><span style=display:flex><span>prompt <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;请解释什么是机器学习？&#34;</span>
+</span></span><span style=display:flex><span>response <span style=color:#f92672>=</span> generate_response(prompt)
+</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;输入:&#34;</span>, prompt)
+</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;输出:&#34;</span>, response)
+</span></span></code></pre></div><h3 id=流式输出>流式输出</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> transformers <span style=color:#f92672>import</span> AutoTokenizer, AutoModelForCausalLM
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> torch
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>tokenizer <span style=color:#f92672>=</span> AutoTokenizer<span style=color:#f92672>.</span>from_pretrained(<span style=color:#e6db74>&#34;deepseek-ai/deepseek-llm-7b-r1&#34;</span>)
+</span></span><span style=display:flex><span>model <span style=color:#f92672>=</span> AutoModelForCausalLM<span style=color:#f92672>.</span>from_pretrained(
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;deepseek-ai/deepseek-llm-7b-r1&#34;</span>,
+</span></span><span style=display:flex><span>    torch_dtype<span style=color:#f92672>=</span>torch<span style=color:#f92672>.</span>bfloat16,
+</span></span><span style=display:flex><span>    device_map<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;auto&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>stream_generate</span>(prompt, max_new_tokens<span style=color:#f92672>=</span><span style=color:#ae81ff>512</span>):
+</span></span><span style=display:flex><span>    inputs <span style=color:#f92672>=</span> tokenizer(prompt, return_tensors<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;pt&#34;</span>)<span style=color:#f92672>.</span>to(model<span style=color:#f92672>.</span>device)
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#34;输入:&#34;</span>, prompt)
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#34;输出:&#34;</span>, end<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;&#34;</span>)
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> output <span style=color:#f92672>in</span> model<span style=color:#f92672>.</span>stream_generate(
+</span></span><span style=display:flex><span>        <span style=color:#f92672>**</span>inputs,
+</span></span><span style=display:flex><span>        max_new_tokens<span style=color:#f92672>=</span>max_new_tokens,
+</span></span><span style=display:flex><span>        temperature<span style=color:#f92672>=</span><span style=color:#ae81ff>0.7</span>,
+</span></span><span style=display:flex><span>        top_p<span style=color:#f92672>=</span><span style=color:#ae81ff>0.95</span>,
+</span></span><span style=display:flex><span>        repetition_penalty<span style=color:#f92672>=</span><span style=color:#ae81ff>1.05</span>
+</span></span><span style=display:flex><span>    ):
+</span></span><span style=display:flex><span>        token <span style=color:#f92672>=</span> tokenizer<span style=color:#f92672>.</span>decode(output[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>:], skip_special_tokens<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>        print(token, end<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;&#34;</span>, flush<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>    print()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 测试</span>
+</span></span><span style=display:flex><span>prompt <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;请写一篇关于人工智能发展趋势的短文。&#34;</span>
+</span></span><span style=display:flex><span>stream_generate(prompt)
+</span></span></code></pre></div><h3 id=批量推理>批量推理</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> transformers <span style=color:#f92672>import</span> AutoTokenizer, AutoModelForCausalLM
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> torch
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>tokenizer <span style=color:#f92672>=</span> AutoTokenizer<span style=color:#f92672>.</span>from_pretrained(<span style=color:#e6db74>&#34;deepseek-ai/deepseek-llm-7b-r1&#34;</span>)
+</span></span><span style=display:flex><span>model <span style=color:#f92672>=</span> AutoModelForCausalLM<span style=color:#f92672>.</span>from_pretrained(
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;deepseek-ai/deepseek-llm-7b-r1&#34;</span>,
+</span></span><span style=display:flex><span>    torch_dtype<span style=color:#f92672>=</span>torch<span style=color:#f92672>.</span>bfloat16,
+</span></span><span style=display:flex><span>    device_map<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;auto&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>batch_generate</span>(prompts, max_new_tokens<span style=color:#f92672>=</span><span style=color:#ae81ff>256</span>):
+</span></span><span style=display:flex><span>    inputs <span style=color:#f92672>=</span> tokenizer(prompts, return_tensors<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;pt&#34;</span>, padding<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>, truncation<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)<span style=color:#f92672>.</span>to(model<span style=color:#f92672>.</span>device)
+</span></span><span style=display:flex><span>    outputs <span style=color:#f92672>=</span> model<span style=color:#f92672>.</span>generate(
+</span></span><span style=display:flex><span>        <span style=color:#f92672>**</span>inputs,
+</span></span><span style=display:flex><span>        max_new_tokens<span style=color:#f92672>=</span>max_new_tokens,
+</span></span><span style=display:flex><span>        temperature<span style=color:#f92672>=</span><span style=color:#ae81ff>0.7</span>,
+</span></span><span style=display:flex><span>        top_p<span style=color:#f92672>=</span><span style=color:#ae81ff>0.95</span>
+</span></span><span style=display:flex><span>    )
+</span></span><span style=display:flex><span>    responses <span style=color:#f92672>=</span> tokenizer<span style=color:#f92672>.</span>batch_decode(outputs, skip_special_tokens<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> responses
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 测试</span>
+</span></span><span style=display:flex><span>prompts <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;什么是深度学习？&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;如何提高Python代码性能？&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;解释一下区块链技术&#34;</span>
+</span></span><span style=display:flex><span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>responses <span style=color:#f92672>=</span> batch_generate(prompts)
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> i, (prompt, response) <span style=color:#f92672>in</span> enumerate(zip(prompts, responses)):
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;问题</span><span style=color:#e6db74>{</span>i<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span><span style=color:#e6db74>}</span><span style=color:#e6db74>: </span><span style=color:#e6db74>{</span>prompt<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;回答</span><span style=color:#e6db74>{</span>i<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span><span style=color:#e6db74>}</span><span style=color:#e6db74>: </span><span style=color:#e6db74>{</span>response<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#34;-&#34;</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>50</span>)
+</span></span></code></pre></div><h2 id=运行步骤>运行步骤</h2><ol><li><strong>安装依赖</strong>: 执行上述依赖安装命令</li><li><strong>下载模型</strong>: 通过Hugging Face Hub或让代码自动下载</li><li><strong>运行代码</strong>: 执行上述代码示例</li><li><strong>调整参数</strong>: 根据硬件情况调整batch size和max_new_tokens</li></ol><h2 id=常见问题>常见问题</h2><h3 id=显存不足>显存不足</h3><ul><li>解决方案1: 使用<code>torch_dtype=torch.float16</code>或<code>torch.int8</code>量化</li><li>解决方案2: 启用模型分片<code>device_map="auto"</code></li><li>解决方案3: 减小batch size和max_new_tokens</li></ul><h3 id=模型加载缓慢>模型加载缓慢</h3><ul><li>解决方案: 使用<code>use_safetensors=True</code>参数</li></ul><h3 id=推理速度慢>推理速度慢</h3><ul><li>解决方案1: 使用GPU加速</li><li>解决方案2: 启用<code>torch.compile(model)</code>（需要PyTorch 2.0+）</li><li>解决方案3: 使用 quantization 技术</li></ul><h2 id=优化技巧>优化技巧</h2><h3 id=量化>量化</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 8位量化</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> transformers <span style=color:#f92672>import</span> AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>quantization_config <span style=color:#f92672>=</span> BitsAndBytesConfig(
+</span></span><span style=display:flex><span>    load_in_8bit<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>,
+</span></span><span style=display:flex><span>    llm_int8_threshold<span style=color:#f92672>=</span><span style=color:#ae81ff>6.0</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>model <span style=color:#f92672>=</span> AutoModelForCausalLM<span style=color:#f92672>.</span>from_pretrained(
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;deepseek-ai/deepseek-llm-7b-r1&#34;</span>,
+</span></span><span style=display:flex><span>    quantization_config<span style=color:#f92672>=</span>quantization_config,
+</span></span><span style=display:flex><span>    device_map<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;auto&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span></code></pre></div><h3 id=4位量化>4位量化</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> transformers <span style=color:#f92672>import</span> AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>quantization_config <span style=color:#f92672>=</span> BitsAndBytesConfig(
+</span></span><span style=display:flex><span>    load_in_4bit<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>,
+</span></span><span style=display:flex><span>    bnb_4bit_use_double_quant<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>,
+</span></span><span style=display:flex><span>    bnb_4bit_quant_type<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nf4&#34;</span>,
+</span></span><span style=display:flex><span>    bnb_4bit_compute_dtype<span style=color:#f92672>=</span>torch<span style=color:#f92672>.</span>bfloat16
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>model <span style=color:#f92672>=</span> AutoModelForCausalLM<span style=color:#f92672>.</span>from_pretrained(
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;deepseek-ai/deepseek-llm-7b-r1&#34;</span>,
+</span></span><span style=display:flex><span>    quantization_config<span style=color:#f92672>=</span>quantization_config,
+</span></span><span style=display:flex><span>    device_map<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;auto&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span></code></pre></div><h2 id=个人感受和评价>个人感受和评价</h2><h3 id=性能表现>性能表现</h3><ul><li><strong>速度</strong>: 在3090 GPU上，7B模型的推理速度约为20-30 tokens/s</li><li><strong>质量</strong>: DeepSeek-R1在中文任务上表现出色，尤其是代码和数学推理</li><li><strong>资源占用</strong>: 7B模型在量化后仅需约8GB显存，适合个人设备部署</li></ul><h3 id=使用建议>使用建议</h3><ul><li>适合作为个人研究和开发的本地大模型</li><li>可用于快速原型开发和小规模应用</li><li>对于生产环境，建议使用更大的模型或云服务</li></ul><h2 id=参考文献>参考文献</h2><ol><li><a href=https://github.com/deepseek-ai/deepseek-llm>DeepSeek-R1官方文档</a></li><li><a href=https://huggingface.co/docs/transformers/index>Hugging Face Transformers文档</a></li><li><a href=https://pytorch.org/docs/stable/index.html>PyTorch官方文档</a></li><li><a href=https://huggingface.co/docs/transformers/main_classes/quantization>BitsAndBytes量化文档</a></li></ol></article><footer class=nowrap><a class=dark href=/notes/tech/bash%E8%84%9A%E6%9C%AC%E4%B8%ADset%E7%9A%84%E7%94%A8%E6%B3%95/>« bash脚本中set的用法</a>  <a class=dark href=/notes/tech/git%E9%A1%B9%E7%9B%AE%E6%89%B9%E9%87%8F%E6%8B%B7%E8%B4%9D%E6%96%87%E4%BB%B6%E5%90%8E%E6%8D%A2%E8%A1%8C%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98/>git项目批量拷贝文件后换行不一致的问题 »</a></footer><script src=https://chz-cc.github.io/js/vanilla-back-to-top.min.js></script><script>addBackToTop({diameter:40,padding:0})</script></html>
