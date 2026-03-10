@@ -1,5 +1,5 @@
 +++
-title = "Networking"
+title = "Socket"
 author = "CC"
 date = 2023-11-24T00:00:00
 tags = ["socket", "sse"]
@@ -7,6 +7,9 @@ categories = ["note"]
 draft = false
 toc = true
 +++
+
+Socket是进程间通信的端点，通过IP地址+端口标识。Unix域套接字用于同一主机进程通信，比网络套接字高效，使用文件系统路径而非IP地址，提供可靠的面向连接或数据报服务。
+<!--more-->
 
 ## Socket {#socket}
 

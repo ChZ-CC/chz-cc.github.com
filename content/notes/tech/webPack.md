@@ -8,7 +8,7 @@ draft = false
 toc = true
 +++
 
-## Rspack {#rspack}
+## Rspack
 
--   [Rspack](https://github.com/web-infra-dev/rspack): rust 语言实现的替代 webPack 的打包工具。
--   [Rsbuild](https://github.com/web-infra-dev/rsbuild): 基于 Rspack 的前端工具。
+- [Rspack](https://github.com/web-infra-dev/rspack): rust 语言实现的替代 webPack 的打包工具。
+- [Rsbuild](https://github.com/web-infra-dev/rsbuild): 基于 Rspack 的前端工具。

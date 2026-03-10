@@ -8,7 +8,8 @@ draft = false
 toc = true
 +++
 
-# elaticsearch-dls
+Elasticsearch 学习笔记：包括搜索机制、分词分析、分布式架构、聚合分析、数据建模、安全认证和集群扩展等内容。涵盖了从基础概念到高级特性的完整学习路径，帮助掌握ES的搜索、存储和集群管理能力。
+<!--more-->
 
 - [Elasticsearch 基本概念与搜索入门](https://godleon.github.io/blog/Elasticsearch/Elasticsearch-getting-started/)
 

@@ -20,6 +20,10 @@
     "draft": {
       "target": "draft",
       "type": "boolean"
+    },
+    "toc": {
+      "target": "toc",
+      "type": "boolean"
     }
   }
 }

@@ -8,7 +8,8 @@ draft = false
 toc = true
 +++
 
-### 视频链接
+全网最尊重 MySQL 的 up。/^ ^
+<!--more-->
 
 [[音视频|video]] up主：原子能
 
@@ -19,8 +20,8 @@ toc = true
 
 - 外键 索引 奇怪的锁表逻辑。
   - 买家表 buyers(id, username)
-  - 订单表 orders(id, buyer_id, order_status) 
-    - index(buyer_id, order_status) 
+  - 订单表 orders(id, buyer_id, order_status)
+    - index(buyer_id, order_status)
     - foreign key (buyer_id)...
   - 1.修改订单的买家  update orders set buyer_id = 2 where id = 1; -- buyers 买家表会被锁。（正常）
   - 2.修改订单的状态  update orders set order_status = 0 where id = 1; -- buyers 买家表还是会被锁。（X）因为订单表的 index

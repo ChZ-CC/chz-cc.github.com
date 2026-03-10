@@ -5,13 +5,14 @@
 
 from dataclasses import dataclass
 from logging import getLogger
+import logging
 import re
 import os
 from datetime import datetime
 from typing import Any
 
 log = getLogger(__name__)
-log.setLevel("DEBUG")
+log.setLevel(logging.INFO)
 
 TypeArray = "array"
 TypeString = "string"
@@ -226,7 +227,7 @@ class HugoToObsidianConverter(ConverterMixin):
 
         # 生成 Hugo 前端字符串
         header = self.format_fields(self.target_fields)
-        log.info(f"转换前端字段: {self.source_fields} -> {self.target_fields}")
+
         return header
 
     def convert_body(self, content):
@@ -300,9 +301,8 @@ class ObsidianToHugoConverter(ConverterMixin):
         )
         if not frontmatter_match:
             return []
-        
+
         header = frontmatter_match.group(1).strip()
-        log.warning(f"obsidian header: {header}")
         fields: list[Field] = []
         lines = header.splitlines()
         i = 0
@@ -349,7 +349,6 @@ class ObsidianToHugoConverter(ConverterMixin):
                 new_field.ftype = TypeString
             # 提取草稿字段
             if new_field.key == "draft":
-                log.warning(f"草稿字段: {new_field.key} = {new_field.val}")
                 self.is_draft = new_field.val
             # 提取标题字段 优先使用 title 属性
             if key == "title" and new_field.val:
@@ -475,7 +474,7 @@ def collect_markdown_files(path) -> tuple[list[tuple[str, str, str]], bool]:
     # 嵌套目录需要 保留子目录结构
     if os.path.isfile(path):
         if path.endswith(".md") and os.path.basename(path) != "_index.md":
-            md_files.append((os.path.dirname(path), '', os.path.basename(path)))
+            md_files.append((os.path.dirname(path), "", os.path.basename(path)))
         else:
             raise ValueError("只支持 Markdown 文件")
     elif os.path.isdir(path):
@@ -508,8 +507,11 @@ def get_converter(field_mapping):
 
 def convert_content(content, field_mapping):
     """转换文件内容"""
+    log.info(f"开始转换内容: {content[:50]}...")
     converter = get_converter(field_mapping)
-    return converter.convert(content)
+    result = converter.convert(content)
+    log.info(f"转换完成: {result[:50]}...")
+    return result
 
 
 def do_convert(
@@ -537,7 +539,6 @@ def do_convert(
     # 标准化路径
     input_path = normalize_path(input_path)
     output_path = normalize_path(output_path)
-    log.warning(f"开始转换: {input_path} -> {output_path}")
 
     if not input_path or not os.path.exists(input_path):
         return False, "invalid_input", "输入路径不存在"
@@ -546,7 +547,7 @@ def do_convert(
 
     # 收集 Markdown 文件
     md_files, is_directory = collect_markdown_files(input_path)
-    log.warning(f"发现 {len(md_files)} 个 Markdown 文件: {md_files}")
+    log.info(f"发现 {len(md_files)} 个 Markdown 文件: {md_files}")
     if not md_files:
         return False, "no_markdown", "未找到 Markdown 文件"
 
@@ -557,14 +558,16 @@ def do_convert(
         filename = os.path.join(root_path, relative_path, filename)
         content = converter.convert_file(filename)
 
-        output_file_path = os.path.join(output_path, relative_path, converter.title + ".md")
+        output_file_path = os.path.join(
+            output_path, relative_path, converter.title + ".md"
+        )
         if os.path.exists(output_file_path):
             existing_files.append(output_file_path)
         if converter.is_draft is True:
-            log.warning(f"草稿文件: {filename} skip")
+            log.info(f"草稿文件: {filename} skip")
             continue
         results.append((content, output_file_path))
-    log.warning(f"转换完成: {len(results)} 个文件")
+    log.info(f"转换完成: {len(results)} 个文件")
     if existing_files and not overwrite:
         return False, "duplicated", existing_files
 
@@ -573,12 +576,11 @@ def do_convert(
         return True, "", [content for content, _ in results]
 
     # 保存转换结果
-    log.warning(f"开始保存")
     for content, output_file_path in results:
         os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
         with open(output_file_path, "w", encoding="utf-8") as f:
             f.write(content)
-            log.warning(f"保存完成: {output_file_path}")
+            log.info(f"保存完成: {output_file_path}")
 
     file_list = [output_file_path for _, output_file_path in results]
     return True, "", file_list

@@ -1,58 +1,68 @@
 +++
 title = "uv -- Python Package and Project Manager"
 author = "CC"
-date = 2026-03-08T22:27:14
+date = 2025-10-26T00:00:00
 tags = ["Python", "uv"]
 categories = ["note"]
 draft = false
 toc = true
 +++
 
-Python 管理工具，all in one。用 `rust` 写的。
+Python 管理工具，all in one。用 `rust` 写的。包含了集成环境管理、依赖解析、构建发布功能，支持多版本Python，通过硬链接优化性能，可替代pip、venv、poetry等工具，提供极速安装和一致环境。
+<!--more-->
 
 ## Install
 
 安装文档: [Installing uv](https://docs.astral.sh/uv/getting-started/installation/#installation-methods), 可以使用 `curl` 或 `pip/pipx` 安装。
+
 - curl 命令安装在 `$HOME/.local/bin` 目录下，需要重启 shell 生效。
 
 ## 常用命令
 
 管理 Python 版本
+
 - `uv self update` -- 升级自己
 - `uv python list` -- 列出uv支持的python版本
 - `uv python install cpython3.12` -- 安装某个python版本 (3.12)
 
 从本地安装：
+
 - 配置环境变量，将安装包放入对应目录，然后安装。
   - `env:UV_PYTHON_INSTALL_MIRROR='file://D:\uv\mirror'`
   - `export UV_PYTHON_INSTALL_MIRROR='file:///home/user/uv/mirror'`(Linux)
 - 命令行参数: `uv python install cpython3.12 -mirror file:///home/user/uv/mirror`
 
 执行脚本
+
 - `uv run -p 3.12 xxx.py` -- 使用特定版本python运行xxx.py
 - `uv run -p 3.12 python` -- 运行指定版本的python交互界面。如果版本不存在，则自动安装对应版本的 Python 解释器。
 - `uv run xxx.py` -- 使用系统python或当前工程的虚拟环境运行xxx.py
-- 
+-
+
 管理系统级/全局工具
+
 - `uv tool install ruff` -- 系统级的安装。
 - `uv tool list` -- 打印当前系统中已安装的工具。
 - `uv tool upgrade --all` -- 升级所有系统级的工具。
 
 管理依赖
+
 - `uv init` -- 创建工程，创建 `uv` 相关的文件。`-p 3.12` 可以指定Python版本。
-	- git & .gitignore
-	- .python-version - 记录Python版本号。
-	- pyproject.toml
+  - git & .gitignore
+  - .python-version - 记录Python版本号。
+  - pyproject.toml
 - `uv add pydantic_ai` -- 添加依赖 (pydantic_ai)。
-	- 如果当前项目没有虚拟环境，会自动创建 venv。
--  `uv add pytest --dev` 作为开发依赖，打包时不会打包进去。适合用于安装项目的测试模块等。
+  - 如果当前项目没有虚拟环境，会自动创建 venv。
+- `uv add pytest --dev` 作为开发依赖，打包时不会打包进去。适合用于安装项目的测试模块等。
 - `uv tree` -- 打印依赖树
 - `uv remove pydantic_ai` -- 删除依赖
 
 编译、发布
+
 - `uv build` -- 编译工程。生成一个 `dist` 目录，其中有可以 install 的 `whl` 文件，用于发布一个Python 库。
 
 虚拟环境 `venv`
+
 - 创建虚拟环境 `uv venv -p/--python python3.14t {path}` 【无pip，uv 的特性】
 - 虚拟环境安装三方库 `uv pip install`, 虚拟环境激活状态下安装到当前环境。
 - 如果是项目，可指定目录/配置文件等。
@@ -63,7 +73,8 @@ Python 管理工具，all in one。用 `rust` 写的。
 ## 开发环境依赖隔离
 
 最佳实践：
-- Use `pyproject.toml` with `[tool.uv.dependencies] dev` section (recommended) 
+
+- Use `pyproject.toml` with `[tool.uv.dependencies] dev` section (recommended)
 - `uv sync --dev` to install
 - `uv run` to use tools.
 
@@ -118,7 +129,7 @@ uv sync
 
 ### `hardlink` 失败告警
 
-- 参考文章：https://www.cnblogs.com/LexLuc/p/19429840
+- 参考文章：<https://www.cnblogs.com/LexLuc/p/19429840>
 
 在 Windows 环境下使用 `uv add` 安装 Python 依赖时，很多人都会遇到类似下面的警告：
 
@@ -139,10 +150,13 @@ setx UV_CACHE_DIR D:\uv-cache
 ```
 
 PS. windows 更新环境变量后，vscode 的 terminal 重开不生效。reload window 也不行。关闭 IDE 再打开，还是不行。
+
 - 原因是我还打开着其他窗口，将 vscode 整体关掉，再打开才行。
 
 ---
-## 参考：
-- 视频：程序员老王/B站 [让 uv 管理一切](https://www.bilibili.com/video/BV1Stwfe1E7s/) 
+
+## 参考
+
+- 视频：程序员老王/B站 [让 uv 管理一切](https://www.bilibili.com/video/BV1Stwfe1E7s/)
 - 博客文章：[From pyenv to uv](https://rob.cogit8.org/posts/2024-09-19-pyenv-to-uv/) ，讲如何作者是如何从 `pyenv` 切换到 `uv` 的。
-- 播客文章： https://www.cnblogs.com/haima/p/18928947 ，整体使用。
+- 播客文章： <https://www.cnblogs.com/haima/p/18928947> ，整体使用。

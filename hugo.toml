@@ -5,39 +5,55 @@ theme = "contrast"
 sectionPagesMenu = 'main'
 
 summaryLength = 2
+hasCJKLanguage = true
 autoCollapseToc = true
 
 paginate = 3
 
 [params]
   minimal = false
-  excerpts = false
+  excerpts = true
   toc = true
   tocMinWordCount = 20
+  mainSections = ["notes"]
+  excludeSections = ["posts", "temp", "private"]
 
 [menu]
   [[menu.main]]
     identifier = "about"
     name = "关于我"
     url = "/about"
-    weight =  50
+    weight =  3
+  [[menu.main]]
+    identifier = "archives"
+    name = "归档"
+    url = "/archive"
+    weight = 2
   [[menu.main]]
     identifier = "notes"
     name = "笔记"
     url = "/notes"
-    weight = 30
-  [[menu.main]]
-    identifier = "posts"
-    name = "文章"
-    url = "/articles"
-    weight = 20
+    weight = 1
+  [[menu.social]]
+    identifier = "envelope"
+    name = "mail"
+    url = "mailto:"
+    weight = 4
+  [[menu.social]]
+    identifier = "github"
+    name = "Github"
+    url = "https://github.com/ChZ-CC"
+    weight = 5
+  [[menu.social]]
+    identifier =  "rss"
+    name = "Subscribe"
+    url = ""
+    weight = 6
 
 [permalinks]
   [permalinks.page]
-    posts = '/articles/:slug/'
     'notes/*' = '/notes/:sections[1:]/:slug/'
   [permalinks.section]
-    posts = '/articles/'
     'notes/*' = '/notes/:sections[1:]/'
 
 [taxonomies]

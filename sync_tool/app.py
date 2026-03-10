@@ -35,12 +35,11 @@ def _get_field_mapping() -> dict | None:
         return None
     try:
         data = json.loads(mapping_str)
-        app.logger.warning(f"原始字段映射: {data}")
         # 如果是完整的配置（包含direction和mapping），则返回配置
         if isinstance(data, dict) and "direction" in data and "mapping" in data:
             return data
     except:
-        app.logger.error("字段映射解析失败")
+        app.logger.error(f"字段映射解析失败: {mapping_str}")
     return None
 
 

@@ -2,6 +2,7 @@ content/.DS_Store
 .hugo_build.lock
 archetypes
 
+public
 data
 
 # python
