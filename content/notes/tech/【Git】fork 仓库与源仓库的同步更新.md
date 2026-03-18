@@ -2,8 +2,8 @@
 title = "【Git】fork 仓库与源仓库的同步更新"
 author = "CC"
 date = 2026-03-09T00:00:00
-tags = []
-categories = ["note"]
+tags = ["git"]
+categories = ["tech"]
 draft = false
 toc = true
 +++

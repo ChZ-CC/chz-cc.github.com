@@ -2,7 +2,7 @@
 title = "using git"
 author = "CC"
 date = 2020-03-08T00:00:00
-tags = ["git", "版本管理"]
+tags = ["git"]
 categories = ["note"]
 draft = false
 toc = true

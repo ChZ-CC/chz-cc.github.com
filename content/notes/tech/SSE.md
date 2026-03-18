@@ -2,7 +2,7 @@
 title = "SSE"
 author = "CC"
 date = 2023-11-24T00:00:00
-tags = ["socket", "sse"]
+tags = ["sse"]
 categories = ["note"]
 draft = false
 toc = true

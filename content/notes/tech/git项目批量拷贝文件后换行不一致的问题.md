@@ -2,7 +2,7 @@
 title = "git项目批量拷贝文件后换行不一致的问题"
 author = "CC"
 date = 2026-03-02T00:00:00
-tags = ["git", "项目管理"]
+tags = ["git"]
 categories = ["note"]
 draft = false
 toc = true

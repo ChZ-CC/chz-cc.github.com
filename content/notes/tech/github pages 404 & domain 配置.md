@@ -2,8 +2,8 @@
 title = "github pages 404 & domain 配置"
 author = "CC"
 date = 2023-11-30T00:00:00
-tags = ["debug"]
-categories = ["note"]
+tags = ["git"]
+categories = ["troubleshooting"]
 draft = false
 toc = true
 +++

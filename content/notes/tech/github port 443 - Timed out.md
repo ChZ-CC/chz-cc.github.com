@@ -2,8 +2,8 @@
 title = "github port 443 - Timed out"
 author = "CC"
 date = 2023-11-30T00:00:00
-tags = ["debug"]
-categories = ["note", "tech"]
+tags = ["git"]
+categories = ["troubleshooting"]
 draft = false
 toc = true
 +++

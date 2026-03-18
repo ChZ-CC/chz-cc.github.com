@@ -2,8 +2,8 @@
 title = "Emacs"
 author = "CC"
 date = 2023-11-18T00:00:00
-tags = ["emacs", "org", "org-roam"]
-categories = ["note", "tech"]
+tags = ["emacs", "org"]
+categories = ["note"]
 draft = false
 toc = true
 +++

@@ -2,10 +2,10 @@
 title = "原子能炮轰MySQL系列"
 author = "CC"
 date = 2025-09-11T00:00:00
-tags = ["数据库"]
+tags = ["MySQL"]
 categories = ["note"]
 draft = false
-toc = true
+toc = false
 +++
 
 全网最尊重 MySQL 的 up。/^ ^

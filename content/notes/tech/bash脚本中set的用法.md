@@ -2,7 +2,7 @@
 title = "bash脚本中set的用法"
 author = "CC"
 date = 2026-03-05T00:00:00
-tags = ["Linux", "shell-script"]
+tags = ["shell-script"]
 categories = ["note"]
 draft = false
 toc = true
