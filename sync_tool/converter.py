@@ -103,6 +103,50 @@ class ConverterMixin:
         else:
             return content
 
+    def convert_collapse(self, content: str, direction: str) -> str:
+        """转换折叠内容格式
+
+        Args:
+            content: 正文内容
+            direction: 转换方向，hugo-to-obsidian 或 obsidian-to-hugo
+
+        Returns:
+            str: 转换后的内容
+        """
+        log.warning(f"【convert_collapse】开始替换折叠内容。方向: {direction}")
+
+        def replace_collapse(match, title_group, body_group, template):
+            """通用替换函数"""
+            title = match.group(title_group)
+            body = match.group(body_group).strip("\n")
+            log.warning(f"【convert_collapse】标题: {title}\nbody: {body}")
+            return template.format(title=title, body=body)
+
+        if direction == "hugo-to-obsidian":
+            # 将 Hugo 短代码转换为 HTML 标签
+            # 匹配 {{< collapse title="标题" >}}内容{{< /collapse >}}
+            pattern = r'\{\{<\s*collapse\s+title="([^"]+)"\s*>\}\}(.*?)\{\{<\s*/\s*collapse\s*>\}\}'
+            template = "<details>\n<summary>{title}</summary>\n{body}\n</details>"
+        elif direction == "obsidian-to-hugo":
+            # 将 HTML 标签转换为 Hugo 短代码
+            # 匹配 <details><summary>标题</summary>内容</details>
+            pattern = r"<details>\s*<summary>(.*?)</summary>\s*(.*?)\s*</details>"
+            template = (
+                '{{{{< collapse title="{title}" >}}}}\n{body}\n{{{{< /collapse >}}}}'
+            )
+        else:
+            log.error(f"【convert_collapse】未知方向: {direction}")
+            return content
+
+        content = re.sub(
+            pattern,
+            lambda m: replace_collapse(m, 1, 2, template),
+            content,
+            flags=re.DOTALL,
+        )
+
+        return content
+
 
 class HugoToObsidianConverter(ConverterMixin):
     """Hugo 到 Obsidian 的转换器"""
@@ -233,6 +277,8 @@ class HugoToObsidianConverter(ConverterMixin):
     def convert_body(self, content):
         """转换正文内容"""
         body = self.extract_body(content, self.header_mark)
+        # 转换折叠内容格式
+        body = self.convert_collapse(body, "hugo-to-obsidian")
         return body + "\n"  # 确保正文末尾有换行符
 
     def convert(self, content):
@@ -412,6 +458,8 @@ class ObsidianToHugoConverter(ConverterMixin):
     def convert_body(self, content):
         """转换正文内容"""
         body = self.extract_body(content, self.header_mark)
+        # 转换折叠内容格式
+        body = self.convert_collapse(body, "obsidian-to-hugo")
         return body + "\n"  # 确保正文末尾有换行符
 
     def convert(self, content: str) -> str:
