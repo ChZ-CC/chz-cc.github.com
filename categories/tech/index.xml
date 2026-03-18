@@ -1,16 +1,1 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech on 起风了</title><link>https://chz-cc.github.io/categories/tech/</link><description>Recent content in Tech on 起风了</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 30 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chz-cc.github.io/categories/tech/index.xml" rel="self" type="application/rss+xml"/><item><title>github port 443 - Timed out</title><link>https://chz-cc.github.io/notes/tech/github-port-443---timed-out/</link><pubDate>Thu, 30 Nov 2023 00:00:00 +0000</pubDate><guid>https://chz-cc.github.io/notes/tech/github-port-443---timed-out/</guid><description>&lt;h3 id="github-port-443-timed-out"&gt;github port 443: Timed out&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;场景：以 https 方式 clone 仓库时出现的错误。&lt;/li&gt;
-&lt;li&gt;原因：Git 所设端口与系统代理不一致。&lt;/li&gt;
-&lt;li&gt;解决方法：
-&lt;ol&gt;
-&lt;li&gt;查看电脑的网络代理的 IP/端口，windows: 设置 - 网络与Internet - 代理。&lt;/li&gt;
-&lt;li&gt;修改 git 的 http.proxy/https.proxy。修改 &lt;code&gt;\~/.gitconfig&lt;/code&gt; 文件，或：
-&lt;code&gt;git config --global http.proxy http://127.0.0.1:7890&lt;/code&gt;
-&lt;code&gt;git config --global https.proxy http://127.0.0.1:7890&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;取消 git 代理配置： &lt;code&gt;git config --global --unset http.proxy&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;查看 git 代理配置： &lt;code&gt;git config --global --get http.proxy&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/li&gt;
-&lt;li&gt;参考：&lt;a href="https://zhuanlan.zhihu.com/p/636418854"&gt;https://zhuanlan.zhihu.com/p/636418854&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>Emacs</title><link>https://chz-cc.github.io/notes/tech/emacs/</link><pubDate>Sat, 18 Nov 2023 00:00:00 +0000</pubDate><guid>https://chz-cc.github.io/notes/tech/emacs/</guid><description>&lt;p&gt;Emacs 是一个高度可定制的文本编辑器，支持多种编程语言和文件格式。&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech on 起风了</title><link>https://chz-cc.github.io/categories/tech/</link><description>Recent content in Tech on 起风了</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 09 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chz-cc.github.io/categories/tech/index.xml" rel="self" type="application/rss+xml"/><item><title>【Git】fork 仓库与源仓库的同步更新</title><link>https://chz-cc.github.io/notes/tech/gitfork-%E4%BB%93%E5%BA%93%E4%B8%8E%E6%BA%90%E4%BB%93%E5%BA%93%E7%9A%84%E5%90%8C%E6%AD%A5%E6%9B%B4%E6%96%B0/</link><pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate><guid>https://chz-cc.github.io/notes/tech/gitfork-%E4%BB%93%E5%BA%93%E4%B8%8E%E6%BA%90%E4%BB%93%E5%BA%93%E7%9A%84%E5%90%8C%E6%AD%A5%E6%9B%B4%E6%96%B0/</guid><description>&lt;p&gt;同步fork项目与原项目的更新是GitHub协作中的常见需求。以下是详细的操作步骤：&lt;/p&gt;</description></item></channel></rss>
