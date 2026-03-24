@@ -1,5 +1,5 @@
 +++
-title = "Python 的 asyncio：实践指南【翻译】"
+title = "Python 异步编程 01：asyncio 实践指南【翻译】"
 author = "CC"
 date = 2026-03-17T00:00:00
 tags = ["python", "asyncio"]

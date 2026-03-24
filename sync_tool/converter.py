@@ -8,6 +8,7 @@ from logging import getLogger
 import logging
 import re
 import os
+import shutil
 from datetime import datetime
 from typing import Any
 
@@ -541,6 +542,55 @@ def collect_markdown_files(path) -> tuple[list[tuple[str, str, str]], bool]:
     return md_files, is_directory
 
 
+def copy_attachments(path: str, output_path: str) -> list[str]:
+    """
+    复制指定路径下的所有 attachments 文件夹
+    返回: 复制的文件夹列表
+    """
+    copied_attachments = []
+
+    # 标准化路径
+    path = normalize_path(path)
+
+    if not os.path.exists(path):
+        log.warning(f"【copy_attachments】路径不存在: {path}")
+        return copied_attachments
+
+    # 遍历目录结构
+    for root, dirs, files in os.walk(path):
+        # 检查当前目录是否包含 attachments 文件夹
+        if "attachments" in dirs:
+            attachments_dir = os.path.join(root, "attachments")
+
+            # 计算相对路径，用于确定目标位置
+            relative_path = os.path.relpath(root, path)
+
+            # 构建目标路径
+            if relative_path == ".":
+                target_dir = os.path.join(output_path, "attachments")
+            else:
+                target_dir = os.path.join(output_path, relative_path, "attachments")
+
+            # 确保目标目录存在
+            os.makedirs(os.path.dirname(target_dir), exist_ok=True)
+
+            # 复制文件夹
+            try:
+                if os.path.exists(target_dir):
+                    shutil.rmtree(target_dir)
+                shutil.copytree(attachments_dir, target_dir)
+                copied_attachments.append(attachments_dir)
+                log.info(
+                    f"【copy_attachments】复制附件文件夹: {attachments_dir} → {target_dir}"
+                )
+            except Exception as e:
+                log.error(
+                    f"【copy_attachments】复制附件文件夹失败: {attachments_dir}, 错误: {str(e)}"
+                )
+
+    return copied_attachments
+
+
 def get_converter(field_mapping):
     direction = field_mapping.get("direction")
     if not direction or direction not in ["hugo-to-obsidian", "obsidian-to-hugo"]:
@@ -598,6 +648,14 @@ def do_convert(
     log.info(f"发现 {len(md_files)} 个 Markdown 文件: {md_files}")
     if not md_files:
         return False, "no_markdown", "未找到 Markdown 文件"
+
+    # 复制附件文件夹
+    if is_directory:
+        input_path_dir = input_path
+    else:
+        input_path_dir = os.path.dirname(input_path)
+    attachments = copy_attachments(input_path_dir, output_path)
+    log.info(f"复制 {len(attachments)} 个附件文件夹: {attachments}")
 
     # 进行转换
     existing_files = []

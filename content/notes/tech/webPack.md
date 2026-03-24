@@ -2,7 +2,7 @@
 title = "webPack"
 author = "CC"
 date = 2023-12-04T00:00:00
-tags = ["FrontEnd"]
+tags = ["frontend"]
 categories = ["note"]
 draft = false
 toc = true
