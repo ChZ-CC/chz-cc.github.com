@@ -6,7 +6,7 @@
 </time><span class=header-tag>字数:403
 </span><span class=header-tag>用时:1min
 </span><span class=header-tag>分类:
-<a href=https://chz-cc.github.io/categories/note/>Note</a>
+<a href=https://chz-cc.github.io/categories/troubleshooting/>Troubleshooting</a>
 </span><span class=header-tag>标签:
 <a href=https://chz-cc.github.io/tags/git/>Git</a></span></header><div class=post-toc><details close><summary>目录</summary><nav id=TableOfContents></nav><a href=# id=toc-toggle></a></details></div><p>问题情境：Windows 环境 git 管理的项目，手动 copy 项目代码，本地原本是 CRLF 换行的文件变成了 LF 换行，导致所有文件都变成了 <code>modified</code> 状态。实际上大部分没有修改，只是换行变了。</p><p>解决方法：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 移除暂存区的缓存</span>
 </span></span><span style=display:flex><span>git rm --cached -r .

@@ -89,6 +89,9 @@ code:not(pre code) {
   margin: 0 0.1em;
   padding: 0.2em 0.4em;
   opacity: 0.75;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  background: light-dark(hsl(230, 18%, 92%), hsl(230, 18%, 22%));
+  color: light-dark(hsl(230, 18%, 12%), hsl(230, 18%, 92%));
 }
 
 body {
