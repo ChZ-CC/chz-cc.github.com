@@ -116,6 +116,69 @@ asyncio.run(main())
 - `loop.add_writer(fd, callback, *args)` 开始监控 fd 文件描述符的写入可用性，一旦 fd 可用，就用指定的参数调用回调函数。
 - `loop.remove_writer(fd)` 停止监控 fd 文件描述符的写入可用性。
 
+### 在线程池或进程池中执行代码
+
+- (awaitable) `loop.run_in_executor(executor, func, *args)` 用于在指定的执行器/`executor`中调用函数`func`，通过`*args`传递位置参数。
+- `executor` 是一个 concurrent.futures.Executor 实例，如果为 None 使用默认执行器。
+- `executor` 可以由 `loop.set_default_executor()` 设置。或者，未设置默认执行器时，`run_in_executor()` 会懒惰初始化一个 `current.futures.ThreadPoolExecutor` 并使用它。
+- 该方法返回一个 `asyncio.Future` 实例。
+- 关键字参数可以使用 `functools.partial()` 递给 func。
+
+```python
+import asyncio
+import concurrent.futures
+
+def blocking_io():
+    # File operations (such as logging) can block the
+    # event loop: run them in a thread pool.
+    with open('/dev/urandom', 'rb') as f:
+        return f.read(100)
+
+def cpu_bound():
+    # CPU-bound operations will block the event loop:
+    # in general it is preferable to run them in a
+    # process pool.
+    return sum(i * i for i in range(10 ** 7))
+
+async def main():
+    loop = asyncio.get_running_loop()
+
+    ## Options:
+
+    # 1. Run in the default loop's executor:
+    result = await loop.run_in_executor(
+        None, blocking_io)
+    print('default thread pool', result)
+
+    # 2. Run in a custom thread pool:
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        result = await loop.run_in_executor(
+            pool, blocking_io)
+        print('custom thread pool', result)
+
+    # 3. Run in a custom process pool:
+    with concurrent.futures.ProcessPoolExecutor() as pool:
+        result = await loop.run_in_executor(
+            pool, cpu_bound)
+        print('custom process pool', result)
+
+    # 4. Run in a custom interpreter pool:
+    with concurrent.futures.InterpreterPoolExecutor() as pool:
+        result = await loop.run_in_executor(
+            pool, cpu_bound)
+        print('custom interpreter pool', result)
+
+if __name__ == '__main__':
+    asyncio.run(main())
+```
+
+注意，选项 3 由于其多进程的特殊性，必须在主模块中运行，也就是必须使用入口保护点 `if __name__ == '__main__'`。
+
+在使用 multiprocessing 或 ProcessPoolExecutor 时，入口点保护是必需的，因为：
+
+- 多进程环境中，子进程会重新导入父进程的模块。
+- 如果没有入口点保护，子进程会重复执行主程序代码，这可能导致无限递归或其他意外行为。
+
 ### 错误处理 API
 
 - `loop.set_exception_handler(handler)` 设置异常处理器。
@@ -137,7 +200,6 @@ asyncio.run(main())
 - DNS
 - Working with pipes
 - Unix signals
-- Executing code in thread or process pools
 - Running subprocesses
 
 ## callback handles
