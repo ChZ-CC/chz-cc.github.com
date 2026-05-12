@@ -314,7 +314,8 @@ details {
   border: 1px solid #aaa;
   border-radius: 4px;
   box-shadow: 2px 2px 2px #aaa;
-  max-width: 300px;
+  min-width: 300px;
+  max-width: fit-content;
 }
 
 details[open] summary {
