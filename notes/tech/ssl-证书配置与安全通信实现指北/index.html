@@ -1,0 +1,293 @@
+<!doctype html><html lang=en-us><title>SSL 证书配置与安全通信实现指北 | 起风了</title><meta charset=utf-8><meta name=generator content="Hugo 0.157.0"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><link rel=stylesheet href=https://chz-cc.github.io/css/index.css><link rel=stylesheet href=https://chz-cc.github.io/PT-Sans/index.css><link rel=canonical href=https://chz-cc.github.io/notes/tech/ssl-%E8%AF%81%E4%B9%A6%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%AE%89%E5%85%A8%E9%80%9A%E4%BF%A1%E5%AE%9E%E7%8E%B0%E6%8C%87%E5%8C%97/><link rel=alternate type=application/rss+xml href title=起风了><header class=hover><h1 class=full><a href=https://chz-cc.github.io/>起风了</a></h1><nav><a href=/notes>笔记</a>
+<a href=/archive>归档</a>
+<a href=/about>关于我</a></nav><nav><a href=mailto: aria-label=mail><svg viewBox="0 0 512 512"><path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V4e2c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5.0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"/></svg></a>
+<a href=https://github.com/ChZ-CC aria-label=Github><svg viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6.0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6.0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3.0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1.0-6.2-.3-40.4-.3-61.4.0.0-70 15-84.7-29.8.0.0-11.4-29.1-27.8-36.6.0.0-22.9-15.7 1.6-15.4.0.0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5.0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9.0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4.0 33.7-.3 75.4-.3 83.6.0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6.0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9.0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></a>
+<a href aria-label=Subscribe><svg viewBox="0 0 448 512"><path d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328.0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765.0 183.105.0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686.0 38.981.0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"/></svg></a></nav></header><div aria-label=breadcrumb class=breadcrumb><ol><li><a href=/>Home</a></li><li><a href=/notes/>笔记</a></li><li><a href=/notes/tech/>技术</a></li><li class=active><a aria-current=page href=/notes/tech/ssl-%E8%AF%81%E4%B9%A6%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%AE%89%E5%85%A8%E9%80%9A%E4%BF%A1%E5%AE%9E%E7%8E%B0%E6%8C%87%E5%8C%97/>SSL 证书配置与安全通信实现指北</a></li></ol></div><article><header class=meta><h1><a href=/notes/tech/ssl-%E8%AF%81%E4%B9%A6%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%AE%89%E5%85%A8%E9%80%9A%E4%BF%A1%E5%AE%9E%E7%8E%B0%E6%8C%87%E5%8C%97/>SSL 证书配置与安全通信实现指北</a></h1><time datetime=2026-04-14T00:00:00Z>2026-04-14
+</time><span class=header-tag>字数:2062
+</span><span class=header-tag>用时:5min
+</span><span class=header-tag>分类:
+<a href=https://chz-cc.github.io/categories/note/>Note</a>
+</span><span class=header-tag>标签:
+<a href=https://chz-cc.github.io/tags/ssl/tls/>SSL/TLS</a></span></header><div class=post-toc><details close><summary>目录</summary><nav id=TableOfContents><ul><li><a href=#概念梳理>概念梳理</a></li><li><a href=#生成-ssl-证书和密钥对>生成 SSL 证书和密钥对</a><ul><li><a href=#使用-openssl-命令行工具>使用 OpenSSL 命令行工具</a></li><li><a href=#使用-python-cryptography-库>使用 Python cryptography 库</a></li><li><a href=#3-项目中的证书生成实现>3. 项目中的证书生成实现</a></li></ul></li><li><a href=#在项目中启用-ssl-加密>在项目中启用 SSL 加密</a><ul><li><a href=#httpserver-开启-ssl-加密>HTTPServer 开启 SSL 加密</a></li><li><a href=#websocket-开启-ssl-加密>websocket 开启 SSL 加密</a></li><li><a href=#前端适配>前端适配</a></li></ul></li><li><a href=#生产环境实践>生产环境实践</a><ul><li><a href=#证书管理>证书管理</a></li><li><a href=#基于-nginx-配置-ssl-加密代理>基于 Nginx 配置 SSL 加密代理</a></li><li><a href=#安全注意事项>安全注意事项</a></li></ul></li><li><a href=#小结>小结</a></li></ul></nav><a href=# id=toc-toggle></a></details></div><p>事情是这样的，我在写前端页面用到 <code>DeviceMotionEvent</code> 的时候，发现它总是在报错, 提示 &ldquo;DeviceMotionEvent is not available&rdquo;。查了下发现，在现代浏览器中，访问敏感 API 必须在<strong>安全上下文</strong>（HTTPS/WSS）中才行，目的是保护保护数据不被窃取或篡改。比如</p><ul><li><code>DeviceMotionEvent</code>（提供设备的位置和方向的改变速度的信息）</li><li><code>DeviceOrientationEvent</code>（提供设备方向的信息）</li><li>摄像头和麦克风 API</li><li>Web Bluetooth API</li><li>Web USB API</li></ul><p>因此我需要给 http/ws 服务增加 SSL/TLS 加密，升级为 https/wss 服务。</p><h2 id=概念梳理>概念梳理</h2><p><code>SSL</code> (Secure Sockets Layer) 一种网络安全协议，用于对客户端和服务器端之间的身份认证，加密传输数据，确保传输数据的保密性、完整性，实现两者之间的安全通信。</p><p><code>TLS</code> (Transport Layer Security) 传输层安全协议，由于SSL协议存在安全隐患，互联网工程任务组IETF于1999年推出了TLS，它提供更强的加密算法和改进的验证方法，被视为SSL的继任者，是SSL的更新、更安全版本。</p><p><code>SSL/TLS</code>最常见的应用是SSL/TLS证书（也称为<code>SSL证书</code>），网站部署<code>SSL证书</code>实现<code>HTTPS</code>协议的加密，确保对浏览器和网站服务器之间的所有传输数据的完整性和保密性，可有效防止中间人攻击的拦截和篡改数据。</p><p><code>HTTPS</code> (Hypertext Transfer Protocol Secure) 超文本传输安全协议，是全球网络安全通信的标准协议。HTTPS是HTTP的安全版本，它基于HTTP进行通信，通过利用<code>SSL/TLS</code>等协议来实现数据加密传输、完整性保护和身份可信验证，防止传输数据被泄露或篡改，确保客户端与服务器端的网络通信安全。</p><h2 id=生成-ssl-证书和密钥对>生成 SSL 证书和密钥对</h2><h3 id=使用-openssl-命令行工具>使用 OpenSSL 命令行工具</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 生成私钥</span>
+</span></span><span style=display:flex><span>openssl genrsa -out key.pem <span style=color:#ae81ff>2048</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 生成自签名证书</span>
+</span></span><span style=display:flex><span>openssl req -new -x509 -key key.pem -out cert.pem -days <span style=color:#ae81ff>365</span> -subj <span style=color:#e6db74>&#34;/C=CN/ST=State/L=City/O=Organization/CN=localhost&#34;</span>
+</span></span></code></pre></div><ul><li>证书 = 公钥 + 申请者与颁发者信息 + 签名</li><li>证书的后缀不能作为证书编码的依据。</li></ul><h3 id=使用-python-cryptography-库>使用 Python cryptography 库</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> cryptography <span style=color:#f92672>import</span> x509
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> cryptography.x509.oid <span style=color:#f92672>import</span> NameOID
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> cryptography.hazmat.primitives <span style=color:#f92672>import</span> hashes, serialization
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> cryptography.hazmat.primitives.asymmetric <span style=color:#f92672>import</span> rsa
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> datetime <span style=color:#f92672>import</span> datetime, timedelta
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> ipaddress
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 生成私钥</span>
+</span></span><span style=display:flex><span>private_key <span style=color:#f92672>=</span> rsa<span style=color:#f92672>.</span>generate_private_key(
+</span></span><span style=display:flex><span>    public_exponent<span style=color:#f92672>=</span><span style=color:#ae81ff>65537</span>,
+</span></span><span style=display:flex><span>    key_size<span style=color:#f92672>=</span><span style=color:#ae81ff>2048</span>,
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 创建证书</span>
+</span></span><span style=display:flex><span>subject <span style=color:#f92672>=</span> issuer <span style=color:#f92672>=</span> x509<span style=color:#f92672>.</span>Name([
+</span></span><span style=display:flex><span>    x509<span style=color:#f92672>.</span>NameAttribute(NameOID<span style=color:#f92672>.</span>COUNTRY_NAME, <span style=color:#e6db74>&#34;CN&#34;</span>),
+</span></span><span style=display:flex><span>    x509<span style=color:#f92672>.</span>NameAttribute(NameOID<span style=color:#f92672>.</span>STATE_OR_PROVINCE_NAME, <span style=color:#e6db74>&#34;State&#34;</span>),
+</span></span><span style=display:flex><span>    x509<span style=color:#f92672>.</span>NameAttribute(NameOID<span style=color:#f92672>.</span>LOCALITY_NAME, <span style=color:#e6db74>&#34;City&#34;</span>),
+</span></span><span style=display:flex><span>    x509<span style=color:#f92672>.</span>NameAttribute(NameOID<span style=color:#f92672>.</span>ORGANIZATION_NAME, <span style=color:#e6db74>&#34;Organization&#34;</span>),
+</span></span><span style=display:flex><span>    x509<span style=color:#f92672>.</span>NameAttribute(NameOID<span style=color:#f92672>.</span>COMMON_NAME, <span style=color:#e6db74>&#34;localhost&#34;</span>),
+</span></span><span style=display:flex><span>])
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>cert <span style=color:#f92672>=</span> x509<span style=color:#f92672>.</span>CertificateBuilder()<span style=color:#f92672>.</span>subject_name(
+</span></span><span style=display:flex><span>    subject
+</span></span><span style=display:flex><span>)<span style=color:#f92672>.</span>issuer_name(
+</span></span><span style=display:flex><span>    issuer
+</span></span><span style=display:flex><span>)<span style=color:#f92672>.</span>public_key(
+</span></span><span style=display:flex><span>    private_key<span style=color:#f92672>.</span>public_key()
+</span></span><span style=display:flex><span>)<span style=color:#f92672>.</span>serial_number(
+</span></span><span style=display:flex><span>    x509<span style=color:#f92672>.</span>random_serial_number()
+</span></span><span style=display:flex><span>)<span style=color:#f92672>.</span>not_valid_before(
+</span></span><span style=display:flex><span>    datetime<span style=color:#f92672>.</span>utcnow()
+</span></span><span style=display:flex><span>)<span style=color:#f92672>.</span>not_valid_after(
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 证书有效期一年</span>
+</span></span><span style=display:flex><span>    datetime<span style=color:#f92672>.</span>utcnow() <span style=color:#f92672>+</span> timedelta(days<span style=color:#f92672>=</span><span style=color:#ae81ff>365</span>)
+</span></span><span style=display:flex><span>)<span style=color:#f92672>.</span>add_extension(
+</span></span><span style=display:flex><span>    x509<span style=color:#f92672>.</span>SubjectAlternativeName([
+</span></span><span style=display:flex><span>        x509<span style=color:#f92672>.</span>DNSName(<span style=color:#e6db74>&#34;localhost&#34;</span>),
+</span></span><span style=display:flex><span>        x509<span style=color:#f92672>.</span>IPAddress(ipaddress<span style=color:#f92672>.</span>IPv4Address(<span style=color:#e6db74>&#34;127.0.0.1&#34;</span>)),
+</span></span><span style=display:flex><span>    ]),
+</span></span><span style=display:flex><span>    critical<span style=color:#f92672>=</span><span style=color:#66d9ef>False</span>,
+</span></span><span style=display:flex><span>)<span style=color:#f92672>.</span>sign(private_key, hashes<span style=color:#f92672>.</span>SHA256())
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 保存证书和私钥</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>with</span> open(<span style=color:#e6db74>&#34;cert.pem&#34;</span>, <span style=color:#e6db74>&#34;wb&#34;</span>) <span style=color:#66d9ef>as</span> f:
+</span></span><span style=display:flex><span>    f<span style=color:#f92672>.</span>write(cert<span style=color:#f92672>.</span>public_bytes(serialization<span style=color:#f92672>.</span>Encoding<span style=color:#f92672>.</span>PEM))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>with</span> open(<span style=color:#e6db74>&#34;key.pem&#34;</span>, <span style=color:#e6db74>&#34;wb&#34;</span>) <span style=color:#66d9ef>as</span> f:
+</span></span><span style=display:flex><span>    f<span style=color:#f92672>.</span>write(private_key<span style=color:#f92672>.</span>private_bytes(
+</span></span><span style=display:flex><span>        encoding<span style=color:#f92672>=</span>serialization<span style=color:#f92672>.</span>Encoding<span style=color:#f92672>.</span>PEM,
+</span></span><span style=display:flex><span>        format<span style=color:#f92672>=</span>serialization<span style=color:#f92672>.</span>PrivateFormat<span style=color:#f92672>.</span>PKCS8,
+</span></span><span style=display:flex><span>        encryption_algorithm<span style=color:#f92672>=</span>serialization<span style=color:#f92672>.</span>NoEncryption()
+</span></span><span style=display:flex><span>    ))
+</span></span></code></pre></div><h3 id=3-项目中的证书生成实现>3. 项目中的证书生成实现</h3><p>在 <code>touchpad/network/http.py</code> 中，实现了自动证书生成：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>_generate_self_signed_cert</span>(self) <span style=color:#f92672>-&gt;</span> tuple:
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;生成自签名证书&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>import</span> os
+</span></span><span style=display:flex><span>    <span style=color:#f92672>import</span> tempfile
+</span></span><span style=display:flex><span>    <span style=color:#f92672>from</span> datetime <span style=color:#f92672>import</span> datetime, timedelta
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 创建临时证书文件</span>
+</span></span><span style=display:flex><span>    cert_fd, cert_path <span style=color:#f92672>=</span> tempfile<span style=color:#f92672>.</span>mkstemp(suffix<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;.pem&#39;</span>)
+</span></span><span style=display:flex><span>    key_fd, key_path <span style=color:#f92672>=</span> tempfile<span style=color:#f92672>.</span>mkstemp(suffix<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;.key&#39;</span>)
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 关闭文件描述符，让ssl模块可以使用这些文件</span>
+</span></span><span style=display:flex><span>    os<span style=color:#f92672>.</span>close(cert_fd)
+</span></span><span style=display:flex><span>    os<span style=color:#f92672>.</span>close(key_fd)
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 使用 OpenSSL 生成自签名证书（如果系统中有 OpenSSL）</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>try</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>import</span> subprocess
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 生成私钥</span>
+</span></span><span style=display:flex><span>        subprocess<span style=color:#f92672>.</span>run([
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;openssl&#39;</span>, <span style=color:#e6db74>&#39;genrsa&#39;</span>, <span style=color:#e6db74>&#39;-out&#39;</span>, key_path, <span style=color:#e6db74>&#39;2048&#39;</span>
+</span></span><span style=display:flex><span>        ], check<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>, capture_output<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 生成自签名证书</span>
+</span></span><span style=display:flex><span>        subprocess<span style=color:#f92672>.</span>run([
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;openssl&#39;</span>, <span style=color:#e6db74>&#39;req&#39;</span>, <span style=color:#e6db74>&#39;-new&#39;</span>, <span style=color:#e6db74>&#39;-x509&#39;</span>, <span style=color:#e6db74>&#39;-key&#39;</span>, key_path, 
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;-out&#39;</span>, cert_path, <span style=color:#e6db74>&#39;-days&#39;</span>, <span style=color:#e6db74>&#39;365&#39;</span>, <span style=color:#e6db74>&#39;-subj&#39;</span>, 
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>f</span><span style=color:#e6db74>&#39;/C=CN/ST=State/L=City/O=Organization/CN=</span><span style=color:#e6db74>{</span>self<span style=color:#f92672>.</span>_host<span style=color:#e6db74>}</span><span style=color:#e6db74>&#39;</span>
+</span></span><span style=display:flex><span>        ], check<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>, capture_output<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        logger<span style=color:#f92672>.</span>info(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;自签名证书已生成: </span><span style=color:#e6db74>{</span>cert_path<span style=color:#e6db74>}</span><span style=color:#e6db74>, </span><span style=color:#e6db74>{</span>key_path<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> cert_path, key_path
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>except</span> (subprocess<span style=color:#f92672>.</span>CalledProcessError, <span style=color:#a6e22e>FileNotFoundError</span>):
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 如果没有 OpenSSL，回退到使用 cryptography 库生成证书</span>
+</span></span><span style=display:flex><span>        logger<span style=color:#f92672>.</span>warning(<span style=color:#e6db74>&#34;OpenSSL 未找到，将尝试使用 Python cryptography 库生成证书&#34;</span>)
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 删除之前创建的临时文件</span>
+</span></span><span style=display:flex><span>        os<span style=color:#f92672>.</span>unlink(cert_path)
+</span></span><span style=display:flex><span>        os<span style=color:#f92672>.</span>unlink(key_path)
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>try</span>:
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 尝试使用 cryptography 库生成证书</span>
+</span></span><span style=display:flex><span>            <span style=color:#f92672>from</span> cryptography <span style=color:#f92672>import</span> x509
+</span></span><span style=display:flex><span>            <span style=color:#f92672>from</span> cryptography.x509.oid <span style=color:#f92672>import</span> NameOID
+</span></span><span style=display:flex><span>            <span style=color:#f92672>from</span> cryptography.hazmat.primitives <span style=color:#f92672>import</span> hashes, serialization
+</span></span><span style=display:flex><span>            <span style=color:#f92672>from</span> cryptography.hazmat.primitives.asymmetric <span style=color:#f92672>import</span> rsa
+</span></span><span style=display:flex><span>            
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 生成私钥</span>
+</span></span><span style=display:flex><span>            private_key <span style=color:#f92672>=</span> rsa<span style=color:#f92672>.</span>generate_private_key(
+</span></span><span style=display:flex><span>                public_exponent<span style=color:#f92672>=</span><span style=color:#ae81ff>65537</span>,
+</span></span><span style=display:flex><span>                key_size<span style=color:#f92672>=</span><span style=color:#ae81ff>2048</span>,
+</span></span><span style=display:flex><span>            )
+</span></span><span style=display:flex><span>            
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 创建证书</span>
+</span></span><span style=display:flex><span>            subject <span style=color:#f92672>=</span> issuer <span style=color:#f92672>=</span> x509<span style=color:#f92672>.</span>Name([
+</span></span><span style=display:flex><span>                x509<span style=color:#f92672>.</span>NameAttribute(NameOID<span style=color:#f92672>.</span>COUNTRY_NAME, <span style=color:#e6db74>&#34;CN&#34;</span>),
+</span></span><span style=display:flex><span>                x509<span style=color:#f92672>.</span>NameAttribute(NameOID<span style=color:#f92672>.</span>STATE_OR_PROVINCE_NAME, <span style=color:#e6db74>&#34;State&#34;</span>),
+</span></span><span style=display:flex><span>                x509<span style=color:#f92672>.</span>NameAttribute(NameOID<span style=color:#f92672>.</span>LOCALITY_NAME, <span style=color:#e6db74>&#34;City&#34;</span>),
+</span></span><span style=display:flex><span>                x509<span style=color:#f92672>.</span>NameAttribute(NameOID<span style=color:#f92672>.</span>ORGANIZATION_NAME, <span style=color:#e6db74>&#34;Organization&#34;</span>),
+</span></span><span style=display:flex><span>                x509<span style=color:#f92672>.</span>NameAttribute(NameOID<span style=color:#f92672>.</span>COMMON_NAME, self<span style=color:#f92672>.</span>_host),
+</span></span><span style=display:flex><span>            ])
+</span></span><span style=display:flex><span>            
+</span></span><span style=display:flex><span>            cert <span style=color:#f92672>=</span> x509<span style=color:#f92672>.</span>CertificateBuilder()<span style=color:#f92672>.</span>subject_name(
+</span></span><span style=display:flex><span>                subject
+</span></span><span style=display:flex><span>            )<span style=color:#f92672>.</span>issuer_name(
+</span></span><span style=display:flex><span>                issuer
+</span></span><span style=display:flex><span>            )<span style=color:#f92672>.</span>public_key(
+</span></span><span style=display:flex><span>                private_key<span style=color:#f92672>.</span>public_key()
+</span></span><span style=display:flex><span>            )<span style=color:#f92672>.</span>serial_number(
+</span></span><span style=display:flex><span>                x509<span style=color:#f92672>.</span>random_serial_number()
+</span></span><span style=display:flex><span>            )<span style=color:#f92672>.</span>not_valid_before(
+</span></span><span style=display:flex><span>                datetime<span style=color:#f92672>.</span>utcnow()
+</span></span><span style=display:flex><span>            )<span style=color:#f92672>.</span>not_valid_after(
+</span></span><span style=display:flex><span>                datetime<span style=color:#f92672>.</span>utcnow() <span style=color:#f92672>+</span> timedelta(days<span style=color:#f92672>=</span><span style=color:#ae81ff>365</span>)
+</span></span><span style=display:flex><span>            )<span style=color:#f92672>.</span>sign(private_key, hashes<span style=color:#f92672>.</span>SHA256())
+</span></span><span style=display:flex><span>            
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 写入证书文件</span>
+</span></span><span style=display:flex><span>            cert_path <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>join(tempfile<span style=color:#f92672>.</span>gettempdir(), <span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;temp_cert_</span><span style=color:#e6db74>{</span>os<span style=color:#f92672>.</span>getpid()<span style=color:#e6db74>}</span><span style=color:#e6db74>.pem&#34;</span>)
+</span></span><span style=display:flex><span>            key_path <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>join(tempfile<span style=color:#f92672>.</span>gettempdir(), <span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;temp_key_</span><span style=color:#e6db74>{</span>os<span style=color:#f92672>.</span>getpid()<span style=color:#e6db74>}</span><span style=color:#e6db74>.key&#34;</span>)
+</span></span><span style=display:flex><span>            
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>with</span> open(cert_path, <span style=color:#e6db74>&#34;wb&#34;</span>) <span style=color:#66d9ef>as</span> f:
+</span></span><span style=display:flex><span>                f<span style=color:#f92672>.</span>write(cert<span style=color:#f92672>.</span>public_bytes(serialization<span style=color:#f92672>.</span>Encoding<span style=color:#f92672>.</span>PEM))
+</span></span><span style=display:flex><span>            
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>with</span> open(key_path, <span style=color:#e6db74>&#34;wb&#34;</span>) <span style=color:#66d9ef>as</span> f:
+</span></span><span style=display:flex><span>                f<span style=color:#f92672>.</span>write(private_key<span style=color:#f92672>.</span>private_bytes(
+</span></span><span style=display:flex><span>                    encoding<span style=color:#f92672>=</span>serialization<span style=color:#f92672>.</span>Encoding<span style=color:#f92672>.</span>PEM,
+</span></span><span style=display:flex><span>                    format<span style=color:#f92672>=</span>serialization<span style=color:#f92672>.</span>PrivateFormat<span style=color:#f92672>.</span>PKCS8,
+</span></span><span style=display:flex><span>                    encryption_algorithm<span style=color:#f92672>=</span>serialization<span style=color:#f92672>.</span>NoEncryption()
+</span></span><span style=display:flex><span>                ))
+</span></span><span style=display:flex><span>            
+</span></span><span style=display:flex><span>            logger<span style=color:#f92672>.</span>info(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;使用 cryptography 库生成的证书: </span><span style=color:#e6db74>{</span>cert_path<span style=color:#e6db74>}</span><span style=color:#e6db74>, </span><span style=color:#e6db74>{</span>key_path<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span> cert_path, key_path
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>ImportError</span>:
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 如果没有 cryptography 库，回退到创建占位符文件</span>
+</span></span><span style=display:flex><span>            logger<span style=color:#f92672>.</span>warning(<span style=color:#e6db74>&#34;cryptography 库未安装，将创建临时证书文件&#34;</span>)
+</span></span><span style=display:flex><span>            
+</span></span><span style=display:flex><span>            cert_path <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>join(tempfile<span style=color:#f92672>.</span>gettempdir(), <span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;temp_cert_</span><span style=color:#e6db74>{</span>os<span style=color:#f92672>.</span>getpid()<span style=color:#e6db74>}</span><span style=color:#e6db74>.pem&#34;</span>)
+</span></span><span style=display:flex><span>            key_path <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>join(tempfile<span style=color:#f92672>.</span>gettempdir(), <span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;temp_key_</span><span style=color:#e6db74>{</span>os<span style=color:#f92672>.</span>getpid()<span style=color:#e6db74>}</span><span style=color:#e6db74>.key&#34;</span>)
+</span></span><span style=display:flex><span>            
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 创建占位符证书文件（实际部署时应替换为真实证书）</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>with</span> open(cert_path, <span style=color:#e6db74>&#39;w&#39;</span>) <span style=color:#66d9ef>as</span> cert_file:
+</span></span><span style=display:flex><span>                cert_file<span style=color:#f92672>.</span>write(<span style=color:#e6db74>&#34;-----BEGIN CERTIFICATE-----</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>                cert_file<span style=color:#f92672>.</span>write(<span style=color:#e6db74>&#34;# 临时证书，实际部署时应替换为真实证书</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>                cert_file<span style=color:#f92672>.</span>write(<span style=color:#e6db74>&#34;-----END CERTIFICATE-----</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>            
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>with</span> open(key_path, <span style=color:#e6db74>&#39;w&#39;</span>) <span style=color:#66d9ef>as</span> key_file:
+</span></span><span style=display:flex><span>                key_file<span style=color:#f92672>.</span>write(<span style=color:#e6db74>&#34;-----BEGIN PRIVATE KEY-----</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>                key_file<span style=color:#f92672>.</span>write(<span style=color:#e6db74>&#34;# 临时私钥，实际部署时应替换为真实私钥</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>                key_file<span style=color:#f92672>.</span>write(<span style=color:#e6db74>&#34;-----END PRIVATE KEY-----</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>            
+</span></span><span style=display:flex><span>            logger<span style=color:#f92672>.</span>info(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;临时证书已创建: </span><span style=color:#e6db74>{</span>cert_path<span style=color:#e6db74>}</span><span style=color:#e6db74>, </span><span style=color:#e6db74>{</span>key_path<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span> cert_path, key_path
+</span></span></code></pre></div><h2 id=在项目中启用-ssl-加密>在项目中启用 SSL 加密</h2><h3 id=httpserver-开启-ssl-加密>HTTPServer 开启 SSL 加密</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> ssl
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> http.server <span style=color:#f92672>import</span> HTTPServer, SimpleHTTPRequestHandler
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>ssl_context <span style=color:#f92672>=</span> ssl<span style=color:#f92672>.</span>SSLContext(ssl<span style=color:#f92672>.</span>PROTOCOL_TLS_SERVER)
+</span></span><span style=display:flex><span>ssl_context<span style=color:#f92672>.</span>load_cert_chain(<span style=color:#e6db74>&#34;path/to/cert_file&#34;</span>, <span style=color:#e6db74>&#34;path/to/key_file&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>httpd <span style=color:#f92672>=</span> HTTPServer((<span style=color:#e6db74>&#34;localhost&#34;</span>, <span style=color:#ae81ff>8000</span>), SimpleHTTPRequestHandler)
+</span></span><span style=display:flex><span><span style=color:#75715e># Wrap socket with SSL</span>
+</span></span><span style=display:flex><span>httpd<span style=color:#f92672>.</span>socket <span style=color:#f92672>=</span> ssl_context<span style=color:#f92672>.</span>wrap_socket(
+</span></span><span style=display:flex><span>   httpd<span style=color:#f92672>.</span>socket,
+</span></span><span style=display:flex><span>   server_side<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>,
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>httpd<span style=color:#f92672>.</span>serve_forever()
+</span></span></code></pre></div><h3 id=websocket-开启-ssl-加密>websocket 开启 SSL 加密</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># WSS (WS over TLS) server example, with a self-signed certificate</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> asyncio
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> pathlib
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> ssl
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> websockets
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>hello</span>(websocket, path):
+</span></span><span style=display:flex><span>    name <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> websocket<span style=color:#f92672>.</span>recv()
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;&lt; </span><span style=color:#e6db74>{</span>name<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    greeting <span style=color:#f92672>=</span> <span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;Hello </span><span style=color:#e6db74>{</span>name<span style=color:#e6db74>}</span><span style=color:#e6db74>!&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> websocket<span style=color:#f92672>.</span>send(greeting)
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;&gt; </span><span style=color:#e6db74>{</span>greeting<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>ssl_context <span style=color:#f92672>=</span> ssl<span style=color:#f92672>.</span>SSLContext(ssl<span style=color:#f92672>.</span>PROTOCOL_TLS_SERVER)
+</span></span><span style=display:flex><span>localhost_pem <span style=color:#f92672>=</span> pathlib<span style=color:#f92672>.</span>Path(__file__)<span style=color:#f92672>.</span>with_name(<span style=color:#e6db74>&#34;localhost.pem&#34;</span>)
+</span></span><span style=display:flex><span>ssl_context<span style=color:#f92672>.</span>load_cert_chain(localhost_pem)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>start_server <span style=color:#f92672>=</span> websockets<span style=color:#f92672>.</span>serve(
+</span></span><span style=display:flex><span>    hello, <span style=color:#e6db74>&#34;localhost&#34;</span>, <span style=color:#ae81ff>8765</span>, ssl<span style=color:#f92672>=</span>ssl_context
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>asyncio<span style=color:#f92672>.</span>get_event_loop()<span style=color:#f92672>.</span>run_until_complete(start_server)
+</span></span><span style=display:flex><span>asyncio<span style=color:#f92672>.</span>get_event_loop()<span style=color:#f92672>.</span>run_forever()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># WSS (WS over TLS) client example, with a self-signed certificate</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> asyncio
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> pathlib
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> ssl
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> websockets
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>ssl_context <span style=color:#f92672>=</span> ssl<span style=color:#f92672>.</span>SSLContext(ssl<span style=color:#f92672>.</span>PROTOCOL_TLS_CLIENT)
+</span></span><span style=display:flex><span>localhost_pem <span style=color:#f92672>=</span> pathlib<span style=color:#f92672>.</span>Path(__file__)<span style=color:#f92672>.</span>with_name(<span style=color:#e6db74>&#34;localhost.pem&#34;</span>)
+</span></span><span style=display:flex><span>ssl_context<span style=color:#f92672>.</span>load_verify_locations(localhost_pem)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>hello</span>():
+</span></span><span style=display:flex><span>    uri <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;wss://localhost:8765&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>with</span> websockets<span style=color:#f92672>.</span>connect(
+</span></span><span style=display:flex><span>        uri, ssl<span style=color:#f92672>=</span>ssl_context
+</span></span><span style=display:flex><span>    ) <span style=color:#66d9ef>as</span> websocket:
+</span></span><span style=display:flex><span>        name <span style=color:#f92672>=</span> input(<span style=color:#e6db74>&#34;What&#39;s your name? &#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>await</span> websocket<span style=color:#f92672>.</span>send(name)
+</span></span><span style=display:flex><span>        print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;&gt; </span><span style=color:#e6db74>{</span>name<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        greeting <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> websocket<span style=color:#f92672>.</span>recv()
+</span></span><span style=display:flex><span>        print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;&lt; </span><span style=color:#e6db74>{</span>greeting<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>asyncio<span style=color:#f92672>.</span>get_event_loop()<span style=color:#f92672>.</span>run_until_complete(hello())
+</span></span></code></pre></div><p>官方文档：<a href=https://websockets.readthedocs.io/en/9.1/intro.html>websocket</a></p><h3 id=前端适配>前端适配</h3><p>当启用 SSL 后，前端页面会自动使用安全协议，根据协议类型选择 websocket 连接方式：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// 根据页面协议自动选择连接方式
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>protocol</span> <span style=color:#f92672>=</span> window.<span style=color:#a6e22e>location</span>.<span style=color:#a6e22e>protocol</span> <span style=color:#f92672>===</span> <span style=color:#e6db74>&#39;https:&#39;</span> <span style=color:#f92672>?</span> <span style=color:#e6db74>&#39;wss://&#39;</span> <span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;ws://&#39;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>ws</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>WebSocket</span>(<span style=color:#a6e22e>protocol</span> <span style=color:#f92672>+</span> window.<span style=color:#a6e22e>location</span>.<span style=color:#a6e22e>hostname</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;:&#39;</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>WEBSOCKET_PORT</span>);
+</span></span></code></pre></div><h2 id=生产环境实践>生产环境实践</h2><h3 id=证书管理>证书管理</h3><ul><li>使用由受信任的 CA 签发的正式证书</li><li>实施证书自动续期机制（如 Let&rsquo;s Encrypt + Certbot）</li><li>定期更换证书（建议每年更换一次）</li></ul><h3 id=基于-nginx-配置-ssl-加密代理>基于 Nginx 配置 SSL 加密代理</h3><p>在生产环境中，推荐使用 Nginx 作为反向代理：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-nginx data-lang=nginx><span style=display:flex><span><span style=color:#66d9ef>server</span> {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>listen</span> <span style=color:#ae81ff>443</span> <span style=color:#e6db74>ssl</span> <span style=color:#e6db74>http2</span>;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>server_name</span> <span style=color:#e6db74>your-domain.com</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ssl_certificate</span> <span style=color:#e6db74>/path/to/certificate.crt</span>;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ssl_certificate_key</span> <span style=color:#e6db74>/path/to/private.key</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># SSL 安全配置
+</span></span></span><span style=display:flex><span>    <span style=color:#f92672>ssl_protocols</span> <span style=color:#e6db74>TLSv1.2</span> <span style=color:#e6db74>TLSv1.3</span>;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ssl_ciphers</span> <span style=color:#e6db74>ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384</span>;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ssl_prefer_server_ciphers</span> <span style=color:#66d9ef>off</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># WebSocket 支持
+</span></span></span><span style=display:flex><span>    <span style=color:#f92672>location</span> <span style=color:#e6db74>/</span> {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_pass</span> <span style=color:#e6db74>http://localhost:9876</span>;  <span style=color:#75715e># HTTP 服务器端口
+</span></span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_http_version</span> <span style=color:#ae81ff>1</span><span style=color:#e6db74>.1</span>;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_set_header</span> <span style=color:#e6db74>Upgrade</span> $http_upgrade;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_set_header</span> <span style=color:#e6db74>Connection</span> <span style=color:#e6db74>&#34;upgrade&#34;</span>;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_set_header</span> <span style=color:#e6db74>Host</span> $host;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_set_header</span> <span style=color:#e6db74>X-Real-IP</span> $remote_addr;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_set_header</span> <span style=color:#e6db74>X-Forwarded-For</span> $proxy_add_x_forwarded_for;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_set_header</span> <span style=color:#e6db74>X-Forwarded-Proto</span> $scheme;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># WebSocket 专用配置
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>server</span> {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>listen</span> <span style=color:#ae81ff>443</span> <span style=color:#e6db74>ssl</span> <span style=color:#e6db74>http2</span>;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>server_name</span> <span style=color:#e6db74>ws.your-domain.com</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ssl_certificate</span> <span style=color:#e6db74>/path/to/certificate.crt</span>;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ssl_certificate_key</span> <span style=color:#e6db74>/path/to/private.key</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#f92672>location</span> <span style=color:#e6db74>/</span> {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_pass</span> <span style=color:#e6db74>http://localhost:9877</span>;  <span style=color:#75715e># WebSocket 服务器端口
+</span></span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_http_version</span> <span style=color:#ae81ff>1</span><span style=color:#e6db74>.1</span>;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_set_header</span> <span style=color:#e6db74>Upgrade</span> $http_upgrade;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_set_header</span> <span style=color:#e6db74>Connection</span> <span style=color:#e6db74>&#34;upgrade&#34;</span>;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>proxy_set_header</span> <span style=color:#e6db74>Host</span> $host;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=安全注意事项>安全注意事项</h3><ul><li>不要在版本控制系统中存储私钥</li><li>实施适当的访问控制</li><li>定期审查 SSL 配置</li><li>监控证书过期时间</li><li>使用 HSTS (HTTP Strict Transport Security) 增强安全性</li></ul><h2 id=小结>小结</h2><table><thead><tr><th>环境</th><th>证书类型</th><th>配置</th><th>注意事项</th></tr></thead><tbody><tr><td>开发</td><td>自签名证书</td><td>宽松验证</td><td>浏览器会显示安全警告</td></tr><tr><td>生产</td><td>CA 签发证书</td><td>严格验证</td><td>用户无安全警告</td></tr></tbody></table><p>通常，在生产环境下，使用 CA 签发的正式证书，通过 Nginx 配置 SSL 加密代理，不需要在业务代码层面进行特殊处理。
+但涉及到前端敏感 API 则必须配置 ssl 认证的开发环境，这时候可以使用自签名证书进行测试。</p></article><footer class=nowrap><span></span> <a class=dark href=/notes/tech/python/python-%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-03fastapi-%E5%AE%9E%E8%B7%B5/>Python 异步编程 03：FastAPI 实践 »</a></footer><script src=https://chz-cc.github.io/js/vanilla-back-to-top.min.js></script><script>addBackToTop({diameter:40,padding:0})</script></html>
